@@ -1,39 +1,84 @@
 fileFormatVersion: 2
 guid: 44b68fbc29733aa42bd37ead189e68d0
-timeCreated: 1526465843
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: S_Torso
-    21300002: S_LA
-    21300004: S_Shoulder
-    21300006: S_RF
-    21300008: S_RL
-    21300010: S_RA
-    21300012: D_Torso
-    21300014: D_LA
-    21300016: D_RL
-    21300018: D_LL
-    21300020: D_RF
-    21300022: D_LF
-    21300024: D_RA
-    21300026: U_Torso
-    21300028: U_LL
-    21300030: U_RL
-    21300032: U_RA
-    21300034: U_LF
-    21300036: U_RF
-    21300038: U_LA
-    21300040: Enemy10_0
-    21300042: Side_Drawing
-  serializedVersion: 2
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: S_Torso
+  - first:
+      213: 21300002
+    second: S_LA
+  - first:
+      213: 21300004
+    second: S_Shoulder
+  - first:
+      213: 21300006
+    second: S_RF
+  - first:
+      213: 21300008
+    second: S_RL
+  - first:
+      213: 21300010
+    second: S_RA
+  - first:
+      213: 21300012
+    second: D_Torso
+  - first:
+      213: 21300014
+    second: D_LA
+  - first:
+      213: 21300016
+    second: D_RL
+  - first:
+      213: 21300018
+    second: D_LL
+  - first:
+      213: 21300020
+    second: D_RF
+  - first:
+      213: 21300022
+    second: D_LF
+  - first:
+      213: 21300024
+    second: D_RA
+  - first:
+      213: 21300026
+    second: U_Torso
+  - first:
+      213: 21300028
+    second: U_LL
+  - first:
+      213: 21300030
+    second: U_RL
+  - first:
+      213: 21300032
+    second: U_RA
+  - first:
+      213: 21300034
+    second: U_LF
+  - first:
+      213: 21300036
+    second: U_RF
+  - first:
+      213: 21300038
+    second: U_LA
+  - first:
+      213: 21300040
+    second: Enemy10_0
+  - first:
+      213: 21300042
+    second: Side_Drawing
+  externalObjects: {}
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -42,34 +87,61 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 7
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
+    serializedVersion: 2
+    filterMode: 1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -85,6 +157,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: S_LA
       rect:
@@ -97,6 +178,15 @@ TextureImporter:
       pivot: {x: 0.10082347, y: 0.22734551}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: S_Shoulder
       rect:
@@ -109,6 +199,15 @@ TextureImporter:
       pivot: {x: 0.4347864, y: 0.5105298}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: S_RF
       rect:
@@ -121,6 +220,15 @@ TextureImporter:
       pivot: {x: 0.342762, y: 0.77797544}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: S_RL
       rect:
@@ -133,6 +241,15 @@ TextureImporter:
       pivot: {x: 0.48056176, y: 0.9256087}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82305410000000000800000000000000
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: S_RA
       rect:
@@ -145,6 +262,15 @@ TextureImporter:
       pivot: {x: 0.19765718, y: 0.35279328}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2305410000000000800000000000000
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_Torso
       rect:
@@ -157,6 +283,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2305410000000000800000000000000
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_LA
       rect:
@@ -169,6 +304,15 @@ TextureImporter:
       pivot: {x: 0.110419795, y: 0.39663845}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2305410000000000800000000000000
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_RL
       rect:
@@ -181,6 +325,15 @@ TextureImporter:
       pivot: {x: 0.3805362, y: 0.917497}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03305410000000000800000000000000
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_LL
       rect:
@@ -193,6 +346,15 @@ TextureImporter:
       pivot: {x: 0.4634488, y: 0.9351377}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23305410000000000800000000000000
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_RF
       rect:
@@ -205,6 +367,15 @@ TextureImporter:
       pivot: {x: 0.47620752, y: 0.90677965}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43305410000000000800000000000000
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_LF
       rect:
@@ -217,6 +388,15 @@ TextureImporter:
       pivot: {x: 0.43244606, y: 0.7847467}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63305410000000000800000000000000
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: D_RA
       rect:
@@ -229,6 +409,15 @@ TextureImporter:
       pivot: {x: 0.96921325, y: 0.13894157}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_Torso
       rect:
@@ -241,6 +430,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3305410000000000800000000000000
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_LL
       rect:
@@ -253,6 +451,15 @@ TextureImporter:
       pivot: {x: 0.3896618, y: 0.8800308}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3305410000000000800000000000000
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_RL
       rect:
@@ -265,6 +472,15 @@ TextureImporter:
       pivot: {x: 0.43772832, y: 0.9232161}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3305410000000000800000000000000
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_RA
       rect:
@@ -277,6 +493,15 @@ TextureImporter:
       pivot: {x: 0.050165903, y: 0.15803124}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04305410000000000800000000000000
+      internalID: 21300032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_LF
       rect:
@@ -289,6 +514,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.8546605}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24305410000000000800000000000000
+      internalID: 21300034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_RF
       rect:
@@ -301,6 +535,15 @@ TextureImporter:
       pivot: {x: 0.50000095, y: 0.9203377}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44305410000000000800000000000000
+      internalID: 21300036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: U_LA
       rect:
@@ -313,6 +556,15 @@ TextureImporter:
       pivot: {x: 0.98100424, y: 0.22319329}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64305410000000000800000000000000
+      internalID: 21300038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Enemy10_0
       rect:
@@ -325,6 +577,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84305410000000000800000000000000
+      internalID: 21300040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Side_Drawing
       rect:
@@ -337,8 +598,51 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4305410000000000800000000000000
+      internalID: 21300042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      S_LA: 21300002
+      U_RL: 21300030
+      U_RA: 21300032
+      U_LF: 21300034
+      U_LA: 21300038
+      S_RF: 21300006
+      Enemy10_0: 21300040
+      S_RA: 21300010
+      S_Shoulder: 21300004
+      D_LL: 21300018
+      D_RF: 21300020
+      U_LL: 21300028
+      S_RL: 21300008
+      D_Torso: 21300012
+      U_RF: 21300036
+      D_LF: 21300022
+      U_Torso: 21300026
+      S_Torso: 21300000
+      D_RL: 21300016
+      D_RA: 21300024
+      D_LA: 21300014
+      Side_Drawing: 21300042
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

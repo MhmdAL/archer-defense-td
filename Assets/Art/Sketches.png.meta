@@ -1,37 +1,78 @@
 fileFormatVersion: 2
 guid: ff7bb83a011b48f47993aa220c51ed8f
-timeCreated: 1526466020
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Sketches_0
-    21300002: Head
-    21300004: Tail
-    21300006: Right arm
-    21300008: Left arm
-    21300010: Right Leg
-    21300012: Left Leg
-    21300014: Body
-    21300016: eHead
-    21300018: eTorso
-    21300020: eUpperArm
-    21300022: eForearm
-    21300024: eHand
-    21300026: eRightLEg
-    21300028: eLeftLeg
-    21300030: eRightShin
-    21300032: eLeftShin
-    21300034: eRightFoot
-    21300036: eLeftFoot
-    21300038: Side_Drawing
-  serializedVersion: 2
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Sketches_0
+  - first:
+      213: 21300002
+    second: Head
+  - first:
+      213: 21300004
+    second: Tail
+  - first:
+      213: 21300006
+    second: Right arm
+  - first:
+      213: 21300008
+    second: Left arm
+  - first:
+      213: 21300010
+    second: Right Leg
+  - first:
+      213: 21300012
+    second: Left Leg
+  - first:
+      213: 21300014
+    second: Body
+  - first:
+      213: 21300016
+    second: eHead
+  - first:
+      213: 21300018
+    second: eTorso
+  - first:
+      213: 21300020
+    second: eUpperArm
+  - first:
+      213: 21300022
+    second: eForearm
+  - first:
+      213: 21300024
+    second: eHand
+  - first:
+      213: 21300026
+    second: eRightLEg
+  - first:
+      213: 21300028
+    second: eLeftLeg
+  - first:
+      213: 21300030
+    second: eRightShin
+  - first:
+      213: 21300032
+    second: eLeftShin
+  - first:
+      213: 21300034
+    second: eRightFoot
+  - first:
+      213: 21300036
+    second: eLeftFoot
+  - first:
+      213: 21300038
+    second: Side_Drawing
+  externalObjects: {}
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -40,34 +81,61 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 7
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
+    serializedVersion: 2
+    filterMode: 1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -83,6 +151,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Head
       rect:
@@ -95,6 +172,15 @@ TextureImporter:
       pivot: {x: 0.8791879, y: 0.14904314}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Tail
       rect:
@@ -107,6 +193,15 @@ TextureImporter:
       pivot: {x: 0.8275606, y: 0.81274414}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Right arm
       rect:
@@ -119,6 +214,15 @@ TextureImporter:
       pivot: {x: 0.121412374, y: 0.53312415}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Left arm
       rect:
@@ -131,6 +235,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.8254688}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82305410000000000800000000000000
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Right Leg
       rect:
@@ -143,6 +256,15 @@ TextureImporter:
       pivot: {x: 0.22955187, y: 0.8301351}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2305410000000000800000000000000
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Left Leg
       rect:
@@ -155,6 +277,15 @@ TextureImporter:
       pivot: {x: 0.24419071, y: 0.87446696}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2305410000000000800000000000000
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Body
       rect:
@@ -167,6 +298,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2305410000000000800000000000000
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eHead
       rect:
@@ -179,6 +319,15 @@ TextureImporter:
       pivot: {x: 0.56575125, y: 0.21023168}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03305410000000000800000000000000
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eTorso
       rect:
@@ -191,6 +340,15 @@ TextureImporter:
       pivot: {x: 0.51423776, y: 0.47671914}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23305410000000000800000000000000
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eUpperArm
       rect:
@@ -203,6 +361,15 @@ TextureImporter:
       pivot: {x: 0.5265907, y: 0.6590508}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43305410000000000800000000000000
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eForearm
       rect:
@@ -215,6 +382,15 @@ TextureImporter:
       pivot: {x: 0.3767173, y: 0.70636517}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63305410000000000800000000000000
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eHand
       rect:
@@ -227,6 +403,15 @@ TextureImporter:
       pivot: {x: 0.46106848, y: 0.5526917}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eRightLEg
       rect:
@@ -239,6 +424,15 @@ TextureImporter:
       pivot: {x: 0.48473623, y: 0.9226794}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3305410000000000800000000000000
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eLeftLeg
       rect:
@@ -251,6 +445,15 @@ TextureImporter:
       pivot: {x: 0.467379, y: 0.91147375}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3305410000000000800000000000000
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eRightShin
       rect:
@@ -263,6 +466,15 @@ TextureImporter:
       pivot: {x: 0.56386876, y: 0.8102698}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3305410000000000800000000000000
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eLeftShin
       rect:
@@ -275,6 +487,15 @@ TextureImporter:
       pivot: {x: 0.6040144, y: 0.83353466}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04305410000000000800000000000000
+      internalID: 21300032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eRightFoot
       rect:
@@ -287,6 +508,15 @@ TextureImporter:
       pivot: {x: 0.32525587, y: 0.63483346}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24305410000000000800000000000000
+      internalID: 21300034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: eLeftFoot
       rect:
@@ -299,6 +529,15 @@ TextureImporter:
       pivot: {x: 0.3887624, y: 0.6765081}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44305410000000000800000000000000
+      internalID: 21300036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Side_Drawing
       rect:
@@ -311,8 +550,49 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64305410000000000800000000000000
+      internalID: 21300038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Left Leg: 21300012
+      eRightLEg: 21300026
+      eRightFoot: 21300034
+      Head: 21300002
+      Right Leg: 21300010
+      Right arm: 21300006
+      eTorso: 21300018
+      Sketches_0: 21300000
+      eRightShin: 21300030
+      eHand: 21300024
+      eLeftShin: 21300032
+      eForearm: 21300022
+      eUpperArm: 21300020
+      eHead: 21300016
+      eLeftLeg: 21300028
+      eLeftFoot: 21300036
+      Left arm: 21300008
+      Tail: 21300004
+      Body: 21300014
+      Side_Drawing: 21300038
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -230,8 +230,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 	}
 
 	public virtual void ShootNearestMonster(){
+		return;
 		// Detect monsters in range
-		monstersInScene = ValueStore.sharedInstance.monsterManagerInstance.MonstersInScene;
+		monstersInScene = ValueStore.sharedInstance.monsterManagerInstance.MonstersInScene.ToList();
 		monstersInRange.Clear();
 		foreach (Monster x in monstersInScene) {
 			if (IsInRange (x) && !monstersInRange.Contains(x)) {
