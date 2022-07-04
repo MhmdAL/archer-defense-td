@@ -1,0 +1,318 @@
+fileFormatVersion: 2
+guid: ff7bb83a011b48f47993aa220c51ed8f
+timeCreated: 1526466020
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sketches_0
+    21300002: Head
+    21300004: Tail
+    21300006: Right arm
+    21300008: Left arm
+    21300010: Right Leg
+    21300012: Left Leg
+    21300014: Body
+    21300016: eHead
+    21300018: eTorso
+    21300020: eUpperArm
+    21300022: eForearm
+    21300024: eHand
+    21300026: eRightLEg
+    21300028: eLeftLeg
+    21300030: eRightShin
+    21300032: eLeftShin
+    21300034: eRightFoot
+    21300036: eLeftFoot
+    21300038: Side_Drawing
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sketches_0
+      rect:
+        serializedVersion: 2
+        x: 1718
+        y: 2254
+        width: 128
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Head
+      rect:
+        serializedVersion: 2
+        x: 1839
+        y: 1292
+        width: 231
+        height: 155
+      alignment: 9
+      pivot: {x: 0.8791879, y: 0.14904314}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Tail
+      rect:
+        serializedVersion: 2
+        x: 2102
+        y: 1495
+        width: 77
+        height: 74
+      alignment: 9
+      pivot: {x: 0.8275606, y: 0.81274414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Right arm
+      rect:
+        serializedVersion: 2
+        x: 2114
+        y: 1065
+        width: 177
+        height: 357
+      alignment: 9
+      pivot: {x: 0.121412374, y: 0.53312415}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Left arm
+      rect:
+        serializedVersion: 2
+        x: 2346
+        y: 1246
+        width: 29
+        height: 100
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8254688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Right Leg
+      rect:
+        serializedVersion: 2
+        x: 2296
+        y: 1165
+        width: 45
+        height: 75
+      alignment: 9
+      pivot: {x: 0.22955187, y: 0.8301351}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Left Leg
+      rect:
+        serializedVersion: 2
+        x: 2349
+        y: 1164
+        width: 39
+        height: 60
+      alignment: 9
+      pivot: {x: 0.24419071, y: 0.87446696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Body
+      rect:
+        serializedVersion: 2
+        x: 2447
+        y: 1131
+        width: 127
+        height: 257
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eHead
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 1286
+        width: 110
+        height: 156
+      alignment: 9
+      pivot: {x: 0.56575125, y: 0.21023168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eTorso
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 1242
+        width: 127
+        height: 233
+      alignment: 9
+      pivot: {x: 0.51423776, y: 0.47671914}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eUpperArm
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 1391
+        width: 68
+        height: 108
+      alignment: 9
+      pivot: {x: 0.5265907, y: 0.6590508}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eForearm
+      rect:
+        serializedVersion: 2
+        x: 638
+        y: 1387
+        width: 66
+        height: 92
+      alignment: 9
+      pivot: {x: 0.3767173, y: 0.70636517}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eHand
+      rect:
+        serializedVersion: 2
+        x: 751
+        y: 1185
+        width: 418
+        height: 326
+      alignment: 9
+      pivot: {x: 0.46106848, y: 0.5526917}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eRightLEg
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 868
+        width: 159
+        height: 178
+      alignment: 9
+      pivot: {x: 0.48473623, y: 0.9226794}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eLeftLeg
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 872
+        width: 186
+        height: 174
+      alignment: 9
+      pivot: {x: 0.467379, y: 0.91147375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eRightShin
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 685
+        width: 66
+        height: 155
+      alignment: 9
+      pivot: {x: 0.56386876, y: 0.8102698}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eLeftShin
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 689
+        width: 62
+        height: 154
+      alignment: 9
+      pivot: {x: 0.6040144, y: 0.83353466}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eRightFoot
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 613
+        width: 125
+        height: 63
+      alignment: 9
+      pivot: {x: 0.32525587, y: 0.63483346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: eLeftFoot
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 614
+        width: 120
+        height: 55
+      alignment: 9
+      pivot: {x: 0.3887624, y: 0.6765081}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Side_Drawing
+      rect:
+        serializedVersion: 2
+        x: 1721
+        y: 609
+        width: 385
+        height: 609
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,331 @@
+fileFormatVersion: 2
+guid: 1eea1e40359291d44823de10f5607569
+timeCreated: 1526465954
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: D_Torso
+    21300002: S_Torso
+    21300004: U_Torso
+    21300006: D_LA
+    21300008: D_RA
+    21300010: D_LF
+    21300012: D_RF
+    21300014: S_LA
+    21300016: S_LL
+    21300018: S_RL
+    21300020: S_LF
+    21300022: S_RF
+    21300024: S_RA
+    21300026: U_LA
+    21300028: U_RA
+    21300030: U_LF
+    21300032: U_RF
+    21300034: ShieldGlow
+    21300036: Enemy16_0
+    21300038: Enemy16_1
+    21300040: Side_Drawing
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: D_Torso
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 1348
+        width: 177
+        height: 629
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_Torso
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 865
+        width: 152
+        height: 489
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_Torso
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 73
+        width: 183
+        height: 611
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_LA
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 1587
+        width: 41
+        height: 133
+      alignment: 9
+      pivot: {x: 0.09833657, y: 0.8405083}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_RA
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 1440
+        width: 191
+        height: 484
+      alignment: 9
+      pivot: {x: 0.8736246, y: 0.4886583}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_LF
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 1372
+        width: 60
+        height: 48
+      alignment: 9
+      pivot: {x: 0.43138325, y: 0.8430888}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_RF
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 1376
+        width: 52
+        height: 40
+      alignment: 9
+      pivot: {x: 0.5, y: 0.9460144}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_LA
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 1032
+        width: 26
+        height: 120
+      alignment: 9
+      pivot: {x: 0.18330501, y: 0.91170555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_LL
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 826
+        width: 69
+        height: 123
+      alignment: 9
+      pivot: {x: 0.5, y: 0.87934935}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_RL
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 821
+        width: 75
+        height: 135
+      alignment: 9
+      pivot: {x: 0.5, y: 0.906623}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_LF
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 737
+        width: 74
+        height: 34
+      alignment: 9
+      pivot: {x: 0.35163796, y: 0.8632687}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_RF
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 725
+        width: 80
+        height: 38
+      alignment: 9
+      pivot: {x: 0.3113014, y: 0.8972602}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_RA
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 859
+        width: 218
+        height: 461
+      alignment: 9
+      pivot: {x: 0.12858371, y: 0.49702317}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_LA
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 316
+        width: 39
+        height: 135
+      alignment: 9
+      pivot: {x: 0.8708997, y: 0.85441625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_RA
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 166
+        width: 194
+        height: 480
+      alignment: 9
+      pivot: {x: 0.11571636, y: 0.49072754}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_LF
+      rect:
+        serializedVersion: 2
+        x: 598
+        y: 80
+        width: 43
+        height: 38
+      alignment: 9
+      pivot: {x: 0.52014446, y: 0.8647288}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_RF
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 85
+        width: 41
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5211271, y: 0.8937389}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: ShieldGlow
+      rect:
+        serializedVersion: 2
+        x: 1428
+        y: 787
+        width: 436
+        height: 412
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Enemy16_0
+      rect:
+        serializedVersion: 2
+        x: 1499
+        y: 1628
+        width: 311
+        height: 312
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Enemy16_1
+      rect:
+        serializedVersion: 2
+        x: 1447
+        y: 1223
+        width: 401
+        height: 379
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Side_Drawing
+      rect:
+        serializedVersion: 2
+        x: 1328
+        y: 110
+        width: 236
+        height: 645
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

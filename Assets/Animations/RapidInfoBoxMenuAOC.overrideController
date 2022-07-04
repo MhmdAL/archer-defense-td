@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: RapidInfoBoxMenuAOC
+  m_Controller: {fileID: 9100000, guid: 3c2db7554dd7d8146a8e62426c3904d2, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 37032135f7863d648aa23dce5ac5c456, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2df3deac73d98e443860e9197fb49596, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 2df3deac73d98e443860e9197fb49596, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2df3deac73d98e443860e9197fb49596, type: 2}

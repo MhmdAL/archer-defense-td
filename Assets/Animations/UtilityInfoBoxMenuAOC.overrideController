@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: UtilityInfoBoxMenuAOC
+  m_Controller: {fileID: 9100000, guid: 389ee7405e4555042b3dbcff8eb8b1c2, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 94d5c0c46a91abf4ea320a0548c58d90, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6685becfaa27e3e46b748e17e586d163, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6685becfaa27e3e46b748e17e586d163, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6685becfaa27e3e46b748e17e586d163, type: 2}

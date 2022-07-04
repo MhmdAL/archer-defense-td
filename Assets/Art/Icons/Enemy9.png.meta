@@ -1,0 +1,253 @@
+fileFormatVersion: 2
+guid: 2a5e104fca1f237418edd1fdb85ecbee
+timeCreated: 1526465822
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: D_Torso
+    21300002: S_Torso
+    21300004: U_Torso
+    21300006: D_RA
+    21300008: D_LA
+    21300010: S_LA
+    21300012: S_RA
+    21300014: D_RF
+    21300016: D_LF
+    21300018: S_RF
+    21300020: U_LA
+    21300022: U_RA
+    21300024: U_LF
+    21300026: U_RF
+    21300028: Side_Drawing
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: D_Torso
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 451
+        width: 164
+        height: 355
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_Torso
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 475
+        width: 112
+        height: 342
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_Torso
+      rect:
+        serializedVersion: 2
+        x: 1219
+        y: 458
+        width: 178
+        height: 354
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_RA
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 534
+        width: 128
+        height: 155
+      alignment: 9
+      pivot: {x: 0.9389951, y: 0.86963326}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_LA
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 515
+        width: 116
+        height: 170
+      alignment: 9
+      pivot: {x: 0.09157694, y: 0.7786883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_LA
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 226
+        width: 52
+        height: 113
+      alignment: 9
+      pivot: {x: 0.038094155, y: 0.7019297}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_RA
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 203
+        width: 98
+        height: 162
+      alignment: 9
+      pivot: {x: 0.20588839, y: 0.9447973}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_RF
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 334
+        width: 49
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.77118313}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: D_LF
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 335
+        width: 41
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7573449}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: S_RF
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 256
+        width: 87
+        height: 34
+      alignment: 9
+      pivot: {x: 0.3343506, y: 0.7825775}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_LA
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 520
+        width: 116
+        height: 166
+      alignment: 9
+      pivot: {x: 0.99694616, y: 0.7387438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_RA
+      rect:
+        serializedVersion: 2
+        x: 1471
+        y: 539
+        width: 122
+        height: 152
+      alignment: 9
+      pivot: {x: 0.037337508, y: 0.8081392}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_LF
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 356
+        width: 56
+        height: 32
+      alignment: 9
+      pivot: {x: 0.47855267, y: 0.6876488}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: U_RF
+      rect:
+        serializedVersion: 2
+        x: 1346
+        y: 359
+        width: 35
+        height: 27
+      alignment: 9
+      pivot: {x: 0.46568778, y: 0.81135726}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: Side_Drawing
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 1296
+        width: 150
+        height: 368
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

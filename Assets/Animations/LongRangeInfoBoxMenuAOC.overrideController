@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: LongRangeInfoBoxMenuAOC
+  m_Controller: {fileID: 9100000, guid: 2c36ba4cca9bfd44da51415d3ee15e75, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 8268a0773caa65f47a6cf3db030148da, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: afcbe2a0729272d4cb1e873a3e2afc9c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: afcbe2a0729272d4cb1e873a3e2afc9c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: afcbe2a0729272d4cb1e873a3e2afc9c, type: 2}
