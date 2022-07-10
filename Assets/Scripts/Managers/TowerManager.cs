@@ -1,306 +1,209 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class TowerManager : MonoBehaviour {
+public class TowerManager : MonoBehaviour
+{
+    public Action TowersInSceneChanged { get; set; }
+    public Action<Tower> TowerDeployed { get; set; }
+    public Action TowerSold { get; set; }
+    public Action<Tower> TowerUpgraded { get; set; }
+    public Action<Tower> TowerSpecialised;
 
-	public Action TowersInSceneChanged;
+    public List<Tower> TowersInScene { get; private set; }
+    public List<TowerBase> TowerBasesInScene { get; private set; }
 
-	public delegate void ArcherDeployedEventHandler(TowerBase owner);
-	public event ArcherDeployedEventHandler ArcherDeployed; 
+    [field: SerializeField]
+    public ArcherSpecialtyData ArcherSpecialtyData { get; private set; }
 
-	public delegate void ArcherSpecialisedEventHandler(ArcherType a);
-	public event ArcherSpecialisedEventHandler ArcherSpecialised;
+    [field: SerializeField]
+    private GameObject towerBaseHolder { get; set; }
 
-	public List<Tower> TowersInScene{
-		get{ 
-			return towersInScene;
-		}
+    [field: SerializeField]
+    private Tower untrainedArcherPrefab { get; set; }
 
-		set{
-			towersInScene = value;
-		}
-	}
+    [field: SerializeField]
+    private Tower rapidArcherPrefab { get; set; }
 
-	public List<TowerBase> TowerBasesInScene{
-		get{ 
-			return towerBasesInScene;
-		}
+    [field: SerializeField]
+    private Tower longArcherPrefab { get; set; }
 
-		set{
-			towerBasesInScene = value;
-		}
-	}
+    [field: SerializeField]
+    private Tower utilityArcherPrefab { get; set; }
 
-	[Header("Prefabs")]
-	public Tower untrainedArcherPrefab;
-	public Tower rapidArcherPrefab;
-	public Tower longArcherPrefab;
-	public Tower utilityArcherPrefab;
+    [field: SerializeField]
+    private float superBaseAttackRangeModifier { get; set; }
 
-	public GameObject towerLock;
+    private ValueStore _vs;
 
-	public GameObject towerBaseHolder;
+    private void Awake()
+    {
+        _vs = FindObjectOfType<ValueStore>();
 
-	[Header("UI items")]
-	public Image archerIcon;
-	public Image upgradeCostImage;
-	public Image upgradeIcon;
+        TowersInScene = new List<Tower>();
+        TowerBasesInScene = new List<TowerBase>();
 
-	public Image deployIconImage;
-	public Image deployIconArcherImage;
+        foreach (var item in towerBaseHolder.GetComponentsInChildren<TowerBase>())
+        {
+            TowerBasesInScene.Add(item);
+        }
+    }
 
-	public Button upgradeButton;
-	public Button deployIconButton;
+    public void CreateTowerIfEnoughMoney(TowerBase tb)
+    {
+        if (_vs.Silver >= untrainedArcherPrefab.cost)
+        {
+            CreateTower(tb);
+        }
+    }
 
-	public TextMeshProUGUI archerTitleText;
-	public TextMeshProUGUI archerLevelText;
-	public TextMeshProUGUI nextUpgradeText;
-	public TextMeshProUGUI nextUpgradeDescText;
-	public TextMeshProUGUI upgradeCostText;
+    private void CreateTower(TowerBase tb)
+    {
+        tb.SetState(TowerBaseState.NonClicked);
 
-	public TextMeshProUGUI deployCostText;
+        var t = Instantiate(untrainedArcherPrefab, tb.originalPos, Quaternion.identity) as Tower;
+        TowersInScene.Add(t);
 
-	public GameObject deployIconBG;
-	public GameObject deployIconArcher;
+        t.towerBase = tb;
 
-	public Color notEnoughSilverButtonColor, defaultButtonColor, defaultTextColor, notEnoughSilverTextColor;
+        if (tb.gameObject.tag == "SuperBase")
+        {
+            t.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
+                Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
 
-	public Sprite upgradeSprite;
-	public Sprite specialityUpgradeSprite;
+            t.buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
+        }
 
-	[Header("Tower Base Attack Range")]
-	public float attackRangeModifier;
+        _vs.Silver -= t.cost;
 
-	private List<Tower> towersInScene = new List<Tower> ();
-	private List<TowerBase> towerBasesInScene = new List<TowerBase> ();
+        TowerDeployed?.Invoke(t);
+        TowersInSceneChanged?.Invoke();
 
-	private ValueStore vs;
-
-	void Awake(){
-		foreach (var item in towerBaseHolder.GetComponentsInChildren<TowerBase>()) {
-			TowerBasesInScene.Add (item);
-		}
-	}
-
-    void Start () {
-		vs = ValueStore.sharedInstance;
-		vs.SilverChanged += OnSilverChanged;
-	}
-		
-	public void CreateTower(TowerBase tb)
-	{
-		tb.SetState (TowerBaseState.NonClicked);
-
-		if (vs.Silver >= untrainedArcherPrefab.cost)
-		{
-			Tower t = Instantiate (untrainedArcherPrefab, tb.originalPos, Quaternion.identity) as Tower;
-			TowersInScene.Add (t);
-
-			if (ArcherDeployed != null)
-				ArcherDeployed (tb);
-
-			if (TowersInSceneChanged != null)
-				TowersInSceneChanged ();
-			
-			t.owner = tb.gameObject;
-
-			if (tb.gameObject.tag == "SuperBase") {
-				t.AddModifier (new Modifier (attackRangeModifier, Name.TowerBaseAttackRangeBuff,
-					Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
-
-				t.buffIndicatorPanel.AddIndicator (BuffIndicatorType.ATTACK_RANGE);
-			}
-
-			tb.gameObject.SetActive (false);
-
-			vs.Silver -= t.cost;
-			vs.buymenu.SetActive(false);
-
-			UpdateTowerDesc (t);
-		}
-	}
+        tb.gameObject.SetActive(false);
+    }
 
     public void SellTower()
     {
-		Tower towerToSell = vs.lastClicked.GetComponent<Tower> ();
-		vs.Silver += (int) (towerToSell.silverSpent * 0.6f);
+        var towerToSell = _vs.lastClicked.GetComponent<Tower>();
+        _vs.Silver += (int)(towerToSell.silverSpent * 0.6f);
 
-		towerToSell.owner.SetActive (true);
+        towerToSell.towerBase.gameObject.SetActive(true);
 
-		TowersInScene.Remove (towerToSell);
+        TowersInScene.Remove(towerToSell);
 
-		if (TowersInSceneChanged != null)
-			TowersInSceneChanged ();
+        TowersInSceneChanged?.Invoke();
 
-		Destroy(vs.lastClicked);
+        Destroy(_vs.lastClicked);
 
-        vs.specialtyMenu.SetActive(false);
-		vs.towerDesc.SetActive (false);
+        TowerSold?.Invoke();
     }
 
-	// archerID: 1 = Rapid Archer, 2 = Long Archer, 3 = Utility Archer			
-	public void SetSpeciality(int archerID){
-		if(ArcherSpecialised != null)
-			ArcherSpecialised ((ArcherType) archerID);
-		
-		Tower t = vs.lastClickedTower;
-		if (vs.Silver >= t.UpgradeCost) {
-			Tower newTower = null;
-			if (archerID == 1) {
-				newTower = Instantiate (rapidArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
-			} else if (archerID == 2) {
-				newTower = Instantiate (longArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
-			} else if (archerID == 3) {
-				newTower = Instantiate (utilityArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
-			}
+    public void UpgradeTower(Tower t)
+    {
+        int nextLvl = t.level + 1;
 
-			TowersInScene.Remove (t);
-			TowersInScene.Add (newTower);
+        if (_vs.Silver >= t.UpgradeCost && Tower.CanUpgrade(t))
+        {
+            t.Upgrade();
 
-			newTower.modifiers.AddRange (t.modifiers);
-			newTower.owner = t.owner;
+            _vs.Silver -= t.UpgradeCost;
 
-			foreach (var item in t.buffIndicatorPanel.indicators) {
-				newTower.buffIndicatorPanel.AddIndicator (item.type, item.cd);
-			}
+            t.level += 1;
 
-			if (newTower.owner.tag == "SuperBase") {
-				newTower.AddModifier (new Modifier (attackRangeModifier, Name.TowerBaseAttackRangeBuff,
-					Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
-			}
+            TowerUpgraded?.Invoke(t);
+        }
+    }
 
-			newTower.silverSpent = t.cost;
-			newTower.Upgrade ();	
-			newTower.level += 1;
-		
-			vs.specialtyMenu.SetActive (false);
-			vs.Silver -= t.UpgradeCost;
-			vs.lastClicked = newTower.gameObject;
-			vs.lastClickedTower = newTower;
+    public void SetSpeciality(int archerID)
+    {
+        var t = _vs.lastClickedTower;
+        if (_vs.Silver >= t.UpgradeCost)
+        {
+            Tower newTower = null;
+            if (archerID == 1)
+            {
+                newTower = Instantiate(rapidArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
+            }
+            else if (archerID == 2)
+            {
+                newTower = Instantiate(longArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
+            }
+            else if (archerID == 3)
+            {
+                newTower = Instantiate(utilityArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
+            }
 
-			Destroy (t.gameObject);
+            TowersInScene.Remove(t);
+            TowersInScene.Add(newTower);
 
-			UpdateTowerDesc (newTower);
-		}
-	}
+            newTower.modifiers.AddRange(t.modifiers);
+            newTower.towerBase = t.towerBase;
 
-	public void UpdateTowerDesc(Tower t){
-		if (t != null) {
-			// If next level is unlocked
-			if (CanUpgrade (t)) {
-				// Remove lock, activate upgradebutton
-				towerLock.SetActive (false);
-				upgradeButton.interactable = true;
-				upgradeCostImage.gameObject.SetActive (true);
-			} else { // if next level is locked
-				// Activate lock, deactivate upgradebutton
-				towerLock.SetActive (true);
-				upgradeButton.interactable = false;
-				upgradeCostImage.gameObject.SetActive (false);
-			}
-			// Update archer Icon, Title, Level to match currently clicked archer
-			archerIcon.sprite = t.icon;
-			archerTitleText.text = t.title;
-			archerLevelText.text = "Level  " + string.Concat (t.level);
+            foreach (var item in t.buffIndicatorPanel.indicators)
+            {
+                newTower.buffIndicatorPanel.AddIndicator(item.type, item.cd);
+            }
 
-			// Disable upgrade button and next upgrade details if archer is maxlevel
-			if (t.level == t.maxLevel) {
-				upgradeIcon.gameObject.SetActive (false);
-				nextUpgradeText.text = System.String.Empty;
-				nextUpgradeDescText.text = System.String.Empty;
-			} else {
-				upgradeIcon.gameObject.SetActive (true);
-			}
+            if (newTower.towerBase.tag == "SuperBase")
+            {
+                newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
+                    Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
+            }
 
-			if (t.level == 0) {
-				upgradeIcon.sprite = specialityUpgradeSprite;
-				nextUpgradeText.text = System.String.Empty;
-				nextUpgradeDescText.text = System.String.Empty;
-			} else if (t.level != t.maxLevel){
-				upgradeIcon.sprite = upgradeSprite;
-				nextUpgradeDescText.text = t.NextUpgradeStats ();
-				nextUpgradeText.text = "Next Upgrade";
-			}
+            newTower.silverSpent = t.cost;
+            newTower.Upgrade();
+            newTower.level += 1;
 
-			upgradeCostText.text = string.Concat(t.UpgradeCost);
+            _vs.specialtyMenu.SetActive(false);
+            _vs.Silver -= t.UpgradeCost;
 
-			if (vs.Silver >= t.UpgradeCost) {
-				upgradeIcon.color = defaultButtonColor;
-				upgradeButton.interactable = true;
-				upgradeCostText.color = defaultTextColor;
-				//if(t.level == 0)
-					//upgradeCostText.GetComponent<TextMeshProUGUI> ().color = Color.yellow;
-			} else if (vs.Silver < t.UpgradeCost) {
-				upgradeIcon.color = notEnoughSilverButtonColor;
-				upgradeButton.interactable = false;
+            _vs.lastClicked = newTower.gameObject;
+            _vs.lastClickedTower = newTower;
 
-				upgradeCostText.color = notEnoughSilverTextColor;
-			}
-		}
-	}
+            Destroy(t.gameObject);
 
-	public void UpdateDeployMenu(){
-		if (ValueStore.sharedInstance.Silver >= 50) {
-			deployIconImage.color = defaultButtonColor;
-			deployIconArcherImage.color = defaultButtonColor;
-			deployIconButton.interactable = true;
+            TowerSpecialised?.Invoke(newTower);
+        }
+    }
 
-			deployCostText.color = defaultTextColor;
-		} else {
-			deployIconImage.color = notEnoughSilverButtonColor;
-			deployIconArcherImage.color = notEnoughSilverButtonColor;
-			deployIconButton.interactable = false;
+    public void UseSkillpoint(int skill)
+    {
+        var tower = _vs.lastClickedTower;
 
-			deployCostText.color = notEnoughSilverTextColor;
-		}
-	}
+        tower.SkillPoints--;
 
-	public void OnSilverChanged(){
-		if(vs.lastClicked != null ){
-			if (vs.lastClickType == ClickType.Tower) {
-				UpdateTowerDesc (vs.lastClickedTower);
-			}else if(vs.lastClickType == ClickType.TowerBase){
-				UpdateDeployMenu ();
-			}
-		}
-	}
+        var upgradeValues = ArcherSpecialtyData.SpecialtyValues[tower.CurrentArcherSpecialtyLevel];
 
-	public void UpgradeArcher(){
-		Tower t = vs.lastClickedTower;
-		if (t.archerSpeciality != ArcherType.ClassicArcher) {
-			int nextLvl = t.level + 1;
+        tower.CurrentArcherSpecialtyLevel++;
 
-			if (vs.Silver >= t.UpgradeCost && CanUpgrade(t)) {
-				t.Upgrade ();
-				vs.specialtyMenu.SetActive (false);
-				vs.towerDesc.SetActive (false);
-				vs.Silver -= t.UpgradeCost;
-				t.level += 1;
-				UpdateTowerDesc (t);
-			}
-		} else {
-			vs.specialtyMenu.SetActive (true);
-		}
+        switch ((TowerSkill)skill)
+        {
+            case TowerSkill.AttackDamage:
+                tower.AddModifier(new Modifier(upgradeValues.ADValue,
+                 Name.ArcherSpecialtyADBuff1, Type.ATTACK_DAMAGE,
+                 upgradeValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat
+                ), StackOperation.Additive, 1);
+                break;
+            case TowerSkill.AttackSpeed:
+                tower.AddModifier(new Modifier(upgradeValues.ASValue,
+                 Name.ArcherSpecialtyASBuff1, Type.ATTACK_SPEED,
+                 upgradeValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat
+                ), StackOperation.Additive, 1);
+                break;
+            case TowerSkill.AttackRange:
+                tower.AddModifier(new Modifier(upgradeValues.ARValue,
+                 Name.ArcherSpecialtyARBuff1, Type.ATTACK_RANGE,
+                 upgradeValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat
+                ), StackOperation.Additive, 1);
+                break;
+        }
+    }
 
-	}
-		
-	public static bool CanUpgrade(Tower t){
-		if (t.archerSpeciality == ArcherType.ClassicArcher) 
-			return true;
-		
-		if (t.archerSpeciality == ArcherType.RapidArcher && SaveData.GetUpgrade (UpgradeType.Rapid_1).level >= t.level) {
-			return true;
-		} else if (t.archerSpeciality == ArcherType.LongArcher && SaveData.GetUpgrade (UpgradeType.Long_1).level >= t.level) {
-			return true;
-		} else if (t.archerSpeciality == ArcherType.UtilityArcher && SaveData.GetUpgrade (UpgradeType.Utility_1).level >= t.level) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
 
+public enum TowerSkill
+{
+    AttackDamage,
+    AttackSpeed,
+    AttackRange
+}

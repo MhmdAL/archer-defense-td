@@ -39,8 +39,8 @@ public class InfoBoxManager : MonoBehaviour {
 		}
 
 		vs.waveManagerInstance.WaveStarted += OnWaveStart;
-		vs.towerManagerInstance.ArcherDeployed += OnArcherDeployed;
-		vs.towerManagerInstance.ArcherSpecialised += OnArcherSpecialised;
+		vs.towerManagerInstance.TowerDeployed += OnTowerDeployed;
+		vs.towerManagerInstance.TowerSpecialised += OnTowerSpecialised;
 		Ability.AbilityActivated += OnAbilityActivated;
 
 		UpdateState ();
@@ -139,8 +139,8 @@ public class InfoBoxManager : MonoBehaviour {
 		}
 	}
 
-	public void OnArcherDeployed(TowerBase tb){
-		if (tb.tag != "SuperBase")
+	public void OnTowerDeployed(Tower tower){
+		if (tower.towerBase.tag != "SuperBase")
 			OnNormalArcherDeployed ();
 		else
 			OnSuperArcherDeployed ();
@@ -160,7 +160,7 @@ public class InfoBoxManager : MonoBehaviour {
 		}
 	}
 
-	public void OnArcherSpecialised(ArcherType a){
+	public void OnTowerSpecialised(Tower tower){
 		if (!firstArcherSpecialised){
 			firstArcherSpecialised = true;
 			UpdateBoxes ();
@@ -178,8 +178,8 @@ public class InfoBoxManager : MonoBehaviour {
 
 	void OnDestroy(){
 		vs.waveManagerInstance.WaveStarted -= OnWaveStart;
-		vs.towerManagerInstance.ArcherDeployed -= OnArcherDeployed;
-		vs.towerManagerInstance.ArcherSpecialised -= OnArcherSpecialised;
+		vs.towerManagerInstance.TowerDeployed -= OnTowerDeployed;
+		vs.towerManagerInstance.TowerSpecialised -= OnTowerSpecialised;
 		Ability.AbilityActivated -= OnAbilityActivated;
 	}
 }

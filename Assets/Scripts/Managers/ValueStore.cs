@@ -47,6 +47,7 @@ public class ValueStore : MonoBehaviour {
 	public AbilityManager abilityManagerInstance;
 	public InfoPanelManager infoPanelManagerInstance;
 	public InfoBoxManager infoBoxManagerInstance;
+	public GameUIController uiControllerInstance;
 
 	public TextMeshProUGUI levelPopUpText;
 
@@ -148,12 +149,12 @@ public class ValueStore : MonoBehaviour {
 			specialtyMenu.SetActive (false);
 			towerDesc.SetActive (false);
 
-			towerManagerInstance.UpdateDeployMenu ();
+			uiControllerInstance.UpdateDeployMenu ();
 		} else if (c == ClickType.Tower) {
 			lastClickType = ClickType.Tower;
 			buymenu.SetActive(false);
 
-			towerManagerInstance.UpdateTowerDesc (lastClickedTower);
+			uiControllerInstance.UpdateTowerDesc (lastClickedTower);
 			specialtyMenu.SetActive (false);
 			towerDesc.SetActive (true);
 

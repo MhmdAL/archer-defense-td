@@ -40,7 +40,16 @@ public enum Name {
 	TowerBaseAttackRangeBuff,
 	EnemyBoss4_Disablility,
 	EnemyBoss5_Immunity,
-	EnemyBoss6_Shield
+	EnemyBoss6_Shield,
+	ArcherSpecialtyADBuff1,
+	ArcherSpecialtyADBuff2,
+	ArcherSpecialtyADBuff3,
+	ArcherSpecialtyASBuff1,
+	ArcherSpecialtyASBuff2,
+	ArcherSpecialtyASBuff3,
+	ArcherSpecialtyARBuff1,
+	ArcherSpecialtyARBuff2,
+	ArcherSpecialtyARBuff3,
 }
 
 public enum StackOperation{
