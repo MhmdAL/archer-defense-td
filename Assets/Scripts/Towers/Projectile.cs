@@ -86,12 +86,12 @@ public class Projectile : MonoBehaviour {
 						}
 					}
 					if (ownerTower != null) {
-						ownerTower.BulletHit (targetMonster, this, aoeTargets, shotNumber);		
+						ownerTower.OnTargetHit (targetMonster, this, aoeTargets, shotNumber);		
 						BulletHit (targetMonster, aoeTargets);
 					}
 				} else {
 					if (ownerTower != null) {
-						ownerTower.BulletHit (targetMonster, this, null, shotNumber);		
+						ownerTower.OnTargetHit (targetMonster, this, null, shotNumber);		
 						BulletHit (targetMonster);
 					} else {
 						targetMonster.Damage (damage, 0, DamageSource.Normal, ownerTower);

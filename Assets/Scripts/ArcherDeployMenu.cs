@@ -1,56 +1,71 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArcherDeployMenu : MonoBehaviour {
+public class ArcherDeployMenu : MonoBehaviour
+{
 
-	[HideInInspector]
-	public TowerBase tb;
+    [HideInInspector]
+    public TowerBase tb;
 
-	[HideInInspector]	public GameObject objToFollow;
-	private Bounds objBounds;
+    [HideInInspector] public GameObject objToFollow;
+    private Bounds objBounds;
 
-	[HideInInspector]	public float verticalOffset;
+    [HideInInspector] public float verticalOffset;
 
-	private Transform myTransform;
+    private Transform myTransform;
 
-	private Camera mainCamera;
+    private Camera mainCamera;
 
-	void Start(){
-		myTransform = transform;
-		mainCamera = ValueStore.sharedInstance.mainCamera;
-		//TODO: Stop using getcomponent 
-		Renderer[] renderersToFollow = objToFollow.GetComponentsInChildren<Renderer>();
-		objBounds = renderersToFollow[0].bounds;
-		foreach (Renderer item in renderersToFollow) {
-			objBounds.Encapsulate (item.bounds);
-		}
+    private ValueStore _vs;
 
-		PinchZoom.CameraSizeChanged += OnCameraSizeChange;
-	}
+    private void Awake()
+    {
+		_vs = FindObjectOfType<ValueStore>();
+    }
 
-	void Update(){
-		float scale = 20f / mainCamera.orthographicSize + 0.3f;
-		myTransform.localScale = new Vector3(scale, scale, 0);
+    void Start()
+    {
+        myTransform = transform;
+        mainCamera = ValueStore.sharedInstance.mainCamera;
+        //TODO: Stop using getcomponent 
+        Renderer[] renderersToFollow = objToFollow.GetComponentsInChildren<Renderer>();
+        objBounds = renderersToFollow[0].bounds;
+        foreach (Renderer item in renderersToFollow)
+        {
+            objBounds.Encapsulate(item.bounds);
+        }
 
-		FollowObject ();
-	}
+        PinchZoom.CameraSizeChanged += OnCameraSizeChange;
+    }
 
-	public void OnClick(){
-		tb.CreateTower ();
-	}
+    void Update()
+    {
+        float scale = 20f / mainCamera.orthographicSize + 0.3f;
+        myTransform.localScale = new Vector3(scale, scale, 0);
 
-	public void FollowObject(){
-		if (objToFollow != null) {
-			Vector3 pos = mainCamera.WorldToScreenPoint (objToFollow.transform.position + new Vector3(0, objBounds.extents.y * 1.5f, 0))
-				+ new Vector3(0, ( ( (RectTransform)myTransform).rect.height * myTransform.localScale.y) / 2, 0);
+        FollowObject();
+    }
 
-			myTransform.position = pos;
-		}
-	}
+    public void OnClick()
+    {
+		_vs.towerManagerInstance.CreateTowerIfEnoughMoney(tb);
+    }
 
-	public void OnCameraSizeChange(){
-		//foreach (var item in objToFollow.GetComponentsInChildren<Renderer>()) {
-		//	objBounds.Encapsulate (item.bounds);
-		//}
-	}
+    public void FollowObject()
+    {
+        if (objToFollow != null)
+        {
+            Vector3 pos = mainCamera.WorldToScreenPoint(objToFollow.transform.position + new Vector3(0, objBounds.extents.y * 1.5f, 0))
+                + new Vector3(0, (((RectTransform)myTransform).rect.height * myTransform.localScale.y) / 2, 0);
+
+            myTransform.position = pos;
+        }
+    }
+
+    public void OnCameraSizeChange()
+    {
+        //foreach (var item in objToFollow.GetComponentsInChildren<Renderer>()) {
+        //	objBounds.Encapsulate (item.bounds);
+        //}
+    }
 }

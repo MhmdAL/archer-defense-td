@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class TowerManager : MonoBehaviour
 {
-    public Action TowersInSceneChanged { get; set; }
-    public Action<Tower> TowerDeployed { get; set; }
-    public Action TowerSold { get; set; }
-    public Action<Tower> TowerUpgraded { get; set; }
-    public Action<Tower> TowerSpecialised;
+    public event Action TowersInSceneChanged;
+    public event Action<Tower> TowerDeployed;
+    public event Action TowerSold;
+    public event Action<Tower> TowerUpgraded;
+    public event Action<Tower> TowerSpecialised;
+    public event Action<Tower> TowerClicked;
+    public event Action<TowerBase> TowerBaseClicked;
+
+    [field: SerializeField]
+    public BackgroundScaler Background { get; set; }
 
     public List<Tower> TowersInScene { get; private set; }
     public List<TowerBase> TowerBasesInScene { get; private set; }
-
-    [field: SerializeField]
-    public ArcherSpecialtyData ArcherSpecialtyData { get; private set; }
 
     [field: SerializeField]
     private GameObject towerBaseHolder { get; set; }
@@ -47,6 +49,8 @@ public class TowerManager : MonoBehaviour
         {
             TowerBasesInScene.Add(item);
         }
+
+        _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
     }
 
     public void CreateTowerIfEnoughMoney(TowerBase tb)
@@ -76,32 +80,29 @@ public class TowerManager : MonoBehaviour
 
         _vs.Silver -= t.cost;
 
-        TowerDeployed?.Invoke(t);
-        TowersInSceneChanged?.Invoke();
+        OnTowerDeployed(t);
 
         tb.gameObject.SetActive(false);
     }
 
-    public void SellTower()
+    public void SellTower(Tower t)
     {
-        var towerToSell = _vs.lastClicked.GetComponent<Tower>();
-        _vs.Silver += (int)(towerToSell.silverSpent * 0.6f);
+        // var towerToSell = _vs.lastClicked.GetComponent<Tower>();
+        _vs.Silver += (int)(t.silverSpent * 0.6f);
 
-        towerToSell.towerBase.gameObject.SetActive(true);
+        t.towerBase.gameObject.SetActive(true);
 
-        TowersInScene.Remove(towerToSell);
+        TowersInScene.Remove(t);
 
         TowersInSceneChanged?.Invoke();
 
-        Destroy(_vs.lastClicked);
+        Destroy(t.gameObject);
 
         TowerSold?.Invoke();
     }
 
     public void UpgradeTower(Tower t)
     {
-        int nextLvl = t.level + 1;
-
         if (_vs.Silver >= t.UpgradeCost && Tower.CanUpgrade(t))
         {
             t.Upgrade();
@@ -114,9 +115,8 @@ public class TowerManager : MonoBehaviour
         }
     }
 
-    public void SetSpeciality(int archerID)
+    public void SetSpeciality(Tower t, int archerID)
     {
-        var t = _vs.lastClickedTower;
         if (_vs.Silver >= t.UpgradeCost)
         {
             Tower newTower = null;
@@ -138,6 +138,9 @@ public class TowerManager : MonoBehaviour
 
             newTower.modifiers.AddRange(t.modifiers);
             newTower.towerBase = t.towerBase;
+            newTower.SkillPoints = t.SkillPoints;
+            newTower.CurrentSkillLevel = t.CurrentSkillLevel;
+            newTower.CurrentXP = t.CurrentXP;
 
             foreach (var item in t.buffIndicatorPanel.indicators)
             {
@@ -154,51 +157,119 @@ public class TowerManager : MonoBehaviour
             newTower.Upgrade();
             newTower.level += 1;
 
-            _vs.specialtyMenu.SetActive(false);
             _vs.Silver -= t.UpgradeCost;
-
-            _vs.lastClicked = newTower.gameObject;
-            _vs.lastClickedTower = newTower;
 
             Destroy(t.gameObject);
 
-            TowerSpecialised?.Invoke(newTower);
+            OnTowerSpecialized(newTower);
         }
     }
 
-    public void UseSkillpoint(int skill)
+    public void ApplyDoubleShotEnhancement(Tower t)
     {
-        var tower = _vs.lastClickedTower;
+        var doubleShotStrat = ScriptableObject.CreateInstance<MultiShootNearestNMonstersTowerAttackStrategy>();
+        doubleShotStrat.ShotCount = 2;
+        doubleShotStrat.MultiShootSecondaries = true;
 
-        tower.SkillPoints--;
+        t.TowerAttackStrategy = doubleShotStrat;
+    }
 
-        var upgradeValues = ArcherSpecialtyData.SpecialtyValues[tower.CurrentArcherSpecialtyLevel];
-
-        tower.CurrentArcherSpecialtyLevel++;
-
-        switch ((TowerSkill)skill)
+    public void ApplyTowerEnhancement(Tower t, EnhancementType type)
+    {
+        Debug.Log(type);
+        
+        switch (type)
         {
-            case TowerSkill.AttackDamage:
-                tower.AddModifier(new Modifier(upgradeValues.ADValue,
-                 Name.ArcherSpecialtyADBuff1, Type.ATTACK_DAMAGE,
-                 upgradeValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat
-                ), StackOperation.Additive, 1);
+            case EnhancementType.SlowOnAttack:
+                t.ApplyEnhancement(new SlowOnAttackEnhancement());
                 break;
-            case TowerSkill.AttackSpeed:
-                tower.AddModifier(new Modifier(upgradeValues.ASValue,
-                 Name.ArcherSpecialtyASBuff1, Type.ATTACK_SPEED,
-                 upgradeValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat
-                ), StackOperation.Additive, 1);
+            case EnhancementType.RampUp:
+                t.ApplyEnhancement(new RampUpEnhancement());
                 break;
-            case TowerSkill.AttackRange:
-                tower.AddModifier(new Modifier(upgradeValues.ARValue,
-                 Name.ArcherSpecialtyARBuff1, Type.ATTACK_RANGE,
-                 upgradeValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat
-                ), StackOperation.Additive, 1);
+            case EnhancementType.MultiShot:
+                t.ApplyEnhancement(new MultiShotEnhancement());
                 break;
         }
     }
 
+    private void OnTowerSpecialized(Tower tower)
+    {
+        tower.Focus();
+
+        TowerSpecialised?.Invoke(tower);
+    }
+
+    private void OnTowerDeployed(Tower tower)
+    {
+        tower.Focus();
+
+        TowerDeployed?.Invoke(tower);
+        TowersInSceneChanged?.Invoke();
+    }
+
+    private void OnObjectClicked(object obj)
+    {
+        if (obj is BackgroundScaler bg)
+        {
+            OnBackgroundClicked();
+        }
+        else if (obj is Tower t)
+        {
+            OnTowerClicked(t);
+        }
+        else if (obj is TowerBase tb)
+        {
+            OnTowerBaseClicked(tb);
+        }
+    }
+
+    public void OnTowerClicked(Tower tower)
+    {
+        foreach (var t in TowersInScene)
+        {
+            t.UnFocus();
+        }
+
+        foreach (var tb in TowerBasesInScene)
+        {
+            tb.UnFocus();
+        }
+
+        tower.Focus();
+    }
+
+    public void OnTowerBaseClicked(TowerBase towerBase)
+    {
+        foreach (var t in TowersInScene)
+        {
+            t.UnFocus();
+        }
+
+        foreach (var tb in TowerBasesInScene)
+        {
+            tb.UnFocus();
+        }
+
+        towerBase.Focus();
+    }
+
+    public void OnBackgroundClicked()
+    {
+        foreach (var t in TowersInScene)
+        {
+            t.UnFocus();
+        }
+
+        foreach (var tb in TowerBasesInScene)
+        {
+            tb.UnFocus();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        _vs.userClickHandlerInstance.ObjectClicked -= OnObjectClicked;
+    }
 }
 
 public enum TowerSkill

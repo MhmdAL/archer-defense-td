@@ -7,25 +7,32 @@ using System.IO;
 using System.Linq;
 using UnityEngine.UI;
 
-public enum BuffIndicatorType
+public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable
 {
-    ATTACK_RANGE,
-    ATTACK_DAMAGE
-}
+    public event Action<Tower> SkillPointsChanged;
+    public event Action<Modifier> ModifierEnded;
+    public event Action AttackFinished;
+    public event Action CombatEnded;
 
-public enum ArcherType
-{
-    ClassicArcher,
-    RapidArcher,
-    LongArcher,
-    UtilityArcher
-}
 
-public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
-{
-    #region fields
-    public delegate void ModifierEndedEventHandler(Modifier m);
-    public event ModifierEndedEventHandler ModifierEnded;
+    [field: SerializeField]
+    public TowerSkillData TowerSkillsData { get; set; }
+
+
+    [field: SerializeField]
+    public TowerAttackStrategy TowerAttackStrategy { get; set; }
+
+    [field: SerializeField]
+    public List<TargetHitEffect> OnHitEffects { get; set; }
+
+
+    [field: SerializeField]
+    public int SecondaryTargetCount { get; set; } = 0;
+
+
+    public List<IEnhancement> Enhancements { get; set; }
+
+    public List<EnhancementType> NextPossibleEnhancements { get; set; }
 
     public List<Stat> Stats
     {
@@ -103,7 +110,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public TowerBase towerBase;
 
     [HideInInspector]
-    public bool active;
+    public bool IsDisabled;
 
     [HideInInspector]
     public float fullcooldown;
@@ -127,16 +134,16 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     protected Animator anim;
 
-    protected int consecutiveShots;
-    protected int shotNumber;
+    public int consecutiveShots;
+    public int shotNumber;
 
     private List<Monster> monstersInScene;
     private List<Monster> targets;
 
     private List<Modifier> towerUpgrades = new List<Modifier>();
 
-    private CooldownTimer ShotCooldown;
-    private CooldownTimer CombatCooldown;
+    public CooldownTimer AttackCooldownTimer;
+    public CooldownTimer CombatCooldown;
     private CooldownTimer DpsCooldown;
 
     private float upgradeCost;
@@ -149,22 +156,64 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     private GameObject cooldownBarParent;
 
-    private bool isInCombat = false;
+    public bool isInCombat = false;
 
     private List<SpriteRenderer> attachedRenderers;
 
-    #endregion
+    private int _skillPoints;
+    public int SkillPoints
+    {
+        get
+        {
+            return _skillPoints;
+        }
+        set
+        {
+            _skillPoints = value;
 
-    public int SkillPoints { get; set; }
+            SkillPointsChanged?.Invoke(this);
+        }
+    }
 
-    public int CurrentArcherSpecialtyLevel { get; set; }
+    public int CurrentSkillLevel { get; set; }
 
-    public int XP { get; private set; }
+    private int _currentXP;
+    public int CurrentXP
+    {
+        get
+        {
+            return _currentXP;
+        }
+        set
+        {
+            _currentXP = value;
 
+            if (TowerSkillsData.SkillValues.Count > CurrentSkillLevel)
+            {
+                var nextLevelXp = TowerSkillsData.SkillValues[CurrentSkillLevel];
 
-    void Awake()
+                if (CurrentXP >= nextLevelXp.ExpRequired)
+                {
+                    SkillPoints++;
+
+                    CurrentSkillLevel++;
+                }
+            }
+        }
+    }
+
+    private void Awake()
     {
         ModifierEnded += OnModifierEnded;
+
+        Enhancements = new List<IEnhancement>();
+
+        NextPossibleEnhancements = new List<EnhancementType>
+        {
+            EnhancementType.SlowOnAttack,
+            EnhancementType.MultiShot,
+            EnhancementType.RampUp,
+        };
 
         stats = new List<Stat>() { AD, AS, AR, AP };
 
@@ -194,7 +243,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     {
         silverSpent = cost;
 
-        ShotCooldown = new CooldownTimer(0);
+        AttackCooldownTimer = new CooldownTimer(0);
         CombatCooldown = new CooldownTimer(2);
         DpsCooldown = new CooldownTimer(15);
 
@@ -214,31 +263,18 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         AP.baseValue = SaveData.GetUpgrade(UpgradeType.AP).CurrentValue;
     }
 
-    public virtual void AddStartingModifiers()
-    {
+    public virtual void AddStartingModifiers() { }
 
-    }
-
-    void FixedUpdate()
+    private void Update()
     {
-        // adjust range circle and CD bar
         UpdateTowerVisuals();
 
-        // shoot when cooldown ends and adjust stats
-        if (ShotCooldown.GetCooldownRemaining() <= 0)
+        if (AttackCooldownTimer.GetCooldownRemaining() <= 0)
         {
-            if (active)
-            {
-                ShootNearestMonster();
-                if (targets[0] == null)
-                {
-                    ShotCooldown.ResetTimer(0.4f);
-                }
-            }
-            else
-            {
-                ShotCooldown.ResetTimer(fullcooldown);
-            }
+            CalculateTargets();
+
+            Attack();
+
             AdjustStats();
         }
 
@@ -246,15 +282,38 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         {
             isInCombat = false;
             consecutiveShots = 0;
+
+            CombatEnded?.Invoke();
         }
-
-        //Debug.Log (AD.Value);
-        //Debug.Log (AS.Value);
-        //Debug.Log ("Flat bonus: " + AR.flatBonus + "Bonus: " + AR.BonusValue + "Total: " + AR.Value);
-
     }
 
-    public virtual void ShootNearestMonster()
+    private void Attack()
+    {
+        if (!IsDisabled)
+        {
+            var secondaryTargets = monstersInRange.ToList();
+
+            if (targets.Count > 0)
+                secondaryTargets.Remove(targets.FirstOrDefault());
+
+            secondaryTargets = secondaryTargets.Take(SecondaryTargetCount).ToList();
+
+            TowerAttackStrategy.Attack(new TowerAttackData
+            {
+                Owner = this,
+                PrimaryTarget = targets.FirstOrDefault(),
+                SecondaryTargets = secondaryTargets,
+                MonstersInRange = monstersInRange,
+                OnAfterAttack = OnAfterAttack
+            });
+        }
+        else
+        {
+            AttackCooldownTimer.ResetTimer(fullcooldown);
+        }
+    }
+
+    private void CalculateTargets()
     {
         // Detect monsters in range
         monstersInScene = ValueStore.sharedInstance.monsterManagerInstance.MonstersInScene.ToList();
@@ -293,75 +352,62 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
                 targets[0].isAboutToDie = true;
             }
         }
-        //if (targets [1] == null && monstersInRange.Count > 1 && monstersInRange [0] != targets [0]) {
-        //	targets [1] = monstersInRange [0];
-        //} else if (targets [1] == null && monstersInRange.Count > 1 && monstersInRange [0] == targets [0]) {
-        //	targets [1] = monstersInRange [1];
-        //}
-        // Shoot targets
-        if (targets[0] != null)
-        {
-            shotNumber += 1;
-            Shoot(targets[0], (GameObject)Instantiate(bullet, arrowSpawnPoint.position, Quaternion.identity), AD.Value, AP.Value, bulletRadius);
-        }
     }
-    public virtual void Shoot(Monster target, GameObject projectile, float bulletDamage, float armorpen, float radius)
-    {
-        Vector3 dir = target.transform.position - projectile.transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        projectile.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
 
-        Projectile bullet = projectile.GetComponentInChildren<Projectile>();
-        if (target != null)
+    private void OnBeforeAttack()
+    {
+
+    }
+
+    private void OnAfterAttack()
+    {
+        CurrentXP++;
+
+        AttackFinished?.Invoke();
+    }
+
+    public bool IsInRange(Monster m)
+    {
+        if (m)
         {
-            if (ValueStore.sharedInstance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
+            Vector3 targetDistance = m.transform.root.position - transform.position;
+            if (targetDistance.magnitude < AR.Value)
             {
-                bullet.isAboutToKill = true;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-
-        //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
-        bullet.speed = bulletSpeed;
-        bullet.ownerTower = this;
-        bullet.targetMonster = target;
-        bullet.damage = bulletDamage;
-        bullet.armorPen = armorpen;
-        bullet.radius = radius;
-        bullet.shotNumber = shotNumber;
-        bullet.currentProjectile = projectile.ToString();
-        isInCombat = true;
-        CombatCooldown.ResetTimer(combatTimer);
-        // set cooldown back to full duration
-        ShotCooldown.ResetTimer(fullcooldown);
-
-        IncreaseXP(1);
+        else
+            return false;
     }
 
-    private void IncreaseXP(int count)
+    public virtual void OnTargetHit(Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
     {
-        XP += count;
-
-        var specialtyData = ValueStore.sharedInstance.towerManagerInstance.ArcherSpecialtyData.SpecialtyValues;
-
-        if (specialtyData.Count > CurrentArcherSpecialtyLevel)
+        foreach (var ohe in OnHitEffects)
         {
-            var nextLevelXp = specialtyData[CurrentArcherSpecialtyLevel];
-
-            if (XP > nextLevelXp.ExpRequired)
+            ohe.OnTargetHit(new TargetHitData
             {
-                SkillPoints++;
-            }
+                Owner = this,
+                Projectile = p,
+                Target = target
+            });
         }
-    }
 
-    private void AdjustSortingOrder()
-    {
-        // adjust sorting order of the tower components
-        attachedRenderers = transform.GetComponentsInChildren<SpriteRenderer>(true).ToList();
-        foreach (var item in attachedRenderers)
-        {
-            item.sortingOrder += Mathf.RoundToInt((transform.position.y) * -150);
-        }
+        // if (target != null)
+        //     target.Damage(p.damage, p.armorPen, DamageSource.Normal, this);
+
+        /*if (aoeTargets != null) {
+			foreach (Monster x in aoeTargets.AsQueryable().Take(3).ToList()) {
+				ValueStore.sharedInstance.monsterManagerInstance.Damage (x, damage / 2, armorpen, "NormalDeath", this);
+			}
+		}*/
+        // if (SaveData.GetUpgrade(UpgradeType.Poison_Arrows).level > 0)
+        // {
+        //     StartPoison(target, p);
+        // }
     }
 
     public void SetTargets()
@@ -409,6 +455,88 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         targets[0] = null;
         SetTargets();
     }
+
+    public void ApplyEnhancement(IEnhancement enhancement)
+    {
+        Enhancements.Add(enhancement);
+
+        enhancement.Apply(this);
+
+        UpdateNextPossibleEnhancements();
+    }
+
+    private void UpdateNextPossibleEnhancements()
+    {
+        NextPossibleEnhancements.Clear();
+
+        if (Enhancements.Count == 1)
+        {
+            var enhancement = Enhancements.First();
+
+            if (enhancement is SlowOnAttackEnhancement)
+            {
+                NextPossibleEnhancements = new List<EnhancementType>
+                {
+                    EnhancementType.MultiShot
+                };
+            }
+            else if (enhancement is MultiShotEnhancement)
+            {
+                NextPossibleEnhancements = new List<EnhancementType>
+                {
+                    EnhancementType.RampUp
+                };
+            }
+            else if (enhancement is RampUpAttackspeed)
+            {
+                NextPossibleEnhancements = new List<EnhancementType>
+                {
+                    EnhancementType.MultiShot
+                };
+            }
+        }
+    }
+
+    public void UpgradeSkill(TowerSkill skill)
+    {
+        if (CurrentSkillLevel - 1 < 0)
+        {
+            return;
+        }
+
+        SkillPoints--;
+
+        var currentSkillValues = TowerSkillsData.SkillValues[CurrentSkillLevel - 1];
+
+        switch ((TowerSkill)skill)
+        {
+            case TowerSkill.AttackDamage:
+                AddModifier(new Modifier(currentSkillValues.ADValue,
+                 Name.ArcherSpecialtyADBuff1, Type.ATTACK_DAMAGE,
+                 currentSkillValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat
+                ), StackOperation.Additive, 0);
+
+                buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_DAMAGE);
+                break;
+            case TowerSkill.AttackSpeed:
+                AddModifier(new Modifier(currentSkillValues.ASValue,
+                 Name.ArcherSpecialtyASBuff1, Type.ATTACK_SPEED,
+                 currentSkillValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat
+                ), StackOperation.Additive, 0);
+
+                buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_SPEED);
+                break;
+            case TowerSkill.AttackRange:
+                AddModifier(new Modifier(currentSkillValues.ARValue,
+                 Name.ArcherSpecialtyARBuff1, Type.ATTACK_RANGE,
+                 currentSkillValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat
+                ), StackOperation.Additive, 0);
+
+                buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
+                break;
+        }
+    }
+
 
     public void OnModifierEnded(Modifier m)
     {
@@ -590,79 +718,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         fullcooldown = 1 / AS.Value;
     }
 
-    public void UpdateTowerVisuals()
-    {
-        if (active && monstersInRange.Count > 0)
-        { // If tower is active and monsters nearby, update cooldown bar
-            cooldownBarScale = new Vector3(1, Mathf.Clamp(ShotCooldown.GetCooldownRemaining() / fullcooldown, 0, 1), 1);
-        }
-        else
-        {
-            cooldownBarScale = new Vector3(1, 0, 1);
-        }
-        cooldownBarTransform.localScale = cooldownBarScale;
-
-        // Set the scale of the range circle to the value of attack range
-        rangeCircleScale.y = AR.Value / 2;
-        rangeCircleScale.x = AR.Value / 2;
-
-        rangeCircleTransform.localScale = rangeCircleScale;
-
-        // Show/Hide range circle and cooldown bar when tower is clicked/unclicked
-        if (ValueStore.sharedInstance.lastClickType == ClickType.Tower)
-        {
-            if (gameObject == ValueStore.sharedInstance.lastClicked)
-            {
-                circle.SetActive(true);
-                cooldownBarParent.SetActive(true);
-            }
-            else
-            {
-                circle.SetActive(false);
-                cooldownBarParent.SetActive(false);
-            }
-        }
-        else
-        {
-            circle.SetActive(false);
-            cooldownBarParent.SetActive(false);
-        }
-    }
-
-    public bool IsInRange(Monster m)
-    {
-        if (m)
-        {
-            Vector3 targetDistance = m.transform.root.position - transform.position;
-            if (targetDistance.magnitude < AR.Value)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-            return false;
-    }
-
-    public virtual void BulletHit(Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
-    {
-        if (target != null)
-            target.Damage(p.damage, p.armorPen, DamageSource.Normal, this);
-
-        /*if (aoeTargets != null) {
-			foreach (Monster x in aoeTargets.AsQueryable().Take(3).ToList()) {
-				ValueStore.sharedInstance.monsterManagerInstance.Damage (x, damage / 2, armorpen, "NormalDeath", this);
-			}
-		}*/
-        if (SaveData.GetUpgrade(UpgradeType.Poison_Arrows).level > 0)
-        {
-            StartPoison(target, p);
-        }
-    }
-
     public virtual void Upgrade()
     {
         Instantiate(upgradeAnimationPrefab, upgradeAnimSpawnPoint.position, Quaternion.identity);
@@ -785,23 +840,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         return SaveData.GetUpgrade(upgrade).level * SaveData.GetUpgrade(upgrade).valuePerLevel;
     }
 
-    void OnDestroy()
-    {
-        ModifierEnded -= OnModifierEnded;
-
-    }
-
-    #region IPointerClickHandler implementation
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        ValueStore vs = ValueStore.sharedInstance;
-        vs.lastClickedTower = this;
-        vs.OnClick(ClickType.Tower, gameObject);
-    }
-    
-    #endregion
-
     public static bool CanUpgrade(Tower t)
     {
         if (t.archerSpeciality == ArcherType.ClassicArcher)
@@ -825,72 +863,83 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
+    public void UpdateTowerVisuals()
+    {
+        if (!IsDisabled && monstersInRange.Count > 0)
+        { // If tower is active and monsters nearby, update cooldown bar
+            cooldownBarScale = new Vector3(1, Mathf.Clamp(AttackCooldownTimer.GetCooldownRemaining() / fullcooldown, 0, 1), 1);
+        }
+        else
+        {
+            cooldownBarScale = new Vector3(1, 0, 1);
+        }
+        cooldownBarTransform.localScale = cooldownBarScale;
+
+        // Set the scale of the range circle to the value of attack range
+        rangeCircleScale.y = AR.Value / 2;
+        rangeCircleScale.x = AR.Value / 2;
+
+        rangeCircleTransform.localScale = rangeCircleScale;
+    }
+
+    private void AdjustSortingOrder()
+    {
+        // adjust sorting order of the tower components
+        attachedRenderers = transform.GetComponentsInChildren<SpriteRenderer>(true).ToList();
+        foreach (var item in attachedRenderers)
+        {
+            item.sortingOrder += Mathf.RoundToInt((transform.position.y) * -150);
+        }
+    }
+
+    public void Focus()
+    {
+        circle.SetActive(true);
+        cooldownBarParent.SetActive(true);
+    }
+
+    public void UnFocus()
+    {
+        circle.SetActive(false);
+        cooldownBarParent.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        ModifierEnded -= OnModifierEnded;
+    }
+
+    #region IPointerClickHandler implementation
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // ValueStore vs = ValueStore.sharedInstance;
+        // vs.lastClickedTower = this;
+        // vs.OnClick(ClickType.Tower, gameObject);
+
+        // _vs.towerManagerInstance.OnTowerClicked(this);
+    }
+
+    #endregion
 }
-public class CooldownTimer
+
+public interface IFocusable
 {
-    public float startTime;
-    public float duration;
-    public float currentTime;
-    public bool isRunning = false;
+    void Focus();
+    void UnFocus();
+}
 
-    private float elapsed;
+public enum BuffIndicatorType
+{
+    ATTACK_RANGE,
+    ATTACK_DAMAGE,
+    ATTACK_SPEED
+}
 
-    public float Elapsed
-    {
-        get
-        {
-            if (isRunning)
-            { // If timer is running return elapsed time before the last stop + elapsed time after starting
-                return elapsed + (ValueStore.CurrentTime - startTime);
-            }
-            else
-            { // If timer is NOT running return elapsed time before the last stop
-                return elapsed;
-            }
-        }
-        set
-        {
-            elapsed = value;
-        }
-    }
-
-    public CooldownTimer(float duration)
-    {
-        this.duration = duration;
-
-        Start();
-    }
-
-    public void Start()
-    {
-        if (!isRunning)
-        { // If timer is NOT running then set it to running and set the start time to current time
-            isRunning = true;
-            startTime = ValueStore.CurrentTime;
-        }
-    }
-
-    public void Stop()
-    { // If timer is running disable it and adjust elapsed time
-        if (isRunning)
-        {
-            isRunning = false;
-            elapsed += ValueStore.CurrentTime - startTime;
-        }
-    }
-
-    public void ResetTimer(float duration)
-    {
-        // Reset Elapsed time to 0
-        elapsed = 0;
-        // Set duration to new duration
-        this.duration = duration;
-        // Reset starttime to current time
-        startTime = ValueStore.CurrentTime;
-    }
-
-    public float GetCooldownRemaining()
-    {
-        return duration - Elapsed;
-    }
+public enum ArcherType
+{
+    ClassicArcher,
+    RapidArcher,
+    LongArcher,
+    UtilityArcher
 }

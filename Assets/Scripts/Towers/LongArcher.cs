@@ -10,12 +10,8 @@ public class LongArcher : Tower {
 
 	public float baseHeadshotBonusDmg;
 
-	public override void ShootNearestMonster(){
-		base.ShootNearestMonster ();
-	}
-
 	
-	public override void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
+	public void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
 		float bulletDamage;
 		float bulletArmorPen = armorpen;
 		if (shotNumber % 3 == 0) {
@@ -38,11 +34,10 @@ public class LongArcher : Tower {
 			bulletDamage = damage;
 		}
 
-		base.Shoot (target, projectile, bulletDamage, bulletArmorPen, radius);
 		//audioManager.PlaySound ("Explosion", transform.position);
 	}
 
-	public override void BulletHit (Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
+	public override void OnTargetHit (Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
 	{
 		GameObject g = null;
 		if(shotNumber % 3 == 0){
@@ -59,7 +54,7 @@ public class LongArcher : Tower {
 			f.StartFloating ();
 		}
 
-		base.BulletHit (target, p, aoeTargets, shotNumber);
+		base.OnTargetHit (target, p, aoeTargets, shotNumber);
 
 		if (target != null && g != null) {
 			g.transform.SetParent (target.transform);

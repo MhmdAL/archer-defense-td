@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System.Linq;
 
-public class TowerBase : MonoBehaviour, IPointerClickHandler
+public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
 {
 
     [Header("Clicked/NonClicked Objects")]
@@ -43,24 +43,24 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler
         ValueStore.sharedInstance.towerManagerInstance.TowerDeployed += OnTowerDeployed;
     }
 
-    void Update()
-    {
-        if (ValueStore.sharedInstance.lastClickType == ClickType.TowerBase)
-        {
-            if (gameObject == ValueStore.sharedInstance.lastClicked)
-            {
-                SetState(TowerBaseState.Clicked);
-            }
-            else
-            {
-                SetState(TowerBaseState.NonClicked);
-            }
-        }
-        else
-        {
-            SetState(TowerBaseState.NonClicked);
-        }
-    }
+    // void Update()
+    // {
+    //     if (ValueStore.sharedInstance.lastClickType == ClickType.TowerBase)
+    //     {
+    //         if (gameObject == ValueStore.sharedInstance.lastClicked)
+    //         {
+    //             SetState(TowerBaseState.Clicked);
+    //         }
+    //         else
+    //         {
+    //             SetState(TowerBaseState.NonClicked);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         SetState(TowerBaseState.NonClicked);
+    //     }
+    // }
 
     private void AdjustSortingOrder()
     {
@@ -97,7 +97,7 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler
 
     private void OnTowerDeployed(Tower t)
     {
-        
+
     }
 
     public void CreateTower()
@@ -107,12 +107,24 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        ValueStore.sharedInstance.OnClick(ClickType.TowerBase, gameObject);
+        // ValueStore.sharedInstance.OnClick(ClickType.TowerBase, gameObject);
+
+        // ValueStore.sharedInstance.towerManagerInstance.OnTowerBaseClicked(this);
     }
 
     private void OnDestroy()
     {
         ValueStore.sharedInstance.towerManagerInstance.TowerDeployed -= OnTowerDeployed;
+    }
+
+    public void Focus()
+    {
+        SetState(TowerBaseState.Clicked);
+    }
+
+    public void UnFocus()
+    {
+        SetState(TowerBaseState.NonClicked);
     }
 }
 

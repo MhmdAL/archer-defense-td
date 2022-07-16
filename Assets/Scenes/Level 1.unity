@@ -1013,18 +1013,6 @@ PrefabInstance:
       propertyPath: orthographic size
       value: 33.42104
       objectReference: {fileID: 0}
-    - target: {fileID: 11400752, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400752, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetSpeciality
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400752, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TowerManager2, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 11406674, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
       propertyPath: infoPanels.Array.size
       value: 2
@@ -1101,18 +1089,6 @@ PrefabInstance:
       propertyPath: towerManagerInstance2
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 11438222, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 11438222, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetSpeciality
-      objectReference: {fileID: 0}
-    - target: {fileID: 11438222, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TowerManager2, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 11464840, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
       propertyPath: m_havePropertiesChanged
       value: 1
@@ -1129,18 +1105,6 @@ PrefabInstance:
       propertyPath: arrowPrefab
       value: 
       objectReference: {fileID: 141400, guid: 88921f3733fdb4646ad83ccef3a2cb1c, type: 3}
-    - target: {fileID: 11468976, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 11468976, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetSpeciality
-      objectReference: {fileID: 0}
-    - target: {fileID: 11468976, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TowerManager2, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 11469274, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
       propertyPath: m_havePropertiesChanged
       value: 1
@@ -3686,51 +3650,6 @@ PrefabInstance:
     - target: {fileID: 22499462, guid: 594c4314b0e6e2141b30ce4cc3a239a9, type: 3}
       propertyPath: m_RootOrder
       value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629514824605915201, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629514824605915201, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UseSkillpoint
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629514824605915201, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TowerManager2, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 5146351232524361345, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5146351232524361345, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UseSkillpoint
-      objectReference: {fileID: 0}
-    - target: {fileID: 5146351232524361345, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TowerManager2, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 8853851089234891252, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8853851089234891252, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UseSkillpoint
-      objectReference: {fileID: 0}
-    - target: {fileID: 8853851089234891252, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TowerManager2, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8919048811922955448, guid: 594c4314b0e6e2141b30ce4cc3a239a9,
         type: 3}

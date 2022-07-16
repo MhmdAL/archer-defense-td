@@ -360,6 +360,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8cf8d8149d5f14eba84d23cd706091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <TowerSkillsData>k__BackingField: {fileID: 11400000, guid: f0a63fbc48cd3dd41986e507f5c04d36,
+    type: 2}
+  <TowerAttackStrategy>k__BackingField: {fileID: 11400000, guid: ed6507729faab064d8a2f0d43b17e39b,
+    type: 2}
+  <OnHitEffects>k__BackingField:
+  - {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4, type: 2}
+  <SecondaryTargetCount>k__BackingField: 0
   stats: []
   archerSpeciality: 0
   upgradeAnimationPrefab: {fileID: 120230, guid: bd1d4bf1b8595a146814cfafa007f638,
@@ -388,13 +395,16 @@ MonoBehaviour:
   title: Untrained Archer
   maxLevel: 5
   archerUpgrades: {fileID: 4900000, guid: 2005524dd89ede142b982c21a477ce2f, type: 3}
-  owner: {fileID: 0}
-  active: 1
+  towerBase: {fileID: 0}
+  IsDisabled: 0
   fullcooldown: 0
   silverSpent: 0
   cost: 50
   level: 0
   monstersInRange: []
+  consecutiveShots: 0
+  shotNumber: 0
+  isInCombat: 0
 --- !u!212 &21265388
 SpriteRenderer:
   m_ObjectHideFlags: 0

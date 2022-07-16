@@ -22,8 +22,7 @@ public class RapidArcher : Tower {
 		vs.waveManagerInstance.WaveEnded += OnWaveEnd;
 	}
 
-	public override void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
-		base.Shoot (target, projectile, damage, armorpen, radius);
+	public void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
 		if (GetModifier (Name.Rapid_Fury) == null) {
 			consecutiveShots += 1;
 		}

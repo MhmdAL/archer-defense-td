@@ -28,7 +28,7 @@ public class UtilityArcher : Tower {
 		stats.Add (Slow);
 	}
 
-	public override void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
+	public void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
 		float bulletRadius = 0;
 		if (SaveData.GetUpgrade (UpgradeType.Utility_4).level > 0) {
 			if (shotNumber % 5 == 0) {
@@ -39,12 +39,11 @@ public class UtilityArcher : Tower {
 		} else {
 			bulletRadius = radius;
 		}
-		base.Shoot (target, projectile, damage, armorpen, bulletRadius);
 	}
 
-	public override void BulletHit(Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
+	public override void OnTargetHit(Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
 	{
-		base.BulletHit (target, p, aoeTargets, shotNumber);
+		base.OnTargetHit (target, p, aoeTargets, shotNumber);
 		List<Monster> allTargetsHit = new List<Monster> ();
 		if (target != null) {
 			// Apply slow

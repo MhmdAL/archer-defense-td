@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System;
 
 public class BackgroundScaler : MonoBehaviour, IPointerClickHandler {
 
+    public event Action BackgroundClicked;
 	public GameObject spike;
 
 	void Start () {
@@ -32,7 +34,8 @@ public class BackgroundScaler : MonoBehaviour, IPointerClickHandler {
 	#region IPointerClickHandler implementation
 	public void OnPointerClick (PointerEventData eventData)
 	{
-		ValueStore.sharedInstance.OnClick (ClickType.Background, gameObject);
+		// ValueStore.sharedInstance.OnClick (ClickType.Background, gameObject);
+        // BackgroundClicked?.Invoke();
 	}
 	#endregion
 }

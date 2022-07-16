@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class ArcherSpecialtyData : ScriptableObject
+public class TowerSkillData : ScriptableObject
 {
     [field: SerializeField]
-    public List<ArcherSpecialtyValues> SpecialtyValues { get; set; }
+    public List<TowerSkillValues> SkillValues { get; set; }
 }
 
 [Serializable]
-public struct ArcherSpecialtyValues
+public struct TowerSkillValues
 {
     [field: SerializeField]
     public int ExpRequired { get; set; }
