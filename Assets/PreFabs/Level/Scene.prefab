@@ -9174,11 +9174,14 @@ MonoBehaviour:
   - <EnhancementType>k__BackingField: 0
     <Sprite>k__BackingField: {fileID: 21300000, guid: dfb03d4eb1d52d242902e96e032b50df,
       type: 3}
-  - <EnhancementType>k__BackingField: 2
+  - <EnhancementType>k__BackingField: 3
     <Sprite>k__BackingField: {fileID: 21300000, guid: bb1093741c966ba45ae480dde21ac7fe,
       type: 3}
   - <EnhancementType>k__BackingField: 1
     <Sprite>k__BackingField: {fileID: 21300000, guid: 28d67ed2f77adf648bfa06a27b2cd506,
+      type: 3}
+  - <EnhancementType>k__BackingField: 2
+    <Sprite>k__BackingField: {fileID: 21300000, guid: 77bfd7137ebf1a445b13f9cc137d2aab,
       type: 3}
 --- !u!1 &196720
 GameObject:
@@ -10332,7 +10335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742eb1aeced96824bb49ad179c317724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Background>k__BackingField: {fileID: 11480436}
+  <TowerSpecialtyEnhancementData>k__BackingField: {fileID: 11400000, guid: f5bd88ac3ca14fa4fb6430444a6514cf,
+    type: 2}
   <towerBaseHolder>k__BackingField: {fileID: 172346}
   <untrainedArcherPrefab>k__BackingField: {fileID: 11482238, guid: ed2337a5e759fba45aef218b02005910,
     type: 3}

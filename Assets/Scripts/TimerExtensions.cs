@@ -21,9 +21,9 @@ namespace UnityTimer
         /// <param name="useRealTime">Whether the timer uses real-time(not affected by slow-mo or pausing) or
         /// game-time(affected by time scale changes).</param>
         public static Timer AttachTimer(this MonoBehaviour behaviour, float duration, Action<Timer> onComplete,
-            Action<float> onUpdate = null, bool isLooped = false, bool useRealTime = false)
+            Action<float> onUpdate = null, bool isLooped = false, bool useRealTime = false, bool isDoneWhenElapsed = true)
         {
-            return Timer.Register(duration, onComplete, onUpdate, isLooped, useRealTime, behaviour);
+            return Timer.Register(duration, onComplete, onUpdate, isLooped, useRealTime, behaviour, isDoneWhenElapsed);
         }
     }
 }

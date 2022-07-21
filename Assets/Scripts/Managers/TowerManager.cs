@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TowerManager : MonoBehaviour
@@ -13,7 +14,7 @@ public class TowerManager : MonoBehaviour
     public event Action<TowerBase> TowerBaseClicked;
 
     [field: SerializeField]
-    public BackgroundScaler Background { get; set; }
+    public TowerSpecialtyEnhancementData TowerSpecialtyEnhancementData { get; set; }
 
     public List<Tower> TowersInScene { get; private set; }
     public List<TowerBase> TowerBasesInScene { get; private set; }
@@ -68,7 +69,7 @@ public class TowerManager : MonoBehaviour
         var t = Instantiate(untrainedArcherPrefab, tb.originalPos, Quaternion.identity) as Tower;
         TowersInScene.Add(t);
 
-        t.towerBase = tb;
+        t.TowerBase = tb;
 
         if (tb.gameObject.tag == "SuperBase")
         {
@@ -90,7 +91,7 @@ public class TowerManager : MonoBehaviour
         // var towerToSell = _vs.lastClicked.GetComponent<Tower>();
         _vs.Silver += (int)(t.silverSpent * 0.6f);
 
-        t.towerBase.gameObject.SetActive(true);
+        t.TowerBase.gameObject.SetActive(true);
 
         TowersInScene.Remove(t);
 
@@ -137,7 +138,7 @@ public class TowerManager : MonoBehaviour
             TowersInScene.Add(newTower);
 
             newTower.modifiers.AddRange(t.modifiers);
-            newTower.towerBase = t.towerBase;
+            newTower.TowerBase = t.TowerBase;
             newTower.SkillPoints = t.SkillPoints;
             newTower.CurrentSkillLevel = t.CurrentSkillLevel;
             newTower.CurrentXP = t.CurrentXP;
@@ -147,7 +148,7 @@ public class TowerManager : MonoBehaviour
                 newTower.buffIndicatorPanel.AddIndicator(item.type, item.cd);
             }
 
-            if (newTower.towerBase.tag == "SuperBase")
+            if (newTower.TowerBase.tag == "SuperBase")
             {
                 newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
                     Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
@@ -165,19 +166,33 @@ public class TowerManager : MonoBehaviour
         }
     }
 
-    public void ApplyDoubleShotEnhancement(Tower t)
+    public (int silverCost, int skillLevelRequired) GetSpecializationRequirements(int specializationLevel)
     {
-        var doubleShotStrat = ScriptableObject.CreateInstance<MultiShootNearestNMonstersTowerAttackStrategy>();
-        doubleShotStrat.ShotCount = 2;
-        doubleShotStrat.MultiShootSecondaries = true;
+        var skillLevelRequirement = TowerSpecialtyEnhancementData.EnhancementSkillRequirementsByLevel;
+        var silverCost = TowerSpecialtyEnhancementData.EnhancementSilverRequirementsByLevel;
 
-        t.TowerAttackStrategy = doubleShotStrat;
+        return (silverCost[specializationLevel], skillLevelRequirement[specializationLevel]);
     }
 
-    public void ApplyTowerEnhancement(Tower t, EnhancementType type)
+    public void ApplyEnhancement(Tower t, EnhancementType type)
     {
-        Debug.Log(type);
-        
+        var requirements = GetSpecializationRequirements(t.SpecializationLevel);
+
+        if(_vs.Silver < requirements.silverCost || t.CurrentSkillLevel < requirements.skillLevelRequired)
+        {
+            return;
+        }
+
+        if (t.SpecializationLevel == 0) // Tower is not specialized
+        {
+            t.ArcherSpecialty = GetSpecialtyFromFirstEnhancement(type);
+            t.SpecializationLevel = 1;
+        }
+        else
+        {
+            t.SpecializationLevel++;
+        }
+
         switch (type)
         {
             case EnhancementType.SlowOnAttack:
@@ -187,9 +202,55 @@ public class TowerManager : MonoBehaviour
                 t.ApplyEnhancement(new RampUpEnhancement());
                 break;
             case EnhancementType.MultiShot:
-                t.ApplyEnhancement(new MultiShotEnhancement());
+                t.ApplyEnhancement(new MultiShotEnhancement(new MultiShotEnhancementData { SecondaryTargetCount = 5 }));
+                break;
+            case EnhancementType.Headshot:
+                t.ApplyEnhancement(new HeadshotEnhancement());
+                break;
+            case EnhancementType.Executioner:
+                t.ApplyEnhancement(new ExecutionerEnhancement());
+                break;
+            case EnhancementType.Berzerk:
+                t.ApplyEnhancement(new BerzerkEnhancement());
                 break;
         }
+    }
+
+    public List<EnhancementType> GetNextPossibleEnhancements(Tower t)
+    {
+        var towerSpecialtyEnhancementData = TowerSpecialtyEnhancementData.TowerSpecialtyEnhancements
+                                .FirstOrDefault(x => x.TowerSpecialty == t.ArcherSpecialty);
+
+        if (towerSpecialtyEnhancementData == null)
+        {
+            var firstLevelEnhancements = TowerSpecialtyEnhancementData.TowerSpecialtyEnhancements
+                                .SelectMany(x => x.TowerEnhancementsBySpecializationLevel)
+                                .Where(x => x.SpecializationLevel == 0)
+                                .SelectMany(x => x.EnhancementTypes)
+                                .ToList();
+
+            return firstLevelEnhancements;
+        }
+
+        return towerSpecialtyEnhancementData.TowerEnhancementsBySpecializationLevel
+                                .FirstOrDefault(x => x.SpecializationLevel == t.SpecializationLevel)?.EnhancementTypes;
+    }
+
+    private ArcherType GetSpecialtyFromFirstEnhancement(EnhancementType enhancement)
+    {
+        var towerSpecialty = TowerSpecialtyEnhancementData.TowerSpecialtyEnhancements?.FirstOrDefault(x =>
+        {
+            var level0Enhancements = x.TowerEnhancementsBySpecializationLevel.FirstOrDefault(y => y.SpecializationLevel == 0);
+
+            return level0Enhancements.EnhancementTypes.Contains(enhancement);
+        }).TowerSpecialty;
+
+        if (towerSpecialty == null || towerSpecialty == default)
+        {
+            return ArcherType.ClassicArcher;
+        }
+
+        return towerSpecialty.Value;
     }
 
     private void OnTowerSpecialized(Tower tower)

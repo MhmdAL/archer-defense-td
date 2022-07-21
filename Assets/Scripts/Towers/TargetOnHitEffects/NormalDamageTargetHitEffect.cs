@@ -7,7 +7,9 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
     public override void OnTargetHit(TargetHitData data)
     {
         if (data.Target != null)
+        {
             data.Target.Damage(data.Projectile.damage, data.Projectile.armorPen, DamageSource.Normal, data.Owner);
+        }
     }
 }
 

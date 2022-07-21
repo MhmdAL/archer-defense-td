@@ -148,7 +148,7 @@ public class UtilityArcher : Tower {
 	public override void AddStartingModifiers ()
 	{
 		if (SaveData.GetUpgrade (UpgradeType.Utility_2).level > 0) {
-			AddModifier (new Modifier (CurrentValue (UpgradeType.Utility_2), Name.ArcherAD_Upgrade, Type.ATTACK_DAMAGE, BonusOperation.Percentage), StackOperation.Additive, 1);		
+			this.AD.Modify(CurrentValue (UpgradeType.Utility_2), BonusOperation.Percentage, BuffNames.TOWER_AD_UPGRADE, null, 1);
 		}
 	}
 		

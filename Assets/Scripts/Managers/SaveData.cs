@@ -19,9 +19,9 @@ public class SaveData {
 	public const float DEFAULT_ARTILLERY_COOLDOWN = 40;
 	public const int DEFAULT_ARTILLERY_ARROWCOUNT = 3;
 
-	public const float DEFAULT_DAMAGEBOOST_VALUE = 0.5f;
+	public const float DEFAULT_DAMAGEBOOST_VALUE = 2.5f;
 	public const float DEFAULT_DAMAGEBOOST_COOLDOWN = 40;
-	public const float DEFAULT_DAMAGEBOOST_DURATION = 4;
+	public const float DEFAULT_DAMAGEBOOST_DURATION = 8;
 
 	public static Dictionary<UpgradeType, float> baseUpgradeValues = new Dictionary<UpgradeType, float> (){
 		{ UpgradeType.Lives, DEFAULT_LIVES }, { UpgradeType.ArtilleryCooldown, DEFAULT_ARTILLERY_COOLDOWN },

@@ -30,6 +30,11 @@ public class TowerEnhancementMenu : MonoBehaviour
     {
         _enhancementButtons.ForEach(x => x.gameObject.SetActive(false));
 
+        if (types == null)
+        {
+            return;
+        }
+
         var activeButtons = _enhancementButtons.Take(types.Count).ToList();
 
         for (int i = 0; i < types.Count; i++)
@@ -39,13 +44,15 @@ public class TowerEnhancementMenu : MonoBehaviour
             _enhancementButtons[i].gameObject.SetActive(true);
             _enhancementButtons[i].onClick.RemoveAllListeners();
             _enhancementButtons[i].onClick.AddListener(() => _vs.uiControllerInstance.ApplyTowerEnhancement((int)type));
-            _enhancementButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = _sprites.FirstOrDefault(x => x.EnhancementType == types[i]).Sprite;
+
+            var sprite = _sprites.FirstOrDefault(x => x.EnhancementType == types[i])?.Sprite ?? _sprites.First().Sprite;
+            _enhancementButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = sprite;
         }
     }
 }
 
 [System.Serializable]
-public struct TowerEnhancementSpriteData
+public class TowerEnhancementSpriteData
 {
     [field: SerializeField]
     public EnhancementType EnhancementType { get; set; }

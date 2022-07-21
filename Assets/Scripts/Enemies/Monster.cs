@@ -149,10 +149,10 @@ public class Monster : MonoBehaviour, IModifiable{
 		//currentColor = new MyColor (GetComponentInChildren<SpriteRenderer> ().color, 0);
 			
 		stats = new List<Stat> (){ MaxHP, Armor, MS, DamageModifier };
-		DamageModifier.baseValue = 1;
+		DamageModifier.BaseValue = 1;
 
-		MaxHP.baseValue = MaxHP.baseValue * m.CurrentMultiplier * 0.95f;
-		Armor.baseValue = Armor.baseValue * m.CurrentMultiplier * 0.95f;
+		MaxHP.BaseValue = MaxHP.BaseValue * m.CurrentMultiplier * 0.95f;
+		Armor.BaseValue = Armor.BaseValue * m.CurrentMultiplier * 0.95f;
 	}
 
     public virtual void FixedUpdate()

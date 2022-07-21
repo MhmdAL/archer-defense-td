@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System.IO;
 using System.Linq;
 using UnityEngine.UI;
+using UnityTimer;
 
 public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable
 {
@@ -25,14 +26,18 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     [field: SerializeField]
     public List<TargetHitEffect> OnHitEffects { get; set; }
 
+    public Dictionary<string, object> ExtraData { get; set; }
+
 
     [field: SerializeField]
     public int SecondaryTargetCount { get; set; } = 0;
 
-
     public List<IEnhancement> Enhancements { get; set; }
 
-    public List<EnhancementType> NextPossibleEnhancements { get; set; }
+    public ArcherType ArcherSpecialty { get; set; }
+
+    public int SpecializationLevel { get; set; }
+
 
     public List<Stat> Stats
     {
@@ -72,8 +77,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public List<Stat> stats;
 
-    public ArcherType archerSpeciality;
-
     public GameObject upgradeAnimationPrefab;
     public GameObject archerShotParticle;
 
@@ -88,12 +91,18 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public Transform upgradeAnimSpawnPoint;
     public Transform arrowSpawnPoint;
 
+
     public Stat AD = new Stat(Type.ATTACK_DAMAGE);
     public Stat AS = new Stat(Type.ATTACK_SPEED);
     public Stat AR = new Stat(Type.ATTACK_RANGE);
     public Stat AP = new Stat(Type.ARMOR_PENETRATION);
 
-    public float combatTimer;
+    public Timer AttackCooldownTimer { get; set; }
+    public Timer CombatTimer { get; set; }
+
+    [field: SerializeField]
+    public float CombatCooldown { get; set; }
+
     public float baseUpgradeCost;
     public float bulletSpeed;
     public float bulletRadius;
@@ -106,14 +115,11 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public TextAsset archerUpgrades;
 
-    [HideInInspector]
-    public TowerBase towerBase;
+    public TowerBase TowerBase { get; set; }
 
-    [HideInInspector]
-    public bool IsDisabled;
+    public bool IsDisabled { get; set; }
 
-    [HideInInspector]
-    public float fullcooldown;
+    public float FullCooldown => 1 / AS.Value;
 
     [HideInInspector]
     public float silverSpent;
@@ -141,10 +147,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     private List<Monster> targets;
 
     private List<Modifier> towerUpgrades = new List<Modifier>();
-
-    public CooldownTimer AttackCooldownTimer;
-    public CooldownTimer CombatCooldown;
-    private CooldownTimer DpsCooldown;
 
     private float upgradeCost;
 
@@ -208,12 +210,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         Enhancements = new List<IEnhancement>();
 
-        NextPossibleEnhancements = new List<EnhancementType>
-        {
-            EnhancementType.SlowOnAttack,
-            EnhancementType.MultiShot,
-            EnhancementType.RampUp,
-        };
+        ExtraData = new Dictionary<string, object>();
 
         stats = new List<Stat>() { AD, AS, AR, AP };
 
@@ -223,6 +220,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         // Add modifiers that apply from the start
         AddStartingModifiers();
 
+
         monstersInRange = new List<Monster>();
         targets = new List<Monster> { null, null };
 
@@ -230,9 +228,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         // Set values from file, used when upgrading tower
         SetUpgradeValues();
-
-        // Adjust stats to apply all modifiers
-        AdjustStats();
 
         anim = GetComponent<Animator>();
 
@@ -243,9 +238,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     {
         silverSpent = cost;
 
-        AttackCooldownTimer = new CooldownTimer(0);
-        CombatCooldown = new CooldownTimer(2);
-        DpsCooldown = new CooldownTimer(15);
+        AttackCooldownTimer = this.AttachTimer(0, OnAttackTimerElapsed, isDoneWhenElapsed: false);
+        CombatTimer = this.AttachTimer(2f, OnCombatTimerElapsed, isDoneWhenElapsed: false);
 
         cooldownBarTransform = cooldownBar.transform;
         rangeCircleTransform = circle.transform;
@@ -257,10 +251,10 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         cooldownBarParent = cooldownBarTransform.parent.gameObject;
 
-        AD.baseValue = SaveData.DEFAULT_AD * (1 + SaveData.GetUpgrade(UpgradeType.AD).CurrentValue);
-        AS.baseValue = SaveData.DEFAULT_AS * (1 + SaveData.GetUpgrade(UpgradeType.AS).CurrentValue);
-        AR.baseValue = SaveData.DEFAULT_AR * (1 + SaveData.GetUpgrade(UpgradeType.AR).CurrentValue);
-        AP.baseValue = SaveData.GetUpgrade(UpgradeType.AP).CurrentValue;
+        AD.BaseValue = SaveData.DEFAULT_AD * (1 + SaveData.GetUpgrade(UpgradeType.AD).CurrentValue);
+        AS.BaseValue = SaveData.DEFAULT_AS * (1 + SaveData.GetUpgrade(UpgradeType.AS).CurrentValue);
+        AR.BaseValue = SaveData.DEFAULT_AR * (1 + SaveData.GetUpgrade(UpgradeType.AR).CurrentValue);
+        AP.BaseValue = SaveData.GetUpgrade(UpgradeType.AP).CurrentValue;
     }
 
     public virtual void AddStartingModifiers() { }
@@ -268,23 +262,21 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     private void Update()
     {
         UpdateTowerVisuals();
+    }
 
-        if (AttackCooldownTimer.GetCooldownRemaining() <= 0)
-        {
-            CalculateTargets();
+    private void OnCombatTimerElapsed(Timer t)
+    {
+        isInCombat = false;
+        consecutiveShots = 0;
 
-            Attack();
+        CombatEnded?.Invoke();
+    }
 
-            AdjustStats();
-        }
+    private void OnAttackTimerElapsed(Timer t)
+    {
+        CalculateTargets();
 
-        if (CombatCooldown.GetCooldownRemaining() <= 0)
-        {
-            isInCombat = false;
-            consecutiveShots = 0;
-
-            CombatEnded?.Invoke();
-        }
+        Attack();
     }
 
     private void Attack()
@@ -309,9 +301,35 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
         else
         {
-            AttackCooldownTimer.ResetTimer(fullcooldown);
+            AttackCooldownTimer.Restart(FullCooldown);
         }
     }
+
+    private void OnBeforeAttack()
+    {
+
+    }
+
+    private void OnAfterAttack()
+    {
+        CurrentXP++;
+
+        AttackFinished?.Invoke();
+    }
+
+    public virtual void OnTargetHit(Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
+    {
+        foreach (var ohe in OnHitEffects)
+        {
+            ohe.OnTargetHit(new TargetHitData
+            {
+                Owner = this,
+                Projectile = p,
+                Target = target
+            });
+        }
+    }
+
 
     private void CalculateTargets()
     {
@@ -352,62 +370,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
                 targets[0].isAboutToDie = true;
             }
         }
-    }
-
-    private void OnBeforeAttack()
-    {
-
-    }
-
-    private void OnAfterAttack()
-    {
-        CurrentXP++;
-
-        AttackFinished?.Invoke();
-    }
-
-    public bool IsInRange(Monster m)
-    {
-        if (m)
-        {
-            Vector3 targetDistance = m.transform.root.position - transform.position;
-            if (targetDistance.magnitude < AR.Value)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-            return false;
-    }
-
-    public virtual void OnTargetHit(Monster target, Projectile p, List<Monster> aoeTargets, int shotNumber)
-    {
-        foreach (var ohe in OnHitEffects)
-        {
-            ohe.OnTargetHit(new TargetHitData
-            {
-                Owner = this,
-                Projectile = p,
-                Target = target
-            });
-        }
-
-        // if (target != null)
-        //     target.Damage(p.damage, p.armorPen, DamageSource.Normal, this);
-
-        /*if (aoeTargets != null) {
-			foreach (Monster x in aoeTargets.AsQueryable().Take(3).ToList()) {
-				ValueStore.sharedInstance.monsterManagerInstance.Damage (x, damage / 2, armorpen, "NormalDeath", this);
-			}
-		}*/
-        // if (SaveData.GetUpgrade(UpgradeType.Poison_Arrows).level > 0)
-        // {
-        //     StartPoison(target, p);
-        // }
     }
 
     public void SetTargets()
@@ -456,45 +418,29 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         SetTargets();
     }
 
+    public bool IsInRange(Monster m)
+    {
+        if (m)
+        {
+            Vector3 targetDistance = m.transform.root.position - transform.position;
+            if (targetDistance.magnitude < AR.Value)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+            return false;
+    }
+
     public void ApplyEnhancement(IEnhancement enhancement)
     {
         Enhancements.Add(enhancement);
 
         enhancement.Apply(this);
-
-        UpdateNextPossibleEnhancements();
-    }
-
-    private void UpdateNextPossibleEnhancements()
-    {
-        NextPossibleEnhancements.Clear();
-
-        if (Enhancements.Count == 1)
-        {
-            var enhancement = Enhancements.First();
-
-            if (enhancement is SlowOnAttackEnhancement)
-            {
-                NextPossibleEnhancements = new List<EnhancementType>
-                {
-                    EnhancementType.MultiShot
-                };
-            }
-            else if (enhancement is MultiShotEnhancement)
-            {
-                NextPossibleEnhancements = new List<EnhancementType>
-                {
-                    EnhancementType.RampUp
-                };
-            }
-            else if (enhancement is RampUpAttackspeed)
-            {
-                NextPossibleEnhancements = new List<EnhancementType>
-                {
-                    EnhancementType.MultiShot
-                };
-            }
-        }
     }
 
     public void UpgradeSkill(TowerSkill skill)
@@ -511,32 +457,28 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         switch ((TowerSkill)skill)
         {
             case TowerSkill.AttackDamage:
-                AddModifier(new Modifier(currentSkillValues.ADValue,
-                 Name.ArcherSpecialtyADBuff1, Type.ATTACK_DAMAGE,
-                 currentSkillValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat
-                ), StackOperation.Additive, 0);
+                AD.AddModifier(currentSkillValues.ADValue,
+                 currentSkillValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
+                  BuffNames.TOWER_SKILL_AD + CurrentSkillLevel);
 
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_DAMAGE);
                 break;
             case TowerSkill.AttackSpeed:
-                AddModifier(new Modifier(currentSkillValues.ASValue,
-                 Name.ArcherSpecialtyASBuff1, Type.ATTACK_SPEED,
-                 currentSkillValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat
-                ), StackOperation.Additive, 0);
+                AS.AddModifier(currentSkillValues.ASValue,
+                 currentSkillValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
+                  BuffNames.TOWER_SKILL_AS + CurrentSkillLevel);
 
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_SPEED);
                 break;
             case TowerSkill.AttackRange:
-                AddModifier(new Modifier(currentSkillValues.ARValue,
-                 Name.ArcherSpecialtyARBuff1, Type.ATTACK_RANGE,
-                 currentSkillValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat
-                ), StackOperation.Additive, 0);
+                AR.AddModifier(currentSkillValues.ARValue,
+                 currentSkillValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
+                  BuffNames.TOWER_SKILL_AR + CurrentSkillLevel);
 
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
                 break;
         }
     }
-
 
     public void OnModifierEnded(Modifier m)
     {
@@ -545,6 +487,24 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public void AddModifier(Modifier m, StackOperation s, int stackLimit)
     {
+        switch (m.type)
+        {
+            case Type.ATTACK_SPEED:
+                AS.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
+                break;
+            case Type.ATTACK_DAMAGE:
+                AD.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
+                break;
+            case Type.ATTACK_RANGE:
+                AR.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
+                break;
+            case Type.ARMOR_PENETRATION:
+                AP.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
+                break;
+        }
+
+        return;
+
         // TODO: fix multiple If checks
         if (GetModifier(m.name) != null)
         { // if Modifier already exists
@@ -672,6 +632,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public virtual void AdjustStats()
     {
+        // FullCooldown = 1 / AS.Value;
+
+        return;
         // TODO: Fix this mess of a method..
 
         foreach (var item in Stats)
@@ -715,7 +678,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
             }
         }
 
-        fullcooldown = 1 / AS.Value;
+        // FullCooldown = 1 / AS.Value;
     }
 
     public virtual void Upgrade()
@@ -742,7 +705,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
             }
         }
         silverSpent += UpgradeCost;
-        AdjustStats();
     }
 
     public virtual string NextUpgradeStats()
@@ -760,12 +722,12 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public virtual void SetUpgradeValues()
     {
-        if (archerSpeciality == ArcherType.ClassicArcher)
+        if (ArcherSpecialty == ArcherType.ClassicArcher)
             return;
 
         string[] splitFile = new string[] { "\r\n", "\r", "\n" };
         string[] lines = archerUpgrades.text.Split(splitFile, StringSplitOptions.None);
-        string[] upgrades = lines[(int)archerSpeciality - 1].Split('/');
+        string[] upgrades = lines[(int)ArcherSpecialty - 1].Split('/');
 
         for (int x = 0; x < maxLevel; x++)
         {
@@ -842,18 +804,18 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public static bool CanUpgrade(Tower t)
     {
-        if (t.archerSpeciality == ArcherType.ClassicArcher)
+        if (t.ArcherSpecialty == ArcherType.ClassicArcher)
             return true;
 
-        if (t.archerSpeciality == ArcherType.RapidArcher && SaveData.GetUpgrade(UpgradeType.Rapid_1).level >= t.level)
+        if (t.ArcherSpecialty == ArcherType.RapidArcher && SaveData.GetUpgrade(UpgradeType.Rapid_1).level >= t.level)
         {
             return true;
         }
-        else if (t.archerSpeciality == ArcherType.LongArcher && SaveData.GetUpgrade(UpgradeType.Long_1).level >= t.level)
+        else if (t.ArcherSpecialty == ArcherType.LongArcher && SaveData.GetUpgrade(UpgradeType.Long_1).level >= t.level)
         {
             return true;
         }
-        else if (t.archerSpeciality == ArcherType.UtilityArcher && SaveData.GetUpgrade(UpgradeType.Utility_1).level >= t.level)
+        else if (t.ArcherSpecialty == ArcherType.UtilityArcher && SaveData.GetUpgrade(UpgradeType.Utility_1).level >= t.level)
         {
             return true;
         }
@@ -867,7 +829,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     {
         if (!IsDisabled && monstersInRange.Count > 0)
         { // If tower is active and monsters nearby, update cooldown bar
-            cooldownBarScale = new Vector3(1, Mathf.Clamp(AttackCooldownTimer.GetCooldownRemaining() / fullcooldown, 0, 1), 1);
+            cooldownBarScale = new Vector3(1, Mathf.Clamp(AttackCooldownTimer.GetTimeRemaining() / FullCooldown, 0, 1), 1);
         }
         else
         {

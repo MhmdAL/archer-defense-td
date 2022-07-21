@@ -61,9 +61,9 @@ public class MonsterManager : MonoBehaviour {
 					string[] details = s.Split (enemyDetailsSplit);
 					item.name = details [1];
 					item.description = details [2];
-					item.MaxHP.baseValue = float.Parse (details [3]);
-					item.Armor.baseValue = float.Parse (details [4]);
-					item.MS.baseValue = float.Parse (details [5]);
+					item.MaxHP.BaseValue = float.Parse (details [3]);
+					item.Armor.BaseValue = float.Parse (details [4]);
+					item.MS.BaseValue = float.Parse (details [5]);
 					item.silverValue = float.Parse (details [6]);
 					item.livesValue = int.Parse (details [7]);
 				}

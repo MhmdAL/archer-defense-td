@@ -32,7 +32,7 @@ public class MultiShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
             }
         }
 
-        data.Owner.AttackCooldownTimer.ResetTimer(data.Owner.fullcooldown);
+        data.Owner.AttackCooldownTimer.Restart(data.Owner.FullCooldown);
 
         if (targetCount > 0)
         {
@@ -92,7 +92,7 @@ public class MultiShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         bullet.shotNumber = data.Owner.shotNumber;
         bullet.currentProjectile = projectile.ToString();
         data.Owner.isInCombat = true;
-        data.Owner.CombatCooldown.ResetTimer(data.Owner.combatTimer);
+        data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown);
         // set cooldown back to full duration
         // data.Owner.AttackCooldownTimer.ResetTimer(data.Owner.fullcooldown);
     }

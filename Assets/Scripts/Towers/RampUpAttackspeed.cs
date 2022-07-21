@@ -21,15 +21,11 @@ public class RampUpAttackspeed : MonoBehaviour
 
     private void OnCombatEnded()
     {
-        if (_modifier != null)
-            _modifier.active = false;
     }
 
     private void OnAfterAttack()
-    {        
-        _modifier = new Modifier(AttackSpeedPerAttack, Name.Rapid_AtkSpdPerAttack, Type.ATTACK_SPEED, BonusOperation.Percentage);
-
-        Owner.AddModifier(_modifier, StackOperation.Additive, RampUpStackLimit);
+    {
+        Owner.AR.Modify(AttackSpeedPerAttack, BonusOperation.Percentage, BuffNames.RAMP_UP_ATK_SPD, 2f, RampUpStackLimit);
     }
 
     private void OnDestroy()

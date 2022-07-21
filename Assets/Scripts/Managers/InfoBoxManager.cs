@@ -140,7 +140,7 @@ public class InfoBoxManager : MonoBehaviour {
 	}
 
 	public void OnTowerDeployed(Tower tower){
-		if (tower.towerBase.tag != "SuperBase")
+		if (tower.TowerBase.tag != "SuperBase")
 			OnNormalArcherDeployed ();
 		else
 			OnSuperArcherDeployed ();

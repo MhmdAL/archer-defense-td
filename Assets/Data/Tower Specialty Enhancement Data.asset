@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ece64f57a79885346b12dd618a7eec83, type: 3}
+  m_Name: Tower Specialty Enhancement Data
+  m_EditorClassIdentifier: 
+  <EnhancementSilverRequirementsByLevel>k__BackingField: 64000000c80000002c010000
+  <EnhancementSkillRequirementsByLevel>k__BackingField: 030000000500000007000000
+  <TowerSpecialtyEnhancements>k__BackingField:
+  - TowerSpecialty: 1
+    TowerEnhancementsBySpecializationLevel:
+    - SpecializationLevel: 0
+      EnhancementTypes: 03000000
+    - SpecializationLevel: 1
+      EnhancementTypes: 01000000
+    - SpecializationLevel: 2
+      EnhancementTypes: 05000000
+  - TowerSpecialty: 2
+    TowerEnhancementsBySpecializationLevel:
+    - SpecializationLevel: 0
+      EnhancementTypes: 02000000
+    - SpecializationLevel: 1
+      EnhancementTypes: 04000000
+  - TowerSpecialty: 3
+    TowerEnhancementsBySpecializationLevel:
+    - SpecializationLevel: 0
+      EnhancementTypes: 00000000
+    - SpecializationLevel: 1
+      EnhancementTypes: 03000000

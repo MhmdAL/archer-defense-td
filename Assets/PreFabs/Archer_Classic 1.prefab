@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8cf8d8149d5f14eba84d23cd706091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <TowerSkillsData>k__BackingField: {fileID: 11400000, guid: f0a63fbc48cd3dd41986e507f5c04d36,
+  <TowerSkillsData>k__BackingField: {fileID: 11400000, guid: 69a26f30dd781ee4ca58e65f4e9d723d,
     type: 2}
   <TowerAttackStrategy>k__BackingField: {fileID: 11400000, guid: ed6507729faab064d8a2f0d43b17e39b,
     type: 2}
@@ -368,7 +368,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4, type: 2}
   <SecondaryTargetCount>k__BackingField: 0
   stats: []
-  archerSpeciality: 0
   upgradeAnimationPrefab: {fileID: 120230, guid: bd1d4bf1b8595a146814cfafa007f638,
     type: 3}
   archerShotParticle: {fileID: 117056, guid: dc463a3f2c8479548a32d5c73769c430, type: 3}
@@ -380,14 +379,14 @@ MonoBehaviour:
   upgradeAnimSpawnPoint: {fileID: 477282}
   arrowSpawnPoint: {fileID: 401128}
   AD:
-    baseValue: 0
+    <BaseValue>k__BackingField: 0
   AS:
-    baseValue: 0
+    <BaseValue>k__BackingField: 0
   AR:
-    baseValue: 0
+    <BaseValue>k__BackingField: 0
   AP:
-    baseValue: 0
-  combatTimer: 2
+    <BaseValue>k__BackingField: 0
+  <CombatCooldown>k__BackingField: 2
   baseUpgradeCost: 60
   bulletSpeed: 3
   bulletRadius: 0
@@ -395,9 +394,6 @@ MonoBehaviour:
   title: Untrained Archer
   maxLevel: 5
   archerUpgrades: {fileID: 4900000, guid: 2005524dd89ede142b982c21a477ce2f, type: 3}
-  towerBase: {fileID: 0}
-  IsDisabled: 0
-  fullcooldown: 0
   silverSpent: 0
   cost: 50
   level: 0

@@ -39,6 +39,8 @@ namespace UnityTimer
         /// </summary>
         public bool isCompleted { get; private set; }
 
+        public bool IsDoneWhenElapsed { get; set; }
+
         /// <summary>
         /// Whether the timer uses real-time or game-time. Real time is unaffected by changes to the timescale
         /// of the game(e.g. pausing, slow-mo), while game time is affected.
@@ -92,7 +94,7 @@ namespace UnityTimer
         /// after the parent has been destroyed.</param>
         /// <returns>A timer object that allows you to examine stats and stop/resume progress.</returns>
         public static Timer Register(float duration, Action<Timer> onComplete, Action<float> onUpdate = null,
-            bool isLooped = false, bool useRealTime = false, MonoBehaviour autoDestroyOwner = null)
+            bool isLooped = false, bool useRealTime = false, MonoBehaviour autoDestroyOwner = null, bool isDoneWhenElapsed = true)
         {
             // create a manager object to update all the timers if one does not already exist.
             if (Timer._manager == null)
@@ -109,7 +111,7 @@ namespace UnityTimer
                 }
             }
 
-            Timer timer = new Timer(duration, onComplete, onUpdate, isLooped, useRealTime, autoDestroyOwner);
+            Timer timer = new Timer(duration, onComplete, onUpdate, isLooped, useRealTime, autoDestroyOwner, isDoneWhenElapsed);
             Timer._manager.RegisterTimer(timer);
             return timer;
         }
@@ -230,6 +232,19 @@ namespace UnityTimer
             this._timeElapsedBeforePause = null;
         }
 
+        public void Restart(float? duration = null)
+        {
+            if (this.isDone)
+            {
+                return;
+            }
+
+            if (duration is not null)
+                this.duration = duration.Value;
+
+            this._startTime = GetWorldTime();
+        }
+
         /// <summary>
         /// Get how many seconds have elapsed since the start of this timer's current cycle.
         /// </summary>
@@ -320,7 +335,7 @@ namespace UnityTimer
         #region Private Constructor (use static Register method to create new timer)
 
         private Timer(float duration, Action<Timer> onComplete, Action<float> onUpdate,
-            bool isLooped, bool usesRealTime, MonoBehaviour autoDestroyOwner)
+            bool isLooped, bool usesRealTime, MonoBehaviour autoDestroyOwner, bool isDoneWhenElapsed)
         {
             this.duration = duration;
             this._onComplete = onComplete;
@@ -334,6 +349,8 @@ namespace UnityTimer
 
             this._startTime = this.GetWorldTime();
             this._lastUpdateTime = this._startTime;
+
+            this.IsDoneWhenElapsed = isDoneWhenElapsed;
         }
 
         #endregion
@@ -388,7 +405,7 @@ namespace UnityTimer
                 {
                     this._startTime = this.GetWorldTime();
                 }
-                else
+                else if (this.IsDoneWhenElapsed)
                 {
                     this.isCompleted = true;
                 }

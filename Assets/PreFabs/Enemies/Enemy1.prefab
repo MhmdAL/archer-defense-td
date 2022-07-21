@@ -253,7 +253,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &11440652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,13 +1250,13 @@ MonoBehaviour:
   ID: 1
   anim: {fileID: 9538416}
   MaxHP:
-    baseValue: 60
+    <BaseValue>k__BackingField: 0
   Armor:
-    baseValue: 25
+    <BaseValue>k__BackingField: 0
   MS:
-    baseValue: 6
+    <BaseValue>k__BackingField: 0
   DamageModifier:
-    baseValue: 0
+    <BaseValue>k__BackingField: 0
   ded: 0
   inCombat: 0
   isAboutToDie: 0

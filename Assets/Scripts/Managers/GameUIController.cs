@@ -77,7 +77,7 @@ public class GameUIController : MonoBehaviour
     private void Awake()
     {
         _towerManager = FindObjectOfType<TowerManager>();
-        _vs = ValueStore.sharedInstance;
+        _vs = FindObjectOfType<ValueStore>();
         _adm = _vs.buymenu.GetComponent<ArcherDeployMenu>();
 
         _towerManager.TowerDeployed += OnTowerDeployed;
@@ -212,16 +212,16 @@ public class GameUIController : MonoBehaviour
 
     public void UpgradeTower()
     {
-        if (LastFocusedTower.archerSpeciality != ArcherType.ClassicArcher)
-        {
-            _towerManager.UpgradeTower(LastFocusedTower);
-        }
-        else
-        {
-            UpdateTowerEnhancementsMenu(LastFocusedTower);
+        // if (LastFocusedTower.ArcherSpecialty != ArcherType.ClassicArcher)
+        // {
+        //     _towerManager.UpgradeTower(LastFocusedTower);
+        // }
+        // else
+        // {
+        UpdateTowerEnhancementsMenu(LastFocusedTower);
 
-            SpecialtyMenu.gameObject.SetActive(true);
-        }
+        SpecialtyMenu.gameObject.SetActive(true);
+        // }
     }
 
     public void UseSkillpoint(int skill)
@@ -231,7 +231,7 @@ public class GameUIController : MonoBehaviour
 
     public void ApplyTowerEnhancement(int enhancementType)
     {
-        _vs.towerManagerInstance.ApplyTowerEnhancement(LastFocusedTower, (EnhancementType)enhancementType);
+        _vs.towerManagerInstance.ApplyEnhancement(LastFocusedTower, (EnhancementType)enhancementType);
 
         SpecialtyMenu.gameObject.SetActive(false);
     }
@@ -262,8 +262,10 @@ public class GameUIController : MonoBehaviour
     {
         if (t != null)
         {
+            var specializationRequirements = _vs.towerManagerInstance.GetSpecializationRequirements(t.SpecializationLevel);
+
             // If next level is unlocked
-            if (Tower.CanUpgrade(t))
+            if (t.CurrentSkillLevel >= specializationRequirements.skillLevelRequired)
             {
                 // Remove lock, activate upgradebutton
                 towerLock.SetActive(false);
@@ -307,9 +309,9 @@ public class GameUIController : MonoBehaviour
                 nextUpgradeText.text = "Next Upgrade";
             }
 
-            upgradeCostText.text = string.Concat(t.UpgradeCost);
+            upgradeCostText.text = string.Concat(specializationRequirements.silverCost);
 
-            if (_vs.Silver >= t.UpgradeCost)
+            if (_vs.Silver >= specializationRequirements.silverCost && t.CurrentSkillLevel >= specializationRequirements.skillLevelRequired)
             {
                 upgradeIcon.color = defaultButtonColor;
                 upgradeButton.interactable = true;
@@ -317,7 +319,7 @@ public class GameUIController : MonoBehaviour
                 //if(t.level == 0)
                 //upgradeCostText.GetComponent<TextMeshProUGUI> ().color = Color.yellow;
             }
-            else if (_vs.Silver < t.UpgradeCost)
+            else
             {
                 upgradeIcon.color = notEnoughSilverButtonColor;
                 upgradeButton.interactable = false;
@@ -338,7 +340,9 @@ public class GameUIController : MonoBehaviour
 
     public void UpdateTowerEnhancementsMenu(Tower t)
     {
-        SpecialtyMenu.SetEnhancements(t.NextPossibleEnhancements);
+        var nextPossibleEnhancements = _vs.towerManagerInstance.GetNextPossibleEnhancements(t);
+
+        SpecialtyMenu.SetEnhancements(nextPossibleEnhancements);
     }
 
     private void OnDestroy()
