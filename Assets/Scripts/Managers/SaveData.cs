@@ -12,7 +12,7 @@ public class SaveData {
 	public const Level DEFAULT_LEVEL = null;
 	public const int DEFAULT_GOLD = 0;
 	public const float DEFAULT_AD = 10;
-	public const float DEFAULT_AS = 1f;
+	public const float DEFAULT_AS = .5f;
 	public const float DEFAULT_AR = 16f;
 	public const float DEFAULT_LIVES = 10;
 

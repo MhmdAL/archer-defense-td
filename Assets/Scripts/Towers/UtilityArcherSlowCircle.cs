@@ -9,13 +9,13 @@ public class UtilityArcherSlowCircle : MonoBehaviour {
 		Monster m = c.GetComponent<Monster> ();
 		if (m != null) {
 			// Apply stun
-			if (m.stunnable.GetCooldownRemaining () <= 0) {
+			if (m.StunTimer.GetTimeRemaining () <= 0) {
 				ShopUpgrade uT4 = SaveData.GetUpgrade (UpgradeType.Utility_4);
 				ShopUpgrade aT5 = SaveData.GetUpgrade (UpgradeType.All_1);
 				float stunDuration = aT5.level > 0 ? uT4.CurrentValue * (1 + aT5.CurrentValue / 2) : uT4.CurrentValue;
-				m.AddModifier (new Modifier (0, Name.Utility_Stun,
-					Type.MOVEMENT_SPEED, BonusOperation.OverallMultiplier, ValueStore.sharedInstance.timerManagerInstance.StartTimer (stunDuration), DeApplyStunModifier),
-					StackOperation.HighestValue, 1);
+
+				m.Movespeed.Modify(0, BonusOperation.OverallMultiplier, Name.Utility_Stun.ToString(), stunDuration, 1);
+
 				m.anim.speed = 0;
 				m.stunImage.SetActive (true);
 
@@ -28,15 +28,15 @@ public class UtilityArcherSlowCircle : MonoBehaviour {
 			    //sr.sortingOrder = m.GetComponent<SpriteRenderer> ().sortingOrder + 1000;
 				//Destroy(g, stunDuration);
 
-				m.stunnable.ResetTimer (stunDuration + 4);
+				m.StunTimer.Restart (stunDuration + 4);
 			}
 
 			// Apply Slow
 			owner.ApplySlow(m);
 
-			// Apply Vulnerability
-			m.AddModifier (new Modifier (owner.baseVulnerabilityValue + SaveData.GetUpgrade(UpgradeType.Utility_3).CurrentValue, Name.Utility_Vulnerability,
-				Type.DAMAGE_TAKEN, BonusOperation.Percentage, ValueStore.sharedInstance.timerManagerInstance.StartTimer(2)), StackOperation.HighestValue, 1);
+			// Apply Vulnerability			
+			var val = owner.baseVulnerabilityValue + SaveData.GetUpgrade(UpgradeType.Utility_3).CurrentValue;
+			m.DamageModifier.Modify(val, BonusOperation.Percentage, Name.Utility_Vulnerability.ToString(), 2, 1);
 		}
 	}
 

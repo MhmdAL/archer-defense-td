@@ -1388,7 +1388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 411266}
   - component: {fileID: 21256060}
-  - component: {fileID: 11455364}
+  - component: {fileID: 634637109401113708}
   - component: {fileID: 5087940}
   - component: {fileID: 6171302}
   - component: {fileID: 9574748}
@@ -1471,7 +1471,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &11455364
+--- !u!114 &634637109401113708
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1480,9 +1480,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 172748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 930f00bdf96a33b4e821f009781006d9, type: 3}
+  m_Script: {fileID: 11500000, guid: 46cbbbd1622edfe4aaac15354efc6124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <EnemyData>k__BackingField: {fileID: 0}
   side: {fileID: 162320}
   up: {fileID: 181674}
   down: {fileID: 123894}
@@ -1495,22 +1496,13 @@ MonoBehaviour:
   HPBarCanvas: {fileID: 22397800}
   ID: 13
   anim: {fileID: 9574748}
-  MaxHP:
-    baseValue: 350
-  Armor:
-    baseValue: 150
-  MS:
-    baseValue: 4
-  DamageModifier:
-    baseValue: 0
   ded: 0
-  inCombat: 0
   isAboutToDie: 0
-  silverValue: 12
+  silverValue: 0
   currentHealth: 0
   distanceTravelled: 0
   combatTimer: 2
-  livesValue: 3
+  livesValue: 0
   targetedBy: []
 --- !u!50 &5087940
 Rigidbody2D:

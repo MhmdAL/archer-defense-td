@@ -24,8 +24,8 @@ public class EnemyBoss3 : Monster {
 
 	public void ActivateHeal(){
 		anim.SetBool ("HealGlow", false);
-		currentHealth += (MaxHP.Value - currentHealth) * percentMissingHealthHeal;
-		currentHealth = Mathf.Clamp (currentHealth, currentHealth, MaxHP.Value);
+		CurrentHP += (MaxHP.Value - CurrentHP) * percentMissingHealthHeal;
+		CurrentHP = Mathf.Clamp (CurrentHP, CurrentHP, MaxHP.Value);
 		healTimer.ResetTimer (healCooldown);
 	}
 }

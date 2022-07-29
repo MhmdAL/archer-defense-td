@@ -18,7 +18,7 @@ public class EnemyBoss4 : Monster {
 
 	CooldownTimer shockwaveCooldown;
 
-	public override void Awake(){
+	protected override void Awake(){
 		base.Awake ();
 
 		shockwaveCooldown = new CooldownTimer (disableShockwaveCooldown);

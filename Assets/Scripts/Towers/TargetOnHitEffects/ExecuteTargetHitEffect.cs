@@ -8,7 +8,7 @@ public class ExecuteTargetHitEffect : TargetHitEffect
     {
         if (data.Target != null)
         {
-            if(data.Target.currentHealth < data.Target.MaxHP.Value * 0.2f)
+            if(data.Target.CurrentHP < data.Target.MaxHP.Value * 0.2f)
             {
                 data.Target.Damage(999999, 0, DamageSource.Normal, data.Owner);
             }

@@ -8,7 +8,7 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityTimer;
 
-public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable
+public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable, IShooter
 {
     public event Action<Tower> SkillPointsChanged;
     public event Action<Modifier> ModifierEnded;
@@ -92,10 +92,10 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public Transform arrowSpawnPoint;
 
 
-    public Stat AD = new Stat(Type.ATTACK_DAMAGE);
-    public Stat AS = new Stat(Type.ATTACK_SPEED);
-    public Stat AR = new Stat(Type.ATTACK_RANGE);
-    public Stat AP = new Stat(Type.ARMOR_PENETRATION);
+    public Stat AD { get; set; }
+    public Stat AS { get; set; }
+    public Stat AR { get; set; }
+    public Stat AP { get; set; }
 
     public Timer AttackCooldownTimer { get; set; }
     public Timer CombatTimer { get; set; }
@@ -146,7 +146,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     private List<Monster> monstersInScene;
     private List<Monster> targets;
 
-    private List<Modifier> towerUpgrades = new List<Modifier>();
+    public List<Modifier> towerUpgrades = new List<Modifier>();
 
     private float upgradeCost;
 
@@ -224,8 +224,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         monstersInRange = new List<Monster>();
         targets = new List<Monster> { null, null };
 
-        AdjustSortingOrder();
-
         // Set values from file, used when upgrading tower
         SetUpgradeValues();
 
@@ -250,6 +248,11 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         rangeCircleScale = rangeCircleTransform.localScale;
 
         cooldownBarParent = cooldownBarTransform.parent.gameObject;
+
+        AD = new Stat(Type.ATTACK_DAMAGE);
+        AS = new Stat(Type.ATTACK_SPEED);
+        AR = new Stat(Type.ATTACK_RANGE);
+        AP = new Stat(Type.ARMOR_PENETRATION);
 
         AD.BaseValue = SaveData.DEFAULT_AD * (1 + SaveData.GetUpgrade(UpgradeType.AD).CurrentValue);
         AS.BaseValue = SaveData.DEFAULT_AS * (1 + SaveData.GetUpgrade(UpgradeType.AS).CurrentValue);
@@ -330,6 +333,24 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
+    public void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber)
+    {
+        foreach (var ohe in OnHitEffects)
+        {
+            foreach (var unit in unitsHit)
+            {
+                ohe.OnTargetHit(new TargetHitData
+                {
+                    Owner = this,
+                    Projectile = p,
+                    Target = unit
+                });
+            }
+        }
+    }
+
+
+    #region Target Calculation
 
     private void CalculateTargets()
     {
@@ -436,6 +457,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
             return false;
     }
 
+    #endregion
+
     public void ApplyEnhancement(IEnhancement enhancement)
     {
         Enhancements.Add(enhancement);
@@ -457,21 +480,21 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         switch ((TowerSkill)skill)
         {
             case TowerSkill.AttackDamage:
-                AD.AddModifier(currentSkillValues.ADValue,
+                AD.Modify(currentSkillValues.ADValue,
                  currentSkillValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
                   BuffNames.TOWER_SKILL_AD + CurrentSkillLevel);
 
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_DAMAGE);
                 break;
             case TowerSkill.AttackSpeed:
-                AS.AddModifier(currentSkillValues.ASValue,
+                AS.Modify(currentSkillValues.ASValue,
                  currentSkillValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
                   BuffNames.TOWER_SKILL_AS + CurrentSkillLevel);
 
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_SPEED);
                 break;
             case TowerSkill.AttackRange:
-                AR.AddModifier(currentSkillValues.ARValue,
+                AR.Modify(currentSkillValues.ARValue,
                  currentSkillValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
                   BuffNames.TOWER_SKILL_AR + CurrentSkillLevel);
 
@@ -707,19 +730,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         silverSpent += UpgradeCost;
     }
 
-    public virtual string NextUpgradeStats()
-    {
-        string x = "";
-        for (int i = 0; i < towerUpgrades.Count; i++)
-        {
-            if (towerUpgrades[i].intendedLevel == level + 1)
-            {
-                x += "<#54DFFBFF>+" + Mathf.Abs(towerUpgrades[i].value) * 100 + "%</color> " + GetDisplayName(towerUpgrades[i].type) + "\n";
-            }
-        }
-        return x;
-    }
-
     public virtual void SetUpgradeValues()
     {
         if (ArcherSpecialty == ArcherType.ClassicArcher)
@@ -742,32 +752,10 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
-    public string GetDisplayName(Type t)
-    {
-        switch (t)
-        {
-            case Type.ATTACK_DAMAGE:
-                return "Attack Damage";
-                break;
-            case Type.ATTACK_SPEED:
-                return "Attack Speed";
-                break;
-            case Type.ATTACK_RANGE:
-                return "Attack Range";
-                break;
-            case Type.SLOW_ON_ATTACK:
-                return "Slow";
-                break;
-            default:
-                return "";
-                break;
-        }
-    }
-
     public void StartPoison(Monster target, Projectile p)
     {
         ShopUpgrade poison = SaveData.GetUpgrade(UpgradeType.Poison_Arrows);
-        StartCoroutine(DOT(poison.CurrentValue * p.damage, target));
+        StartCoroutine(DOT(poison.CurrentValue * p.Damage, target));
     }
 
     public IEnumerator ColorFade()
@@ -842,16 +830,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         rangeCircleScale.x = AR.Value / 2;
 
         rangeCircleTransform.localScale = rangeCircleScale;
-    }
-
-    private void AdjustSortingOrder()
-    {
-        // adjust sorting order of the tower components
-        attachedRenderers = transform.GetComponentsInChildren<SpriteRenderer>(true).ToList();
-        foreach (var item in attachedRenderers)
-        {
-            item.sortingOrder += Mathf.RoundToInt((transform.position.y) * -150);
-        }
     }
 
     public void Focus()

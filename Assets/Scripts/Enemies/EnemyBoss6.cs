@@ -33,7 +33,7 @@ public class EnemyBoss6 : Monster {
 	{
 		base.FixedUpdate ();
 
-		if (currentHealth >= MaxHP.Value / 2) {
+		if (CurrentHP >= MaxHP.Value / 2) {
 			multiplier = 1f;
 		} else {
 			multiplier = 1.5f;
@@ -80,8 +80,8 @@ public class EnemyBoss6 : Monster {
 		foreach (Collider2D c in cols) {
 			Monster m = c.GetComponent<Monster> ();
 			if (c != null && m != null && c.gameObject != gameObject) {
-				m.currentHealth += m.MaxHP.Value * (healValue * multiplier);
-				m.currentHealth = Mathf.Clamp(m.currentHealth, m.currentHealth, m.MaxHP.Value);
+				m.CurrentHP += m.MaxHP.Value * (healValue * multiplier);
+				m.CurrentHP = Mathf.Clamp(m.CurrentHP, m.CurrentHP, m.MaxHP.Value);
 			}
 		}
 	}

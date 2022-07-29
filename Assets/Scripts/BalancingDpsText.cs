@@ -10,10 +10,10 @@ public class BalancingDpsText : MonoBehaviour {
 
 	void Awake(){
 		textObject = GetComponent<TextMeshProUGUI> ();
-		Monster.MonsterDamaged += OnMonsterDamaged;
+		// Monster.UnitDamaged += OnMonsterDamaged;
 	}
 
-	public void OnMonsterDamaged(Monster m, float damage, IAttacker source){
+	public void OnMonsterDamaged(Unit m, float damage, IAttacker source){
 		if (source.GetType() == t.GetType() ) {
 			damageValue += damage;
 			textObject.text = "Damage:  " + damageValue;
@@ -21,6 +21,6 @@ public class BalancingDpsText : MonoBehaviour {
 	}
 
 	void OnDisable(){
-		Monster.MonsterDamaged -= OnMonsterDamaged;
+		// Monster.UnitDamaged -= OnMonsterDamaged;
 	}
 }

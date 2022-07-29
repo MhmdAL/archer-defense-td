@@ -14,7 +14,7 @@ public class Stat
         _modifiers = new List<ModifierV2>();
     }
 
-    public void AddModifier(float value, BonusOperation bo, string name)
+    public void Modify(float value, BonusOperation bo, string name)
     {
         Modify(value, bo, name, null, null, null);
     }

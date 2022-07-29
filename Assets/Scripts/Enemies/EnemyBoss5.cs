@@ -22,17 +22,17 @@ public class EnemyBoss5 : EnemyAdaptive {
 	{
 		base.FixedUpdate ();
 		if (immunityTimer.GetCooldownRemaining () <= 0) {
-			if (currentHealth <= damagePercentTillImmunity * MaxHP.Value) {
+			if (CurrentHP <= damagePercentTillImmunity * MaxHP.Value) {
 				//AddModifier (new Modifier (Name.EnemyBoss5_Immunity, Type.Immunity,
 				//	immunityDuration * 2, ApplyImmunityModifier, DeApplyImmunityModifier), StackOperation.Additive, 1);
 				anim.SetBool("PlayInvulnerability", true);
 				immunityTimer.ResetTimer (immunityCooldown);
-			}else if (currentHealth <= damagePercentTillImmunity * 2 * MaxHP.Value) {
+			}else if (CurrentHP <= damagePercentTillImmunity * 2 * MaxHP.Value) {
 				//AddModifier (new Modifier (Name.EnemyBoss5_Immunity, Type.Immunity,
 				//	immunityDuration * 1.5f, ApplyImmunityModifier, DeApplyImmunityModifier), StackOperation.Additive, 1);
 				anim.SetBool("PlayInvulnerability", true);
 				immunityTimer.ResetTimer (immunityCooldown);
-			}else if (currentHealth <= damagePercentTillImmunity * 3 * MaxHP.Value) {
+			}else if (CurrentHP <= damagePercentTillImmunity * 3 * MaxHP.Value) {
 			//	AddModifier (new Modifier (Name.EnemyBoss5_Immunity, Type.Immunity,
 			//		immunityDuration, ApplyImmunityModifier, DeApplyImmunityModifier), StackOperation.Additive, 1);
 				anim.SetBool("PlayInvulnerability", true);
@@ -47,13 +47,13 @@ public class EnemyBoss5 : EnemyAdaptive {
 		anim.SetFloat("InvulnerabilitySpeed", 0);
 		
 
-		if (currentHealth <= damagePercentTillImmunity * MaxHP.Value) {
+		if (CurrentHP <= damagePercentTillImmunity * MaxHP.Value) {
 			AddModifier (new Modifier (Name.EnemyBoss5_Immunity, Type.Immunity,
 				immunityDuration * 2, ApplyImmunityModifier, DeApplyImmunityModifier), StackOperation.Additive, 1);
-		}else if (currentHealth <= damagePercentTillImmunity * 2 * MaxHP.Value) {
+		}else if (CurrentHP <= damagePercentTillImmunity * 2 * MaxHP.Value) {
 			AddModifier (new Modifier (Name.EnemyBoss5_Immunity, Type.Immunity,
 				immunityDuration * 1.5f, ApplyImmunityModifier, DeApplyImmunityModifier), StackOperation.Additive, 1);
-		}else if (currentHealth <= damagePercentTillImmunity * 3 * MaxHP.Value) {
+		}else if (CurrentHP <= damagePercentTillImmunity * 3 * MaxHP.Value) {
 			AddModifier (new Modifier (Name.EnemyBoss5_Immunity, Type.Immunity,
 				immunityDuration, ApplyImmunityModifier, DeApplyImmunityModifier), StackOperation.Additive, 1);
 		}

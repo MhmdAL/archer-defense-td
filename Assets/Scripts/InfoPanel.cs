@@ -22,11 +22,11 @@ public class InfoPanel : MonoBehaviour {
 		ipm = ValueStore.sharedInstance.infoPanelManagerInstance;
 		m = ValueStore.sharedInstance.monsterManagerInstance;
 
-		associatedEnemy = m.enemyPrefabs.FirstOrDefault (x => x.ID == enemyID);
+		// associatedEnemy = m.enemyPrefabs.FirstOrDefault (x => x.ID == enemyID);
 
 		enemyImage.sprite = associatedEnemy.icon;
 
-		enemyTitleText.text = associatedEnemy.name;
+		enemyTitleText.text = associatedEnemy.EnemyData.Name;
 		//enemyDescText.text = associatedEnemy.description;
 
 		float hpFill = (float)associatedEnemy.MaxHP.Value / (float)m.maximumHP;

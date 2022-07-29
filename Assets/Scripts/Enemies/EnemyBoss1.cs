@@ -3,9 +3,7 @@ using System.Collections;
 
 public class EnemyBoss1 : Monster
 {
-
-    public float attackSpeedDebuffValue;
-    public float attackSpeedDebuffDuration;
+    public new EnemyBoss1Data EnemyData => base.EnemyData as EnemyBoss1Data;
 
     public override void Damage(float damage, float armorpen, DamageSource source, IAttacker killer)
     {
@@ -13,8 +11,8 @@ public class EnemyBoss1 : Monster
         Tower t = killer as Tower;
         if (t != null)
         {
-            t.AS.Modify(attackSpeedDebuffValue, BonusOperation.Percentage, Name.EnemyBoss1_AtkSlow.ToString(),
-			 attackSpeedDebuffDuration, 1);
+            t.AS.Modify(EnemyData.AttackSpeedDebuffValue, BonusOperation.Percentage, Name.EnemyBoss1_AtkSlow.ToString(),
+             EnemyData.AttackSpeedDebuffDuration, 1);
         }
     }
 }

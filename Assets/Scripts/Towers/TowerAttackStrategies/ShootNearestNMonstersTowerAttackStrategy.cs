@@ -52,15 +52,22 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
             }
         }
 
+        var targetDir = (target.CurrentPath.waypoints[target.CurrentWaypoint + 1].transform.position - target.transform.position).normalized;
+
+        var randomOffset = Random.Range(-1, 1f);
+        var targetPosition = target.transform.position + targetDir * (data.Owner.bulletSpeed * 0.9f * target.Movespeed.Value + randomOffset);
+
         //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
-        bullet.speed = data.Owner.bulletSpeed;
-        bullet.ownerTower = data.Owner;
-        bullet.targetMonster = target;
-        bullet.damage = bulletDamage;
-        bullet.armorPen = armorpen;
-        bullet.radius = radius;
+        bullet.Owner = data.Owner;
+        bullet.Target = target;
+        bullet.Damage = bulletDamage;
+        bullet.ArmorPen = armorpen;
+        bullet.Radius = radius;
         bullet.shotNumber = data.Owner.shotNumber;
-        bullet.currentProjectile = projectile.ToString();
+        bullet.StartPosition = data.Owner.transform.position;
+        bullet.TargetPosition = targetPosition;
+        bullet.Duration = data.Owner.bulletSpeed;
+
         data.Owner.isInCombat = true;
         data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown);
         // set cooldown back to full duration

@@ -13,13 +13,13 @@ public class HeadshotTargetHitEffect : TargetHitEffect
             
             if (headShotTimer.GetTimeRemaining() <= 0)
             {
-                data.Target.Damage(data.Projectile.damage * 5, data.Projectile.armorPen, DamageSource.Normal, data.Owner);
+                data.Target.Damage(data.Projectile.Damage * 5, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
 
                 headShotTimer.Restart();
             }
             else
             {
-                data.Target.Damage(data.Projectile.damage, data.Projectile.armorPen, DamageSource.Normal, data.Owner);
+                data.Target.Damage(data.Projectile.Damage, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
             }
         }
     }

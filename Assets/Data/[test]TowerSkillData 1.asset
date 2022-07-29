@@ -20,6 +20,13 @@ MonoBehaviour:
     <IsASPercentage>k__BackingField: 1
     <ARValue>k__BackingField: 0.3
     <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 10
+    <ADValue>k__BackingField: 10
+    <IsADPercentage>k__BackingField: 0
+    <ASValue>k__BackingField: 0.2
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
   - <ExpRequired>k__BackingField: 15
     <ADValue>k__BackingField: 10
     <IsADPercentage>k__BackingField: 0
@@ -27,21 +34,14 @@ MonoBehaviour:
     <IsASPercentage>k__BackingField: 1
     <ARValue>k__BackingField: 0.3
     <IsARPercentage>k__BackingField: 1
-  - <ExpRequired>k__BackingField: 25
-    <ADValue>k__BackingField: 10
-    <IsADPercentage>k__BackingField: 0
-    <ASValue>k__BackingField: 0.2
-    <IsASPercentage>k__BackingField: 1
-    <ARValue>k__BackingField: 0.3
-    <IsARPercentage>k__BackingField: 1
-  - <ExpRequired>k__BackingField: 40
+  - <ExpRequired>k__BackingField: 20
     <ADValue>k__BackingField: 10
     <IsADPercentage>k__BackingField: 0
     <ASValue>k__BackingField: 0.5
     <IsASPercentage>k__BackingField: 1
     <ARValue>k__BackingField: 0.3
     <IsARPercentage>k__BackingField: 1
-  - <ExpRequired>k__BackingField: 50
+  - <ExpRequired>k__BackingField: 25
     <ADValue>k__BackingField: 10
     <IsADPercentage>k__BackingField: 0
     <ASValue>k__BackingField: 0.5

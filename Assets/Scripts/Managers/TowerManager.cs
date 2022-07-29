@@ -73,8 +73,7 @@ public class TowerManager : MonoBehaviour
 
         if (tb.gameObject.tag == "SuperBase")
         {
-            t.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
-                Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
+            t.AR.Modify(superBaseAttackRangeModifier, BonusOperation.Percentage, Name.TowerBaseAttackRangeBuff.ToString());
 
             t.buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
         }
@@ -88,7 +87,6 @@ public class TowerManager : MonoBehaviour
 
     public void SellTower(Tower t)
     {
-        // var towerToSell = _vs.lastClicked.GetComponent<Tower>();
         _vs.Silver += (int)(t.silverSpent * 0.6f);
 
         t.TowerBase.gameObject.SetActive(true);
@@ -100,70 +98,6 @@ public class TowerManager : MonoBehaviour
         Destroy(t.gameObject);
 
         TowerSold?.Invoke();
-    }
-
-    public void UpgradeTower(Tower t)
-    {
-        if (_vs.Silver >= t.UpgradeCost && Tower.CanUpgrade(t))
-        {
-            t.Upgrade();
-
-            _vs.Silver -= t.UpgradeCost;
-
-            t.level += 1;
-
-            TowerUpgraded?.Invoke(t);
-        }
-    }
-
-    public void SetSpeciality(Tower t, int archerID)
-    {
-        if (_vs.Silver >= t.UpgradeCost)
-        {
-            Tower newTower = null;
-            if (archerID == 1)
-            {
-                newTower = Instantiate(rapidArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
-            }
-            else if (archerID == 2)
-            {
-                newTower = Instantiate(longArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
-            }
-            else if (archerID == 3)
-            {
-                newTower = Instantiate(utilityArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
-            }
-
-            TowersInScene.Remove(t);
-            TowersInScene.Add(newTower);
-
-            newTower.modifiers.AddRange(t.modifiers);
-            newTower.TowerBase = t.TowerBase;
-            newTower.SkillPoints = t.SkillPoints;
-            newTower.CurrentSkillLevel = t.CurrentSkillLevel;
-            newTower.CurrentXP = t.CurrentXP;
-
-            foreach (var item in t.buffIndicatorPanel.indicators)
-            {
-                newTower.buffIndicatorPanel.AddIndicator(item.type, item.cd);
-            }
-
-            if (newTower.TowerBase.tag == "SuperBase")
-            {
-                newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
-                    Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
-            }
-
-            newTower.silverSpent = t.cost;
-            newTower.Upgrade();
-            newTower.level += 1;
-
-            _vs.Silver -= t.UpgradeCost;
-
-            Destroy(t.gameObject);
-
-            OnTowerSpecialized(newTower);
-        }
     }
 
     public (int silverCost, int skillLevelRequired) GetSpecializationRequirements(int specializationLevel)
@@ -178,7 +112,7 @@ public class TowerManager : MonoBehaviour
     {
         var requirements = GetSpecializationRequirements(t.SpecializationLevel);
 
-        if(_vs.Silver < requirements.silverCost || t.CurrentSkillLevel < requirements.skillLevelRequired)
+        if (_vs.Silver < requirements.silverCost || t.CurrentSkillLevel < requirements.skillLevelRequired)
         {
             return;
         }
@@ -251,6 +185,70 @@ public class TowerManager : MonoBehaviour
         }
 
         return towerSpecialty.Value;
+    }
+
+    public void UpgradeTower(Tower t)
+    {
+        if (_vs.Silver >= t.UpgradeCost && Tower.CanUpgrade(t))
+        {
+            t.Upgrade();
+
+            _vs.Silver -= t.UpgradeCost;
+
+            t.level += 1;
+
+            TowerUpgraded?.Invoke(t);
+        }
+    }
+
+    public void SetSpeciality(Tower t, int archerID)
+    {
+        if (_vs.Silver >= t.UpgradeCost)
+        {
+            Tower newTower = null;
+            if (archerID == 1)
+            {
+                newTower = Instantiate(rapidArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
+            }
+            else if (archerID == 2)
+            {
+                newTower = Instantiate(longArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
+            }
+            else if (archerID == 3)
+            {
+                newTower = Instantiate(utilityArcherPrefab, t.gameObject.transform.position, Quaternion.identity) as Tower;
+            }
+
+            TowersInScene.Remove(t);
+            TowersInScene.Add(newTower);
+
+            newTower.modifiers.AddRange(t.modifiers);
+            newTower.TowerBase = t.TowerBase;
+            newTower.SkillPoints = t.SkillPoints;
+            newTower.CurrentSkillLevel = t.CurrentSkillLevel;
+            newTower.CurrentXP = t.CurrentXP;
+
+            foreach (var item in t.buffIndicatorPanel.indicators)
+            {
+                newTower.buffIndicatorPanel.AddIndicator(item.type, item.cd);
+            }
+
+            if (newTower.TowerBase.tag == "SuperBase")
+            {
+                newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
+                    Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
+            }
+
+            newTower.silverSpent = t.cost;
+            newTower.Upgrade();
+            newTower.level += 1;
+
+            _vs.Silver -= t.UpgradeCost;
+
+            Destroy(t.gameObject);
+
+            OnTowerSpecialized(newTower);
+        }
     }
 
     private void OnTowerSpecialized(Tower tower)

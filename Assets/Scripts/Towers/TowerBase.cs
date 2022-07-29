@@ -27,8 +27,6 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
     {
         originalPos = transform.position;
 
-        AdjustSortingOrder();
-
         if (tag == "SuperBase")
         {
             nonClickedPickaxeRenderer.sprite = defaultSuperSprite;
@@ -41,34 +39,6 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
         }
 
         ValueStore.sharedInstance.towerManagerInstance.TowerDeployed += OnTowerDeployed;
-    }
-
-    // void Update()
-    // {
-    //     if (ValueStore.sharedInstance.lastClickType == ClickType.TowerBase)
-    //     {
-    //         if (gameObject == ValueStore.sharedInstance.lastClicked)
-    //         {
-    //             SetState(TowerBaseState.Clicked);
-    //         }
-    //         else
-    //         {
-    //             SetState(TowerBaseState.NonClicked);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         SetState(TowerBaseState.NonClicked);
-    //     }
-    // }
-
-    private void AdjustSortingOrder()
-    {
-        // adjust sorting order of the tower components
-        foreach (var item in GetComponentsInChildren<SpriteRenderer>(true).ToList())
-        {
-            item.sortingOrder += Mathf.RoundToInt((transform.position.y) * -150);
-        }
     }
 
     public void SetLayer(string sortingLayer)

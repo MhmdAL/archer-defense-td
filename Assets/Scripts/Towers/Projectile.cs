@@ -2,107 +2,116 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Projectile : MonoBehaviour {
+public interface IShooter
+{
+    void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber);
+}
 
-	[HideInInspector]
-	public Tower ownerTower;
-
-	[HideInInspector]
-	public Monster targetMonster;
-
-	[HideInInspector]
-	public string currentProjectile;
-
-	[HideInInspector]
-    public float damage;
-
-	[HideInInspector]
-    public float radius;
-
-	[HideInInspector]
-    public float armorPen;
-
-	[HideInInspector]
-	public float progress;
-
-	[HideInInspector]
-	public float speed;
-
-	[HideInInspector]
-	public int shotNumber;
-
-	[HideInInspector]
-	public bool isAboutToKill;
-
-	private MonsterManager mm;
-
-	private Vector3 startPos, endPos, dir;
-
-	private float pathLength, step;
-
-	private Transform myTransform;
-	private Transform targetTransform;
+public class Projectile : MonoBehaviour
+{
+    public IShooter Owner { get; set; }
+    public Unit Target { get; set; }
 
 
-	void Start(){
-		mm = ValueStore.sharedInstance.monsterManagerInstance;
-		startPos = ownerTower.transform.position;
+    public float Damage { get; set; }
+    public float Radius { get; set; }
+    public float ArmorPen { get; set; }
+    public int shotNumber;
+    public bool isAboutToKill;
 
-		myTransform = transform;
+    public float Duration { get; set; } = 2f;
+    public Vector3 StartPosition { get; set; }
+    public Vector3 TargetPosition { get; set; }
+    public float Gravity { get; set; } = -50f;
 
-		targetTransform = targetMonster.transform;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		if(ownerTower == null || targetTransform == null)
+    private float _curTime;
+
+    private bool _reached;
+
+    private void FixedUpdate()
+    {
+        if(_reached)
         {
-			Destroy (transform.root.gameObject);
-			return;
+            return;
         }
-		if (targetTransform != null && ownerTower != null) {
-			dir = targetTransform.position - transform.position;
+        
+        MoveParabola();
 
-			float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.AngleAxis (angle + 90, Vector3.forward);
+        if (_curTime >= Duration)
+        {
+            OnBulletHit();
 
-			endPos = targetTransform.transform.position;
-
-			pathLength = Vector3.Distance (startPos, endPos);
-			step = speed / pathLength;
-
-			progress += step;
-
-			myTransform.position = Vector3.Lerp (startPos, endPos, progress);
-
-			if (transform.position == endPos) {
-				if (radius > 0) {
-					List<Monster> aoeTargets = new List<Monster> ();
-					Collider2D[] cols = Physics2D.OverlapCircleAll (myTransform.position, radius);
-					foreach (Collider2D c in cols) {
-						Monster mo = c.GetComponent<Monster> ();
-						if (mo != null && mo != targetMonster) {
-							aoeTargets.Add (mo);
-						}
-					}
-					if (ownerTower != null) {
-						ownerTower.OnTargetHit (targetMonster, this, aoeTargets, shotNumber);		
-						BulletHit (targetMonster, aoeTargets);
-					}
-				} else {
-					if (ownerTower != null) {
-						ownerTower.OnTargetHit (targetMonster, this, null, shotNumber);		
-						BulletHit (targetMonster);
-					} else {
-						targetMonster.Damage (damage, 0, DamageSource.Normal, ownerTower);
-					}
-				}
-			}
-		}
+            if (Target != null)
+            {
+                Destroy(transform.root.gameObject);
+            }
+            else
+            {
+                Destroy(transform.root.gameObject, 3f);
+                _reached = true;
+            }
+        }
     }
 
-	public void BulletHit(Monster m, List<Monster> aoeTargets = null)
+    public void OnBulletHit()
     {
-		Destroy (transform.root.gameObject);
+        if (Radius > 0)
+        {
+            var targets = new List<Unit>();
+
+            var cols = Physics2D.OverlapCircleAll(TargetPosition, Radius);
+
+            foreach (var c in cols)
+            {
+                var unit = c.GetComponent<Unit>();
+                if (unit != null)
+                {
+                    targets.Add(unit);
+                }
+            }
+
+            if (Owner != null)
+            {
+                Owner.OnTargetHit(targets, this, shotNumber);
+            }
+        }
+        else
+        {
+            if (Owner != null)
+            {
+                Owner.OnTargetHit(new List<Unit> { Target }, this, shotNumber);
+            }
+        }
+    }
+
+    private void MoveParabola()
+    {
+        _curTime += Time.deltaTime;
+        _curTime = Mathf.Clamp(_curTime, 0, Duration);
+
+        var pos = transform.position;
+
+        var dir = TargetPosition - StartPosition;
+
+        var xSpeed = dir.x / Duration;
+        var ySpeed = (dir.y - 0.5f * Gravity * Duration * Duration) / Duration;
+
+        pos.x = StartPosition.x + xSpeed * _curTime;
+        pos.y = StartPosition.y + ySpeed * _curTime + 0.5f * Gravity * _curTime * _curTime;
+
+        transform.position = pos;
+
+        var targetDir = (Vector2)StartPosition + GetDeltaPos(xSpeed, ySpeed, _curTime + 0.1f * Duration) - (Vector2)pos;
+
+        float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    private Vector2 GetDeltaPos(float iXSpeed, float iYSpeed, float t)
+    {
+        var x = iXSpeed * t;
+        var y = iYSpeed * t + 0.5f * Gravity * t * t;
+
+        return new Vector2(x, y);
     }
 }

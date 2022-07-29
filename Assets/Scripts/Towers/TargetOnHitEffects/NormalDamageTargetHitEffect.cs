@@ -8,7 +8,7 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
     {
         if (data.Target != null)
         {
-            data.Target.Damage(data.Projectile.damage, data.Projectile.armorPen, DamageSource.Normal, data.Owner);
+            data.Target.Damage(data.Projectile.Damage, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
         }
     }
 }
@@ -16,6 +16,6 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
 public class TargetHitData
 {
     public Tower Owner { get; set; }
-    public Monster Target { get; set; }
+    public Unit Target { get; set; }
     public Projectile Projectile { get; set; }
 }

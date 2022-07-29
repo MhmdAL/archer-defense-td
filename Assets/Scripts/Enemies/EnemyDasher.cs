@@ -18,7 +18,7 @@ public class EnemyDasher : Monster {
 	{
 		base.FixedUpdate ();
 
-		if (dashCooldownTimer.GetCooldownRemaining () <= 0 && !inCombat && shotNumber > 0) {
+		if (dashCooldownTimer.GetCooldownRemaining () <= 0 && !InCombat && shotNumber > 0) {
 			anim.SetBool ("Dash", true);
 			FixedMovespeed (dashSpeed, dashDuration * shotNumber);
 

@@ -227,6 +227,8 @@ public class GameUIController : MonoBehaviour
     public void UseSkillpoint(int skill)
     {
         LastFocusedTower.UpgradeSkill((TowerSkill)skill);
+
+        UpdateTowerDesc(LastFocusedTower);
     }
 
     public void ApplyTowerEnhancement(int enhancementType)
@@ -305,7 +307,7 @@ public class GameUIController : MonoBehaviour
             else if (t.level != t.maxLevel)
             {
                 upgradeIcon.sprite = upgradeSprite;
-                nextUpgradeDescText.text = t.NextUpgradeStats();
+                nextUpgradeDescText.text = GetNextUpgradeDescription(t);
                 nextUpgradeText.text = "Next Upgrade";
             }
 
@@ -335,6 +337,41 @@ public class GameUIController : MonoBehaviour
             {
                 ArcherSpecialtyChoiceMenu.SetActive(false);
             }
+        }
+    }
+
+    private string GetNextUpgradeDescription(Tower t)
+    {
+        string x = "";
+        for (int i = 0; i < t.towerUpgrades.Count; i++)
+        {
+            if (t.towerUpgrades[i].intendedLevel == t.level + 1)
+            {
+                x += "<#54DFFBFF>+" + Mathf.Abs(t.towerUpgrades[i].value) * 100 + "%</color> " + GetDisplayName(t.towerUpgrades[i].type) + "\n";
+            }
+        }
+        return x;
+    }
+
+    private string GetDisplayName(Type t)
+    {
+        switch (t)
+        {
+            case Type.ATTACK_DAMAGE:
+                return "Attack Damage";
+                break;
+            case Type.ATTACK_SPEED:
+                return "Attack Speed";
+                break;
+            case Type.ATTACK_RANGE:
+                return "Attack Range";
+                break;
+            case Type.SLOW_ON_ATTACK:
+                return "Slow";
+                break;
+            default:
+                return "";
+                break;
         }
     }
 

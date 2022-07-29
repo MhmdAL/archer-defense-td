@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 6177714}
   - component: {fileID: 5042302}
   - component: {fileID: 9539268}
+  - component: {fileID: 5184944960580754996}
   m_Layer: 0
   m_Name: Archer_Classic 1
   m_TagString: Untagged
@@ -378,17 +379,9 @@ MonoBehaviour:
   buffIndicatorPanel: {fileID: 11419350}
   upgradeAnimSpawnPoint: {fileID: 477282}
   arrowSpawnPoint: {fileID: 401128}
-  AD:
-    <BaseValue>k__BackingField: 0
-  AS:
-    <BaseValue>k__BackingField: 0
-  AR:
-    <BaseValue>k__BackingField: 0
-  AP:
-    <BaseValue>k__BackingField: 0
   <CombatCooldown>k__BackingField: 2
   baseUpgradeCost: 60
-  bulletSpeed: 3
+  bulletSpeed: 0.7
   bulletRadius: 0
   icon: {fileID: 21300000, guid: c7d4dc6c4818fd0469031fa851f1b197, type: 3}
   title: Untrained Archer
@@ -520,6 +513,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5184944960580754996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &135158
 GameObject:
   m_ObjectHideFlags: 0

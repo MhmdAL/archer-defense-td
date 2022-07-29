@@ -60,7 +60,7 @@ public class WaveManager : MonoBehaviour {
     }
 
 	public void OnEnemyDied(Monster m){
-		if(!m.ded)
+		if(!m.IsDead)
 			enemiesRemainingThisWave -= 1;
 		
 		if (enemiesRemainingThisWave == 0 && curWave != totalWaves) { // WaveEnded

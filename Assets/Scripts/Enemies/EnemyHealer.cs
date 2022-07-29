@@ -23,8 +23,8 @@ public class EnemyHealer : Monster {
 			foreach (Collider2D c in cols) {
 				Monster m = c.GetComponent<Monster> ();
 				if (c != null && m != null && m != this) {
-					m.currentHealth += m.MaxHP.Value * healPercent;
-					m.currentHealth = Mathf.Clamp(m.currentHealth, m.currentHealth, m.MaxHP.Value);
+					m.CurrentHP += m.MaxHP.Value * healPercent;
+					m.CurrentHP = Mathf.Clamp(m.CurrentHP, m.CurrentHP, m.MaxHP.Value);
 				}
 			}
 			healCdTimer.ResetTimer (healCooldown);
