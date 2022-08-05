@@ -3,15 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - SuperBase
-  - InfoCanvas
-  - Monster3
-  - Tower4
-  - Tower2
-  - Wave
-  - Tower3
-  - Gold
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -21,7 +13,6 @@ TagManager:
   - UI
   - 
   - 
-  - Ground
   - 
   - 
   - 
@@ -34,8 +25,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Layer 1
+  - Layer 2
+  - Layer 3
   - 
   - 
   - 
@@ -49,18 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: RangeCircles
-    uniqueID: 4267096409
+  - name: Layer 1
+    uniqueID: 2425651459
     locked: 0
-  - name: TowerUI
-    uniqueID: 412940989
+  - name: Layer 2
+    uniqueID: 4250941897
     locked: 0
-  - name: FloatyImage
-    uniqueID: 1126649919
-    locked: 0
-  - name: InfoUI
-    uniqueID: 233755911
-    locked: 0
-  - name: Highest
-    uniqueID: 491070661
+  - name: Layer 3
+    uniqueID: 4189426099
     locked: 0

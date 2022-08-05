@@ -110,4 +110,9 @@ public abstract class Unit : MonoBehaviour
     {
         InCombat = false;
     }
+
+    public virtual void OnProjectileHit(Projectile p, Vector2 hitpoint)
+    {
+        p.OnTargetHit(this);
+    }
 }

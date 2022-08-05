@@ -140,6 +140,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     protected Animator anim;
 
+    [SerializeField]
+    protected Animator animator;
+
     public int consecutiveShots;
     public int shotNumber;
 
@@ -265,12 +268,40 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     private void Update()
     {
         UpdateTowerVisuals();
+
+        var res = Physics2D.OverlapCircleAll(transform.position, AR.Value);
+        foreach (var obj in res)
+        {
+            var enemy = obj.GetComponent<Monster>();
+            if (enemy)
+            {
+                OnEnemyInRange();
+                break;
+            }
+        }
+    }
+
+    private void OnEnemyInRange()
+    {
+        CombatTimer.Restart(CombatCooldown);
+        AttackCooldownTimer.Resume();
+
+        print("combat restarted");
+
+        animator.SetTrigger("attack");
     }
 
     private void OnCombatTimerElapsed(Timer t)
     {
         isInCombat = false;
         consecutiveShots = 0;
+
+        print("combat elapsed");
+
+        animator.SetTrigger("idle");
+
+        AttackCooldownTimer.Restart(FullCooldown);
+        AttackCooldownTimer.Pause();
 
         CombatEnded?.Invoke();
     }
@@ -815,6 +846,24 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public void UpdateTowerVisuals()
     {
+        var target = targets.FirstOrDefault();
+
+        if (target != null)
+        {
+            var dir = target.transform.position - transform.position;
+
+            if (dir.x > 0)
+            {
+                animator.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+            }
+            else
+            {
+                animator.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+            }
+        }
+
+        animator.SetFloat("progress", 1 - Mathf.Clamp01(AttackCooldownTimer.GetTimeRemaining() / FullCooldown));
+
         if (!IsDisabled && monstersInRange.Count > 0)
         { // If tower is active and monsters nearby, update cooldown bar
             cooldownBarScale = new Vector3(1, Mathf.Clamp(AttackCooldownTimer.GetTimeRemaining() / FullCooldown, 0, 1), 1);
@@ -823,6 +872,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         {
             cooldownBarScale = new Vector3(1, 0, 1);
         }
+        cooldownBarScale = new Vector3(1, Mathf.Clamp(AttackCooldownTimer.GetTimeRemaining() / FullCooldown, 0, 1), 1);
         cooldownBarTransform.localScale = cooldownBarScale;
 
         // Set the scale of the range circle to the value of attack range

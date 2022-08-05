@@ -24,16 +24,16 @@ public class InfoPanel : MonoBehaviour {
 
 		// associatedEnemy = m.enemyPrefabs.FirstOrDefault (x => x.ID == enemyID);
 
-		enemyImage.sprite = associatedEnemy.icon;
+		// enemyImage.sprite = associatedEnemy.icon;
 
-		enemyTitleText.text = associatedEnemy.EnemyData.Name;
+		// enemyTitleText.text = associatedEnemy.EnemyData.Name;
 		//enemyDescText.text = associatedEnemy.description;
 
-		float hpFill = (float)associatedEnemy.MaxHP.Value / (float)m.maximumHP;
-		float armorFill = (float)associatedEnemy.Armor.Value / (float)m.maximumArmor;
+		// float hpFill = (float)associatedEnemy.MaxHP.Value / (float)m.maximumHP;
+		// float armorFill = (float)associatedEnemy.Armor.Value / (float)m.maximumArmor;
 
-		hpStarRating.fillAmount = Mathf.Clamp (hpFill, 0, 1);
-		armorStarRating.fillAmount = Mathf.Clamp (armorFill, 0, 1);
+		// hpStarRating.fillAmount = Mathf.Clamp (hpFill, 0, 1);
+		// armorStarRating.fillAmount = Mathf.Clamp (armorFill, 0, 1);
 
 		if(Application.isPlaying)
 			Destroy (transform.parent.gameObject, ipm.delayTillDeath);

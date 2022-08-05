@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class AdjustSortingOrder : MonoBehaviour
 {
     private List<SortingOrderOffsetData> _itemsToBeSorted;
@@ -44,11 +45,11 @@ public class AdjustSortingOrder : MonoBehaviour
         {
             if (item.SpriteRenderer != null)
             {
-                item.SpriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * -150) + item.SortingOrderOffset;
+                item.SpriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * -500) + item.SortingOrderOffset;
             }
             else
             {
-                item.Canvas.sortingOrder = Mathf.RoundToInt(transform.position.y * -150) + item.SortingOrderOffset;
+                item.Canvas.sortingOrder = Mathf.RoundToInt(transform.position.y * -500) + item.SortingOrderOffset;
             }
         }
     }

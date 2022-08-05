@@ -17,4 +17,10 @@ public class EnemyData : ScriptableObject
 
     [field: SerializeField]
     public float Movespeed { get; set; }
+
+    [field: SerializeField]
+    public int SilverValue { get; set; }
+
+    [field: SerializeField]
+    public int LivesValue { get; set; }
 }

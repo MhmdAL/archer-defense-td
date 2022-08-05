@@ -59,11 +59,7 @@ public abstract class Monster : Unit, IModifiable
 
     [HideInInspector] public bool isAboutToDie;
 
-    [HideInInspector] public float silverValue;
-
     [HideInInspector] public float distanceTravelled;
-
-    [HideInInspector] public int livesValue;
 
     [HideInInspector] public List<Tower> targetedBy = new List<Tower>();
 
@@ -114,7 +110,7 @@ public abstract class Monster : Unit, IModifiable
 
         AdjustStats();
 
-        FixDirection();
+        AdjustDirection();
     }
 
     public virtual void InitializeValues()
@@ -209,13 +205,13 @@ public abstract class Monster : Unit, IModifiable
         if (source == DamageSource.Normal)
         { // Killed by Archers
             vs.waveManagerInstance.totalEnemiesSlain++;
-            float value = silverValue * (1 + SaveData.GetUpgrade(UpgradeType.SilverIncrease).CurrentValue);
+            float value = EnemyData.SilverValue * (1 + SaveData.GetUpgrade(UpgradeType.SilverIncrease).CurrentValue);
             vs.Silver += value;
             vs.silverEarned += value;
         }
         else if (source == DamageSource.Exit)
         { // Killed by leaving screen
-            vs.lives -= livesValue;
+            vs.lives -= EnemyData.LivesValue;
         }
 
         if (vs.lives <= 0 && ValueStore.sharedInstance.active)
@@ -276,7 +272,7 @@ public abstract class Monster : Unit, IModifiable
 
         if (_directionSwitchTimer.GetTimeRemaining() <= 0)
         {
-            FixDirection();
+            AdjustDirection();
             _directionSwitchTimer.Restart(0.4f);
         }
 
@@ -287,19 +283,20 @@ public abstract class Monster : Unit, IModifiable
         {
             progress = 0;
             CurrentWaypoint++;
-            FixDirection();
+            AdjustDirection();
             startPosition = CurrentPath.waypoints[CurrentWaypoint].transform.position;
             endPosition = CurrentPath.waypoints[CurrentWaypoint + 1].transform.position;
             pathLength = Mathf.Abs(Vector3.Distance(startPosition, endPosition));
         }
-
     }
 
-    public void FixDirection()
+    public void AdjustDirection()
     {
         float wdeltaX = endPosition.x - startPosition.x;
         float wdeltaY = endPosition.y - startPosition.y;
-        side.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+
+        side.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+
         if (endPosition.x >= startPosition.x && (deltaX >= deltaY * 0.8f))
         {
             side.SetActive(true);
@@ -311,7 +308,7 @@ public abstract class Monster : Unit, IModifiable
             side.SetActive(true);
             down.SetActive(false);
             up.SetActive(false);
-            side.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+            side.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
         else if (endPosition.y >= startPosition.y && (deltaY >= deltaX))
         {

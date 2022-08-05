@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public interface IShooter
 {
@@ -22,7 +23,7 @@ public class Projectile : MonoBehaviour
     public float Duration { get; set; } = 2f;
     public Vector3 StartPosition { get; set; }
     public Vector3 TargetPosition { get; set; }
-    public float Gravity { get; set; } = -50f;
+    public float Gravity { get; set; } = -150f;
 
     private float _curTime;
 
@@ -30,57 +31,77 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_reached)
+        {
+            return;
+        }
+
+        MoveParabola();
+
+        if (transform.position == TargetPosition)
+        {
+            OnTargetHit(null);
+        }
+    }
+
+    public void Reset(Vector2 startPos, Vector2 targetPos)
+    {
+        StartPosition = startPos;
+        TargetPosition = targetPos;
+
+        _curTime = 0;
+        _reached = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if(_reached)
         {
             return;
         }
         
-        MoveParabola();
-
-        if (_curTime >= Duration)
+        var unit = other.GetComponent<Unit>();
+        if(unit != null)
         {
-            OnBulletHit();
-
-            if (Target != null)
-            {
-                Destroy(transform.root.gameObject);
-            }
-            else
-            {
-                Destroy(transform.root.gameObject, 3f);
-                _reached = true;
-            }
+            unit.OnProjectileHit(this, other.ClosestPoint(transform.position));
         }
     }
 
-    public void OnBulletHit()
+    public void OnTargetHit(Unit unit)
     {
-        if (Radius > 0)
-        {
-            var targets = new List<Unit>();
+        var targets = new List<Unit>();
 
+        if (unit == null && Radius > 0)
+        {
             var cols = Physics2D.OverlapCircleAll(TargetPosition, Radius);
 
             foreach (var c in cols)
             {
-                var unit = c.GetComponent<Unit>();
+                var u = c.GetComponent<Unit>();
                 if (unit != null)
                 {
                     targets.Add(unit);
                 }
             }
+        }
+        else if (unit != null)
+        {
+            targets.Add(unit);
+        }
+        // else
+        // {
+        //     targets.Add(Target);
+        // }
 
-            if (Owner != null)
-            {
-                Owner.OnTargetHit(targets, this, shotNumber);
-            }
+        if (targets.Any())
+        {
+            Owner.OnTargetHit(targets, this, shotNumber);
+            Destroy(transform.root.gameObject);
         }
         else
         {
-            if (Owner != null)
-            {
-                Owner.OnTargetHit(new List<Unit> { Target }, this, shotNumber);
-            }
+            Destroy(transform.root.gameObject, 3f);
+            _reached = true;
         }
     }
 
