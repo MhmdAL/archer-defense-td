@@ -20,7 +20,7 @@ public class Spike : MonoBehaviour, IAttacker {
 					}
 					m.AddModifier (new Modifier (-(Mathf.Clamp (SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).valuePerLevel
 						* SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).level, 0.1f, 0.6f)), Name.Spike_Slow, Type.MOVEMENT_SPEED, BonusOperation.Percentage,
-						ValueStore.sharedInstance.timerManagerInstance.StartTimer(0.1f)), StackOperation.HighestValue, 1);
+						ValueStore.Instance.timerManagerInstance.StartTimer(0.1f)), StackOperation.HighestValue, 1);
 				}
 			}
 			if (!(cooldown > 0))

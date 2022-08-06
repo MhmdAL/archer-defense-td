@@ -69,7 +69,7 @@ public class EnemyBoss6 : Monster {
 			Monster m = c.GetComponent<Monster>();
 			if (c != null && m != null && m != this) {
 				m.AddModifier (new Modifier (speedBuffValue * multiplier, Name.EnemyRallier_MsIncrease, Type.MOVEMENT_SPEED, BonusOperation.Percentage,
-					ValueStore.sharedInstance.timerManagerInstance.StartTimer (speedBuffDuration)), StackOperation.Additive, 1);
+					ValueStore.Instance.timerManagerInstance.StartTimer (speedBuffDuration)), StackOperation.Additive, 1);
 			}
 		}
 	}

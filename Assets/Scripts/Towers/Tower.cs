@@ -232,7 +232,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         anim = GetComponent<Animator>();
 
-        audioManager = ValueStore.sharedInstance.audioManagerInstance;
+        audioManager = ValueStore.Instance.audioManagerInstance;
     }
 
     public virtual void InitializeValues()
@@ -286,7 +286,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         CombatTimer.Restart(CombatCooldown);
         AttackCooldownTimer.Resume();
 
-        print("combat restarted");
+        // print("combat restarted");
 
         animator.SetTrigger("attack");
     }
@@ -296,7 +296,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         isInCombat = false;
         consecutiveShots = 0;
 
-        print("combat elapsed");
+        // print("combat elapsed");
 
         animator.SetTrigger("idle");
 
@@ -386,7 +386,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     private void CalculateTargets()
     {
         // Detect monsters in range
-        monstersInScene = ValueStore.sharedInstance.monsterManagerInstance.MonstersInScene.ToList();
+        monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
         monstersInRange.Clear();
         foreach (Monster x in monstersInScene)
         {
@@ -417,7 +417,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         if (targets[0] != null)
         {
-            if (ValueStore.sharedInstance.monsterManagerInstance.DoesKill(targets[0], AD.Value, AP.Value))
+            if (ValueStore.Instance.monsterManagerInstance.DoesKill(targets[0], AD.Value, AP.Value))
             {
                 targets[0].isAboutToDie = true;
             }

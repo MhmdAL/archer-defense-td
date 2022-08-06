@@ -38,7 +38,7 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
             clickedPickaxeRenderer.sprite = clickedSprite;
         }
 
-        ValueStore.sharedInstance.towerManagerInstance.TowerDeployed += OnTowerDeployed;
+        ValueStore.Instance.towerManagerInstance.TowerDeployed += OnTowerDeployed;
     }
 
     public void SetLayer(string sortingLayer)
@@ -72,7 +72,7 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
 
     public void CreateTower()
     {
-        ValueStore.sharedInstance.towerManagerInstance.CreateTowerIfEnoughMoney(this);
+        ValueStore.Instance.towerManagerInstance.CreateTowerIfEnoughMoney(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -84,7 +84,7 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
 
     private void OnDestroy()
     {
-        ValueStore.sharedInstance.towerManagerInstance.TowerDeployed -= OnTowerDeployed;
+        ValueStore.Instance.towerManagerInstance.TowerDeployed -= OnTowerDeployed;
     }
 
     public void Focus()

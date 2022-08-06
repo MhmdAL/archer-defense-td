@@ -17,9 +17,9 @@ public class RapidArcher : Tower {
 		base.InitializeValues ();
 		rapidT4CooldownTimer = new CooldownTimer (0);
 
-		vs = ValueStore.sharedInstance;
-		vs.waveManagerInstance.WaveStarted += OnWaveStart;
-		vs.waveManagerInstance.WaveEnded += OnWaveEnd;
+		vs = ValueStore.Instance;
+		vs.WaveSpawner.WaveStarted += OnWaveStart;
+		vs.WaveSpawner.WaveEnded += OnWaveEnd;
 	}
 
 	public void Shoot(Monster target, GameObject projectile, float damage, float armorpen, float radius){
@@ -29,7 +29,7 @@ public class RapidArcher : Tower {
 
 			if (GetModifier (Name.Rapid_Fury) == null) {
 				AddModifier (new Modifier (baseAtkSpdPerAtkValue + SaveData.GetUpgrade(UpgradeType.Rapid_3).CurrentValue, Name.Rapid_AtkSpdPerAttack, Type.ATTACK_SPEED, BonusOperation.Percentage,
-					ValueStore.sharedInstance.timerManagerInstance.StartTimer(2)), StackOperation.Additive, 5);
+					ValueStore.Instance.timerManagerInstance.StartTimer(2)), StackOperation.Additive, 5);
 			}
 
 		// Activate Fury if upgraded and off cooldown
@@ -78,7 +78,7 @@ public class RapidArcher : Tower {
 	}
 
 	void OnDestroy(){
-		vs.waveManagerInstance.WaveStarted -= OnWaveStart;
-		vs.waveManagerInstance.WaveEnded -= OnWaveEnd;
+		vs.WaveSpawner.WaveStarted -= OnWaveStart;
+		vs.WaveSpawner.WaveEnded -= OnWaveEnd;
 	}
 }

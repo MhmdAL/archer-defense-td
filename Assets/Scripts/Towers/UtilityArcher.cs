@@ -51,7 +51,7 @@ public class UtilityArcher : Tower {
 
 			// Apply Vulnerability
 			target.AddModifier (new Modifier (baseVulnerabilityValue + SaveData.GetUpgrade(UpgradeType.Utility_3).CurrentValue,
-				Name.Utility_Vulnerability, Type.DAMAGE_TAKEN, BonusOperation.Percentage, ValueStore.sharedInstance.timerManagerInstance.StartTimer(2)), StackOperation.HighestValue, 1);
+				Name.Utility_Vulnerability, Type.DAMAGE_TAKEN, BonusOperation.Percentage, ValueStore.Instance.timerManagerInstance.StartTimer(2)), StackOperation.HighestValue, 1);
 			
 			// Apply stun if upgraded
 			if (SaveData.GetUpgrade(UpgradeType.Utility_4).level > 0 && aoeTargets != null) {
@@ -81,7 +81,7 @@ public class UtilityArcher : Tower {
 
 	public void ApplySlow(Monster m){
 		m.AddModifier(new Modifier (Slow.Value, Name.Utility_Slow, Type.MOVEMENT_SPEED, BonusOperation.Percentage, 
-			ValueStore.sharedInstance.timerManagerInstance.StartTimer(slowDuration), DeApplySlowModifier), StackOperation.HighestValue, 1);
+			ValueStore.Instance.timerManagerInstance.StartTimer(slowDuration), DeApplySlowModifier), StackOperation.HighestValue, 1);
 		
 		foreach (var item in m.GetComponentsInChildren<SpriteRenderer>(true)) {
 			if (!m.colorChangeBlockList.Contains (item.gameObject)) {

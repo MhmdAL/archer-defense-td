@@ -26,12 +26,12 @@ public class Ability : MonoBehaviour, IAttacker {
 	[HideInInspector]	public ValueStore vs;
 
 	void Start () {
-		vs = ValueStore.sharedInstance;
+		vs = ValueStore.Instance;
 
 		InitializeValues ();
 
-		vs.waveManagerInstance.WaveStarted += OnWaveStarted;
-		vs.waveManagerInstance.WaveEnded += OnWaveEnded;
+		vs.WaveSpawner.WaveStarted += OnWaveStarted;
+		vs.WaveSpawner.WaveEnded += OnWaveEnded;
 		vs.monsterManagerInstance.EnemyDied += OnEnemyDied;
 
 		b = GetComponent<Button> ();
@@ -44,7 +44,7 @@ public class Ability : MonoBehaviour, IAttacker {
 		
 	}
 
-	public void OnEnemyDied(Monster m){
+	public void OnEnemyDied(Monster m, DamageSource source){
 		
 	}
 

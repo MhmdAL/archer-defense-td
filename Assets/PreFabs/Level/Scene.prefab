@@ -602,26 +602,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  enemyPrefabs:
-  - {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-  - {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-  - {fileID: 135172, guid: 140bf74b738527241b540fb1ee0ebbd4, type: 3}
-  - {fileID: 178002, guid: 7d3bfc11e36de9440b78da6978326889, type: 3}
-  - {fileID: 127790, guid: 9035ec3e3d2adc14b8a6becc7ccbc1f7, type: 3}
-  - {fileID: 192766, guid: f1ceeb4ca896d2b4fbf4603bdbe7b1ef, type: 3}
-  - {fileID: 176228, guid: 4026f221ac9d2d540bcafe8be10c8912, type: 3}
-  - {fileID: 129646, guid: 1139fae08b04a324fa528b8a7a2dc789, type: 3}
-  - {fileID: 129796, guid: 61c1aa205daf01d42bdab9f531bc9527, type: 3}
-  - {fileID: 167300, guid: 0e0230977ad0b3c428e89679ec51bfaf, type: 3}
-  - {fileID: 116974, guid: 21fe3c9e3d36a6e45ac86f903c180b8c, type: 3}
-  - {fileID: 163866, guid: 862426a36b32a744d8c4f98dbb8f7a2b, type: 3}
-  - {fileID: 140006, guid: 5ac85da2df67422438858ec0f3fd987e, type: 3}
-  - {fileID: 120728, guid: b362c2c8fe46b6c4ab552cbd290db7c2, type: 3}
-  - {fileID: 155816, guid: c5e2337e8b8243142bb5b1666184eee1, type: 3}
-  - {fileID: 151084, guid: 53df239cf4447f24d9c21ba6b7e7fd39, type: 3}
-  enemyDetails: {fileID: 4900000, guid: 740061013a61a434f99138b52201d14b, type: 3}
-  enemyDetailsLines: []
-  enemyDetailsSplit: 59
   maximumArmor: 500
   maximumHP: 2000
 --- !u!1 &103956
@@ -1292,9 +1272,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11497374}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SpawnWave
+      - m_Target: {fileID: 8311214719775845152}
+        m_TargetAssemblyTypeName: WaveSpawner, Assembly-CSharp
+        m_MethodName: SpawnNextWave
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6993,6 +6973,7 @@ GameObject:
   m_Component:
   - component: {fileID: 437618}
   - component: {fileID: 11497374}
+  - component: {fileID: 8311214719775845152}
   m_Layer: 0
   m_Name: WaveManager
   m_TagString: Untagged
@@ -7022,7 +7003,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166718}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d9dd81710b3c3f49b39320346d6c17b, type: 3}
   m_Name: 
@@ -7043,6 +7024,19 @@ MonoBehaviour:
   defaultSpawnDelay: 1
   spawnButton: {fileID: 108230}
   waveActive: 0
+--- !u!114 &8311214719775845152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31492fb974e797e4695302f3af472d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelData: {fileID: 11400000, guid: 610be91db7fa64c48801161da75f320a, type: 2}
 --- !u!1 &167238
 GameObject:
   m_ObjectHideFlags: 0
@@ -8630,6 +8624,7 @@ MonoBehaviour:
   infoBoxManagerInstance: {fileID: 11490020}
   uiControllerInstance: {fileID: 6548439233773466994}
   userClickHandlerInstance: {fileID: 7203027323390156266}
+  WaveSpawner: {fileID: 8311214719775845152}
   levelPopUpText: {fileID: 2263319408169032409}
   endGameMenuGoldText: {fileID: 5144468940059997785}
   endGameMenuSlainGoldText: {fileID: 2096525871010880111}
@@ -10549,5 +10544,6 @@ MonoBehaviour:
   upgradeSprite: {fileID: 21300006, guid: d07eb18f6ae9bb442918526bdf89a5c8, type: 3}
   specialityUpgradeSprite: {fileID: 21300012, guid: d07eb18f6ae9bb442918526bdf89a5c8,
     type: 3}
+  SpawnWaveButton: {fileID: 108230}
   <ArcherSpecialtyChoiceMenu>k__BackingField: {fileID: 3357124445435293086}
   <background>k__BackingField: {fileID: 11480436}

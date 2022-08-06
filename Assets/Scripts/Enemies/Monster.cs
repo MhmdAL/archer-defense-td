@@ -97,7 +97,7 @@ public abstract class Monster : Unit, IModifiable
         base.Awake();
 
         myTransform = transform;
-        m = ValueStore.sharedInstance.monsterManagerInstance;
+        m = ValueStore.Instance.monsterManagerInstance;
 
         ModifierEnded += OnModifierEnded;
 
@@ -178,7 +178,7 @@ public abstract class Monster : Unit, IModifiable
     {
         Movespeed.Value = value;
         Movespeed.locked = true;
-        MyTimer t = ValueStore.sharedInstance.timerManagerInstance.StartTimer(duration);
+        MyTimer t = ValueStore.Instance.timerManagerInstance.StartTimer(duration);
         t.TimerElapsed += FixedMoveSpeedEnded;
     }
 
@@ -195,37 +195,11 @@ public abstract class Monster : Unit, IModifiable
             return;
         }
 
-        m.OnEnemyDied(this);
+        m.OnEnemyDied(this, source);
 
         // Add death particle effects
         GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
         Destroy(deathParticle, 2f);
-
-        ValueStore vs = ValueStore.sharedInstance;
-        if (source == DamageSource.Normal)
-        { // Killed by Archers
-            vs.waveManagerInstance.totalEnemiesSlain++;
-            float value = EnemyData.SilverValue * (1 + SaveData.GetUpgrade(UpgradeType.SilverIncrease).CurrentValue);
-            vs.Silver += value;
-            vs.silverEarned += value;
-        }
-        else if (source == DamageSource.Exit)
-        { // Killed by leaving screen
-            vs.lives -= EnemyData.LivesValue;
-        }
-
-        if (vs.lives <= 0 && ValueStore.sharedInstance.active)
-        {
-            vs.lives = 0;
-            vs.GameOver(GameStatus.Loss);
-        }
-        else if (vs.waveManagerInstance.enemiesRemainingThisWave == 0 && vs.waveManagerInstance.curWave == vs.waveManagerInstance.totalWaves &&
-                  vs.active && vs.lives > 0)
-        { // End game when all waves end
-            vs.GameOver(GameStatus.Win);
-        }
-
-        vs.UpdateStats();
 
         base.OnDeath(source, killer);
     }
@@ -333,11 +307,11 @@ public abstract class Monster : Unit, IModifiable
                     //t = targetedBy.FirstOrDefault (x => x.monstersInRange.Count == 1);
             if (targetedBy.All(x => x.monstersInRange.Count > 1))
             {
-                t = targetedBy.FirstOrDefault(x => ValueStore.sharedInstance.monsterManagerInstance.DoesKill(this, x.AD.Value, x.AP.Value));
+                t = targetedBy.FirstOrDefault(x => ValueStore.Instance.monsterManagerInstance.DoesKill(this, x.AD.Value, x.AP.Value));
             }
             else
             {
-                t = targetedBy.FirstOrDefault(x => x.monstersInRange.Count == 1 && ValueStore.sharedInstance.monsterManagerInstance.DoesKill(this, x.AD.Value, x.AP.Value));
+                t = targetedBy.FirstOrDefault(x => x.monstersInRange.Count == 1 && ValueStore.Instance.monsterManagerInstance.DoesKill(this, x.AD.Value, x.AP.Value));
             }
             //}
             if (t != null)

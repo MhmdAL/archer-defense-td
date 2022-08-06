@@ -27,7 +27,7 @@ public class EnemyBoss2 : Monster {
 			if (shotNumber >= armorBuffShotsNeeded) {
 				anim.SetBool ("ArmorGlow", true);
 				AddModifier (new Modifier (armorBuffValue, Name.EnemyBoss2_ArmorBuff, Type.Armor,
-					BonusOperation.Percentage, ValueStore.sharedInstance.timerManagerInstance.StartTimer (armorBuffDuration), DeApplyArmorBuff), StackOperation.Additive, 1);
+					BonusOperation.Percentage, ValueStore.Instance.timerManagerInstance.StartTimer (armorBuffDuration), DeApplyArmorBuff), StackOperation.Additive, 1);
 				shotNumber = 0;
 				armorBuffCooldownTimer.ResetTimer (armorBuffCooldown);
 			}

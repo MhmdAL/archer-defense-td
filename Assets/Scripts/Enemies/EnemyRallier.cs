@@ -26,7 +26,7 @@ public class EnemyRallier : Monster {
 				Monster m = c.GetComponent<Monster> ();
 				if (c != null && m != null && m != this) {
 					m.AddModifier (new Modifier (msBuffValue, Name.EnemyRallier_MsIncrease, Type.MOVEMENT_SPEED, BonusOperation.Percentage,
-						ValueStore.sharedInstance.timerManagerInstance.StartTimer (msBuffDuration)), StackOperation.Additive, msBuffStackCount);
+						ValueStore.Instance.timerManagerInstance.StartTimer (msBuffDuration)), StackOperation.Additive, msBuffStackCount);
 				}
 			}
 			msBuffCdTimer.ResetTimer (msBuffCooldown);

@@ -21,7 +21,7 @@ public class AdjustSortingOrder : MonoBehaviour
                 SortingOrderOffset = item.sortingOrder
             });
 
-            print(item.name);
+            // print(item.name);
         }
 
         foreach (var item in transform.GetComponentsInChildren<Canvas>(true).ToList())

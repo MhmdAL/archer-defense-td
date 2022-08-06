@@ -22,7 +22,7 @@ public class EnemyDasher : Monster {
 			anim.SetBool ("Dash", true);
 			FixedMovespeed (dashSpeed, dashDuration * shotNumber);
 
-			MyTimer t = ValueStore.sharedInstance.timerManagerInstance.StartTimer (dashDuration * shotNumber);
+			MyTimer t = ValueStore.Instance.timerManagerInstance.StartTimer (dashDuration * shotNumber);
 			t.TimerElapsed += OnDashEnd;
 			timers.Add (t);
 	

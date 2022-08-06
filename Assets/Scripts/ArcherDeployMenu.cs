@@ -26,7 +26,7 @@ public class ArcherDeployMenu : MonoBehaviour
     void Start()
     {
         myTransform = transform;
-        mainCamera = ValueStore.sharedInstance.mainCamera;
+        mainCamera = ValueStore.Instance.mainCamera;
         //TODO: Stop using getcomponent 
         Renderer[] renderersToFollow = objToFollow.GetComponentsInChildren<Renderer>();
         objBounds = renderersToFollow[0].bounds;

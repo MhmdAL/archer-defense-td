@@ -19,8 +19,8 @@ public class InfoPanel : MonoBehaviour {
 	private MonsterManager m;
 
 	void Start(){
-		ipm = ValueStore.sharedInstance.infoPanelManagerInstance;
-		m = ValueStore.sharedInstance.monsterManagerInstance;
+		ipm = ValueStore.Instance.infoPanelManagerInstance;
+		m = ValueStore.Instance.monsterManagerInstance;
 
 		// associatedEnemy = m.enemyPrefabs.FirstOrDefault (x => x.ID == enemyID);
 

@@ -64,6 +64,8 @@ public class GameUIController : MonoBehaviour
     public Sprite upgradeSprite;
     public Sprite specialityUpgradeSprite;
 
+    public GameObject SpawnWaveButton;
+
     [field: SerializeField]
     public GameObject ArcherSpecialtyChoiceMenu { get; set; }
 
@@ -89,7 +91,8 @@ public class GameUIController : MonoBehaviour
 
         _vs.SilverChanged += OnSilverChanged;
 
-        // background.BackgroundClicked += OnBackgroundClicked;
+        _vs.WaveSpawner.WaveStarted += OnWaveStarted;
+        _vs.WaveSpawner.WaveEnded += OnWaveEnded;
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
     }
 
@@ -196,6 +199,19 @@ public class GameUIController : MonoBehaviour
     private void OnLastFocusedTowerSkillPointsChanged(Tower tower)
     {
         UpdateTowerDesc(tower);
+    }
+
+    private void OnWaveStarted(int wave)
+    {
+        SpawnWaveButton.SetActive(false);
+    }
+
+    private void OnWaveEnded(int wave)
+    {
+        if (!_vs.WaveSpawner.IsFinished)
+        {
+            SpawnWaveButton.SetActive(true);
+        }
     }
 
     #region Tower Actions
@@ -384,6 +400,9 @@ public class GameUIController : MonoBehaviour
 
     private void OnDestroy()
     {
+        _vs.WaveSpawner.WaveStarted -= OnWaveStarted;
+        _vs.WaveSpawner.WaveEnded -= OnWaveEnded;
+
         _towerManager.TowerDeployed -= OnTowerDeployed;
         _towerManager.TowerSold -= OnTowerSold;
         _towerManager.TowerUpgraded -= OnTowerUpgraded;

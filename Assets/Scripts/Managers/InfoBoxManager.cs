@@ -31,14 +31,14 @@ public class InfoBoxManager : MonoBehaviour {
 	}
 
 	void Start(){
-		vs = ValueStore.sharedInstance;
+		vs = ValueStore.Instance;
 
 		foreach (var item in infoBoxes) {
 			item.ibm = this;
 			item.SetDelegates ();
 		}
 
-		vs.waveManagerInstance.WaveStarted += OnWaveStart;
+		vs.WaveSpawner.WaveStarted += OnWaveStart;
 		vs.towerManagerInstance.TowerDeployed += OnTowerDeployed;
 		vs.towerManagerInstance.TowerSpecialised += OnTowerSpecialised;
 		Ability.AbilityActivated += OnAbilityActivated;
@@ -177,7 +177,7 @@ public class InfoBoxManager : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		vs.waveManagerInstance.WaveStarted -= OnWaveStart;
+		vs.WaveSpawner.WaveStarted -= OnWaveStart;
 		vs.towerManagerInstance.TowerDeployed -= OnTowerDeployed;
 		vs.towerManagerInstance.TowerSpecialised -= OnTowerSpecialised;
 		Ability.AbilityActivated -= OnAbilityActivated;

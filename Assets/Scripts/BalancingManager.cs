@@ -20,7 +20,7 @@ public class BalancingManager : MonoBehaviour {
 	}
 
 	public void SpawnEnemy(){
-		ValueStore.sharedInstance.monsterManagerInstance.SpawnEnemy (enemyDropdown.monsterPrefabs [enemyDropdown.d.value], 0, 0);
+		ValueStore.Instance.monsterManagerInstance.SpawnEnemy (enemyDropdown.monsterPrefabs [enemyDropdown.d.value], 0, 0);
 	}
 
 	public void ClearEnemies(){
@@ -37,6 +37,6 @@ public class BalancingManager : MonoBehaviour {
 	}
 
 	public void SetWave(){
-		ValueStore.sharedInstance.waveManagerInstance.curWave = int.Parse (waveField.text);
+		ValueStore.Instance.WaveSpawner.CurrentWave = int.Parse (waveField.text);
 	}
 }

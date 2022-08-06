@@ -9,7 +9,7 @@ public class MonsterManager : MonoBehaviour
 
     public delegate void EnemyActionHandler(Monster m);
     public event EnemyActionHandler EnemySpawned;
-    public event EnemyActionHandler EnemyDied;
+    public event Action<Monster, DamageSource> EnemyDied;
 
     public float easyMultiplier = 1, intermediateMultiplier = 2f, expertMultiplier = 3f;
 
@@ -17,8 +17,8 @@ public class MonsterManager : MonoBehaviour
     {
         get
         {
-            return ValueStore.sharedInstance.level.difficulty == LevelDifficulty.Easy ?
-                easyMultiplier : ValueStore.sharedInstance.level.difficulty == LevelDifficulty.Medium ? intermediateMultiplier : expertMultiplier;
+            return ValueStore.Instance.level.difficulty == LevelDifficulty.Easy ?
+                easyMultiplier : ValueStore.Instance.level.difficulty == LevelDifficulty.Medium ? intermediateMultiplier : expertMultiplier;
         }
     }
 
@@ -51,12 +51,12 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    public void OnEnemyDied(Monster m)
+    public void OnEnemyDied(Monster m, DamageSource source)
     {
         MonstersInScene.Remove(m);
         if (EnemyDied != null)
         {
-            EnemyDied(m);
+            EnemyDied(m, source);
         }
     }
 

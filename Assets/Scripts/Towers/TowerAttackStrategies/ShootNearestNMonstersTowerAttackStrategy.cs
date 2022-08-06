@@ -46,7 +46,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         Projectile bullet = projectile.GetComponentInChildren<Projectile>();
         if (target != null)
         {
-            if (ValueStore.sharedInstance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
+            if (ValueStore.Instance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
             {
                 bullet.isAboutToKill = true;
             }

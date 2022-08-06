@@ -23,7 +23,7 @@ public enum GameStatus
 public class ValueStore : MonoBehaviour
 {
 
-    public static ValueStore sharedInstance;
+    public static ValueStore Instance;
 
     public static float CurrentTime;
 
@@ -39,7 +39,7 @@ public class ValueStore : MonoBehaviour
 
     public GameObject entranceNodePrefab, exitNodePrefab;
 
-    public GameObject buymenu, specialtyMenu, towerDesc, endGameMenu, pauseMenu;
+    public GameObject buymenu, endGameMenu, pauseMenu;
     public GameObject allEnemiesSlainEndMenuGoldDesc;
 
     public TowerManager towerManagerInstance;
@@ -51,7 +51,8 @@ public class ValueStore : MonoBehaviour
     public InfoPanelManager infoPanelManagerInstance;
     public InfoBoxManager infoBoxManagerInstance;
     public GameUIController uiControllerInstance;
-	public UserClickHandler userClickHandlerInstance;
+    public UserClickHandler userClickHandlerInstance;
+    public WaveSpawner WaveSpawner;
 
     public TextMeshProUGUI levelPopUpText;
 
@@ -66,6 +67,8 @@ public class ValueStore : MonoBehaviour
     public TextMeshProUGUI silverText;
 
     public float startingSilver;
+
+    public int TotalEnemiesSlain { get; private set; }
 
     private float silver;
 
@@ -101,18 +104,17 @@ public class ValueStore : MonoBehaviour
 
     [HideInInspector] public Camera mainCamera;
 
-    private ArcherDeployMenu adm;
-
     void Awake()
     {
         active = true;
-        sharedInstance = this;
+        Instance = this;
         if (Application.isPlaying)
         {
-            waveManagerInstance.WaveStarted += OnWaveStart;
+            WaveSpawner.WaveStarted += OnWaveStart;
+            WaveSpawner.WaveEnded += OnWaveEnded;
             monsterManagerInstance.EnemyDied += OnEnemyDeath;
 
-            adm = buymenu.GetComponent<ArcherDeployMenu>();
+            monsterManagerInstance.EnemyDied += WaveSpawner.OnEnemyDied;
 
             SaveData s = DataService.Instance.SaveData;
 
@@ -136,63 +138,10 @@ public class ValueStore : MonoBehaviour
         CurrentTime = Time.time;
     }
 
-	public void OnBackgroundClicked()
-	{
-
-	}
-
-	public void OnTowerBaseClicked()
-	{
-
-	}
-
-    public void OnClick(ClickType c, GameObject clicker)
-    {
-        lastClicked = clicker;
-        if (c == ClickType.Background)
-        {
-            lastClickedTower = null;
-            lastClickType = ClickType.Background;
-
-            buymenu.SetActive(false);
-            specialtyMenu.SetActive(false);
-            towerDesc.SetActive(false);
-
-        }
-        else if (c == ClickType.TowerBase)
-        {
-            lastClickedTower = null;
-            lastClickType = ClickType.TowerBase;
-
-            adm.transform.position = new Vector3(10000, 10000, 0);
-            adm.objToFollow = lastClicked;
-            adm.tb = lastClicked.GetComponent<TowerBase>();
-
-            buymenu.SetActive(true);
-            buymenu.transform.SetAsLastSibling();
-            pauseMenu.transform.SetAsLastSibling();
-
-            specialtyMenu.SetActive(false);
-            towerDesc.SetActive(false);
-
-            uiControllerInstance.UpdateDeployMenu();
-        }
-        else if (c == ClickType.Tower)
-        {
-            lastClickType = ClickType.Tower;
-            buymenu.SetActive(false);
-
-            uiControllerInstance.UpdateTowerDesc(lastClickedTower);
-            specialtyMenu.SetActive(false);
-            towerDesc.SetActive(true);
-
-        }
-    }
-
     public void OnSilverChange()
     {
-        if (SilverChanged != null)
-            SilverChanged();
+        SilverChanged?.Invoke();
+
         UpdateStats();
     }
 
@@ -201,32 +150,45 @@ public class ValueStore : MonoBehaviour
         UpdateStats();
     }
 
-    public void OnEnemyDeath(Monster enemy)
+    private void OnWaveEnded(int wave)
     {
-        UpdateStats();
+        if (WaveSpawner.IsFinished && active && lives > 0)
+        {
+            GameOver(GameStatus.Win);
+        }
     }
 
-    public void AnchorsToCorners(RectTransform t)
+    public void OnEnemyDeath(Monster enemy, DamageSource source)
     {
-        RectTransform pt = t.parent as RectTransform;
+        if (source == DamageSource.Normal)
+        { // Killed by Archers
+            TotalEnemiesSlain++;
 
-        if (t == null || pt == null) return;
+            print("Enemy killed");
 
-        Vector2 newAnchorsMin = new Vector2(t.anchorMin.x + t.offsetMin.x / pt.rect.width,
-            t.anchorMin.y + t.offsetMin.y / pt.rect.height);
-        Vector2 newAnchorsMax = new Vector2(t.anchorMax.x + t.offsetMax.x / pt.rect.width,
-            t.anchorMax.y + t.offsetMax.y / pt.rect.height);
+            float value = enemy.EnemyData.SilverValue * (1 + SaveData.GetUpgrade(UpgradeType.SilverIncrease).CurrentValue);
+            Silver += value;
+            silverEarned += value;
+        }
+        else if (source == DamageSource.Exit)
+        { // Killed by leaving screen
+            lives -= enemy.EnemyData.LivesValue;
+        }
 
-        t.anchorMin = newAnchorsMin;
-        t.anchorMax = newAnchorsMax;
-        t.offsetMin = t.offsetMax = new Vector2(0, 0);
+        if (lives <= 0 && ValueStore.Instance.active)
+        {
+            lives = 0;
+            GameOver(GameStatus.Loss);
+        }
+
+        UpdateStats();
     }
 
     public void UpdateStats()
     {
         livesText.text = string.Concat(lives);
 
-        waveText.text = waveManagerInstance.curWave + "/" + waveManagerInstance.totalWaves;
+        waveText.text = WaveSpawner.CurrentWave + "/" + WaveSpawner.TotalWaves;
 
         silverText.text = string.Concat(Silver);
     }
@@ -266,10 +228,10 @@ public class ValueStore : MonoBehaviour
             // If level is won for the first time, set enemy slain count and gold gain accordingly
             if (!level.won)
             {
-                level.totalEnemies = waveManagerInstance.totalEnemies;
-                if (level.totalEnemiesSlain < waveManagerInstance.totalEnemiesSlain)
+                level.totalEnemies = WaveSpawner.TotalEnemies;
+                if (level.totalEnemiesSlain < TotalEnemiesSlain)
                 {
-                    level.totalEnemiesSlain = waveManagerInstance.totalEnemiesSlain;
+                    level.totalEnemiesSlain = TotalEnemiesSlain;
                 }
 
                 winGoldGained = (float)(CurrentGoldValue * 0.8f) + ((CurrentGoldValue * 0.2f) * ((float)lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives).level)));
@@ -278,9 +240,9 @@ public class ValueStore : MonoBehaviour
             // If level is already won, set enemy slain count and gold gain accordingly
             else
             {
-                if (level.totalEnemiesSlain < waveManagerInstance.totalEnemiesSlain)
+                if (level.totalEnemiesSlain < TotalEnemiesSlain)
                 {
-                    level.totalEnemiesSlain = waveManagerInstance.totalEnemiesSlain;
+                    level.totalEnemiesSlain = TotalEnemiesSlain;
                 }
 
                 winGoldGained = (CurrentGoldValue * 0.2f) * ((float)lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives).level));
@@ -302,7 +264,7 @@ public class ValueStore : MonoBehaviour
             endGameMenuWonText.text = "Defeat:-";
 
             endGameMenuTitleText.color = Color.red;
-            winGoldGained = (0.15f * CurrentGoldValue * ((float)waveManagerInstance.curWave / (float)waveManagerInstance.totalWaves));
+            winGoldGained = (0.15f * CurrentGoldValue * ((float)WaveSpawner.CurrentWave / (float)WaveSpawner.TotalWaves));
         }
 
         totalGoldGained = winGoldGained + allEnemiesSlainGoldGained;
@@ -321,5 +283,21 @@ public class ValueStore : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void AnchorsToCorners(RectTransform t)
+    {
+        RectTransform pt = t.parent as RectTransform;
+
+        if (t == null || pt == null) return;
+
+        Vector2 newAnchorsMin = new Vector2(t.anchorMin.x + t.offsetMin.x / pt.rect.width,
+            t.anchorMin.y + t.offsetMin.y / pt.rect.height);
+        Vector2 newAnchorsMax = new Vector2(t.anchorMax.x + t.offsetMax.x / pt.rect.width,
+            t.anchorMax.y + t.offsetMax.y / pt.rect.height);
+
+        t.anchorMin = newAnchorsMin;
+        t.anchorMax = newAnchorsMax;
+        t.offsetMin = t.offsetMax = new Vector2(0, 0);
     }
 }

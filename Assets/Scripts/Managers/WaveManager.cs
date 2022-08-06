@@ -45,7 +45,7 @@ public class WaveManager : MonoBehaviour {
 
     void Start()
     {
-		ValueStore.sharedInstance.monsterManagerInstance.EnemyDied += OnEnemyDied;
+		ValueStore.Instance.monsterManagerInstance.EnemyDied += OnEnemyDied;
 
 		totalWaves = waveInstance.Length;
 		enemiesRemainingThisWave = 0;
@@ -56,10 +56,10 @@ public class WaveManager : MonoBehaviour {
 				totalEnemies += item2.num;
 			}
 		}
-		ValueStore.sharedInstance.UpdateStats ();
+		ValueStore.Instance.UpdateStats ();
     }
 
-	public void OnEnemyDied(Monster m){
+	public void OnEnemyDied(Monster m, DamageSource source){
 		if(!m.IsDead)
 			enemiesRemainingThisWave -= 1;
 		
@@ -80,9 +80,9 @@ public class WaveManager : MonoBehaviour {
 		waveActive = true;
 
 		curWave += 1;
-		lastWaveSilver = ValueStore.sharedInstance.Silver;
+		lastWaveSilver = ValueStore.Instance.Silver;
 		lastWave = curWave - 1;
-		lastWaveLives = ValueStore.sharedInstance.lives;
+		lastWaveLives = ValueStore.Instance.lives;
 
 		// Raise WaveStarted event
 		if (WaveStarted != null) {
@@ -107,7 +107,7 @@ public class WaveManager : MonoBehaviour {
 		for (int i = 0; i < waveInstance[cw].wc.Length; i++) {
 			for(int j = 0; j < waveInstance[cw].wc[i].num; j++){
 				
-				ValueStore.sharedInstance.monsterManagerInstance.SpawnEnemy (waveInstance [curWave - 1].wc [i].enemyPrefab,
+				ValueStore.Instance.monsterManagerInstance.SpawnEnemy (waveInstance [curWave - 1].wc [i].enemyPrefab,
 					waveInstance [curWave - 1].wc [i].entrance, waveInstance [curWave - 1].wc [i].exit);
 				if (waveInstance [cw].wc [i].spawnDelay == 0) {
 					yield return new WaitForSeconds (defaultSpawnDelay);

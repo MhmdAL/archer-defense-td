@@ -42,7 +42,7 @@ public class InfoBox : MonoBehaviour {
 	[HideInInspector]	public InfoBoxManager ibm;
 
 	void Awake(){
-		ibm = ValueStore.sharedInstance.infoBoxManagerInstance;	
+		ibm = ValueStore.Instance.infoBoxManagerInstance;	
 	}
 
 	void Start(){
@@ -58,7 +58,7 @@ public class InfoBox : MonoBehaviour {
 	}
 
 	public void UpdateState(){
-		Level x = LevelsManager.GetLevel (ValueStore.sharedInstance.level.levelID);
+		Level x = LevelsManager.GetLevel (ValueStore.Instance.level.levelID);
 		if (x.won) {
 			Destroy (transform.parent.gameObject);
 		}

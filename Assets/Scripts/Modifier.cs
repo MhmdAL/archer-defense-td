@@ -131,7 +131,7 @@ public class Modifier {
 		this.name = name;
 		this.type = type;
 
-		this.cdTimer = ValueStore.sharedInstance.timerManagerInstance.StartTimer(duration);
+		this.cdTimer = ValueStore.Instance.timerManagerInstance.StartTimer(duration);
 		cdTimer.TimerElapsed += HandleElapsedEventHandler;
 
 		currentStack = 0;
