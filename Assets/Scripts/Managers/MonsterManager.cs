@@ -42,6 +42,12 @@ public class MonsterManager : MonoBehaviour
     [Header("Star rating Options")]
     public float maximumArmor, maximumHP;
 
+    public void Reset()
+    {
+        MonstersInScene.ForEach(x => Destroy(x.transform.root.gameObject));
+        MonstersInScene.Clear();
+    }
+
     public void OnEnemySpawned(Monster m)
     {
         MonstersInScene.Add(m);
@@ -65,8 +71,29 @@ public class MonsterManager : MonoBehaviour
         // Spawn enemy
         GameObject m = (GameObject)Instantiate(prefab, new Vector3(1000, 1000, 0), Quaternion.identity);
         Monster mon = m.GetComponentInChildren<Monster>();
+        
         // Set Path
-        mon.SetPath(entrance, exit);
+        List<Path> relevantPaths;
+        if (entrance != 0 && exit != 0)
+        {
+            relevantPaths = paths.Where(x => x.entrance == entrance && x.exit == exit).ToList();
+        }
+        else if (entrance == 0 && exit != 0)
+        {
+            relevantPaths = paths.Where(x => x.exit == exit).ToList();
+        }
+        else if (entrance != 0 && exit == 0)
+        {
+            relevantPaths = paths.Where(x => x.entrance == entrance).ToList();
+        }
+        else
+        {
+            relevantPaths = paths.ToList();
+        }
+        int random = UnityEngine.Random.Range(1, relevantPaths.Count + 1);
+
+        mon.SetPath(relevantPaths[random - 1]);
+
         // Raise enemyspawned event
         OnEnemySpawned(mon);
     }

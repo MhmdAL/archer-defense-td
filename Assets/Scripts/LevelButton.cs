@@ -127,7 +127,7 @@ public class LevelButton : MonoBehaviour {
 
 		LevelsManager.CurrentLevel = level;
 
-		MySceneLoader.instance.LoadScene (levelToLoad.levelName);
+		MySceneLoader.instance.LoadScene ("Test");
 	}
 }
 	

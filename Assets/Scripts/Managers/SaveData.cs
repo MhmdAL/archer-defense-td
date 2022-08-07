@@ -125,6 +125,11 @@ public class SaveData {
 	}
 
 	public static ShopUpgrade GetUpgrade(UpgradeType x){
+		if (DataService.Instance.SaveData is null)
+		{
+			return null;
+		}
+		
 		ShopUpgrade ss = null;
 		foreach (ShopUpgrade s in DataService.Instance.SaveData.upgradeList) {
 			if (s.ID.Equals(x)) {

@@ -17,7 +17,7 @@ public class TowerManager : MonoBehaviour
     public TowerSpecialtyEnhancementData TowerSpecialtyEnhancementData { get; set; }
 
     public List<Tower> TowersInScene { get; private set; }
-    public List<TowerBase> TowerBasesInScene { get; private set; }
+    public List<TowerBase> TowerBasesInScene { get; set; }
 
     [field: SerializeField]
     private GameObject towerBaseHolder { get; set; }
@@ -46,12 +46,20 @@ public class TowerManager : MonoBehaviour
         TowersInScene = new List<Tower>();
         TowerBasesInScene = new List<TowerBase>();
 
-        foreach (var item in towerBaseHolder.GetComponentsInChildren<TowerBase>())
-        {
-            TowerBasesInScene.Add(item);
-        }
+        // foreach (var item in towerBaseHolder.GetComponentsInChildren<TowerBase>())
+        // {
+        //     TowerBasesInScene.Add(item);
+        // }
 
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
+    }
+
+    public void Reset()
+    {
+        TowersInScene.ForEach(x => Destroy(x.gameObject));
+        
+        TowerBasesInScene.Clear();
+        TowersInScene.Clear();
     }
 
     public void CreateTowerIfEnoughMoney(TowerBase tb)
@@ -331,7 +339,13 @@ public class TowerManager : MonoBehaviour
     }
 }
 
-public enum TowerSkill
+public class TowerSkill
+{
+    public TowerSkillType SkillType;
+    public int CurrentLevel;
+}
+
+public enum TowerSkillType
 {
     AttackDamage,
     AttackSpeed,

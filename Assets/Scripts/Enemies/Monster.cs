@@ -204,27 +204,9 @@ public abstract class Monster : Unit, IModifiable
         base.OnDeath(source, killer);
     }
 
-    public virtual void SetPath(int entrance, int exit)
+    public virtual void SetPath(Path path)
     {
-        List<Path> relevantPaths;
-        if (entrance != 0 && exit != 0)
-        {
-            relevantPaths = m.paths.Where(x => x.entrance == entrance && x.exit == exit).ToList();
-        }
-        else if (entrance == 0 && exit != 0)
-        {
-            relevantPaths = m.paths.Where(x => x.exit == exit).ToList();
-        }
-        else if (entrance != 0 && exit == 0)
-        {
-            relevantPaths = m.paths.Where(x => x.entrance == entrance).ToList();
-        }
-        else
-        {
-            relevantPaths = m.paths.ToList();
-        }
-        int random = UnityEngine.Random.Range(1, relevantPaths.Count + 1);
-        CurrentPath = relevantPaths[random - 1];
+        CurrentPath = path;
         startPosition = CurrentPath.waypoints[CurrentWaypoint].transform.position;
         endPosition = CurrentPath.waypoints[CurrentWaypoint + 1].transform.position;
         pathLength = Vector3.Distance(startPosition, endPosition);

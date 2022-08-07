@@ -19,25 +19,20 @@ public enum GameStatus
     Win,
     Loss
 }
-[ExecuteInEditMode]
+// [ExecuteInEditMode]
 public class ValueStore : MonoBehaviour
 {
-
     public static ValueStore Instance;
+
+    public event Action SilverChanged;
+    public event Action LivesChanged;
+    public event Action<GameStatus> GameEnded;
 
     public static float CurrentTime;
 
-    public delegate void SilverChangedEventHandler();
-    public event SilverChangedEventHandler SilverChanged;
+    public List<LevelTemplate> LevelPrefabs;
 
-    public delegate void GameEndedHandler(GameStatus s);
-    public event GameEndedHandler GameEnded;
-
-    [HideInInspector] public GameObject lastClicked;
-    [HideInInspector] public Tower lastClickedTower;
-    [HideInInspector] public ClickType lastClickType;
-
-    public GameObject entranceNodePrefab, exitNodePrefab;
+    public LevelTemplate CurrentLevel { get; set; }
 
     public GameObject buymenu, endGameMenu, pauseMenu;
     public GameObject allEnemiesSlainEndMenuGoldDesc;
@@ -62,16 +57,9 @@ public class ValueStore : MonoBehaviour
     public TextMeshProUGUI endGameMenuWonText;
     public TextMeshProUGUI endGameMenuTitleText;
 
-    public TextMeshProUGUI livesText;
-    public TextMeshProUGUI waveText;
-    public TextMeshProUGUI silverText;
-
-    public float startingSilver;
-
     public int TotalEnemiesSlain { get; private set; }
 
     private float silver;
-
     public float Silver
     {
         get
@@ -82,6 +70,20 @@ public class ValueStore : MonoBehaviour
         {
             silver = value;
             OnSilverChange();
+        }
+    }
+
+    private int _lives;
+    public int Lives
+    {
+        get
+        {
+            return _lives;
+        }
+        set
+        {
+            _lives = value;
+            OnLivesChanged();
         }
     }
 
@@ -96,8 +98,6 @@ public class ValueStore : MonoBehaviour
 
     [HideInInspector] public float silverEarned;
 
-    [HideInInspector] public int lives;
-
     [HideInInspector] public Level level;
 
     [HideInInspector] public bool active;
@@ -110,49 +110,89 @@ public class ValueStore : MonoBehaviour
         Instance = this;
         if (Application.isPlaying)
         {
-            WaveSpawner.WaveStarted += OnWaveStart;
             WaveSpawner.WaveEnded += OnWaveEnded;
             monsterManagerInstance.EnemyDied += OnEnemyDeath;
-
             monsterManagerInstance.EnemyDied += WaveSpawner.OnEnemyDied;
 
-            SaveData s = DataService.Instance.SaveData;
+            // SaveData s = DataService.Instance.SaveData;
 
-            level = LevelsManager.CurrentLevel;
-            easyGoldValue = LevelsManager.easyGoldValues[level.levelID - 1];
-            intermediateGoldValue = LevelsManager.mediumGoldValues[level.levelID - 1];
-            expertGoldValue = LevelsManager.hardGoldValues[level.levelID - 1];
-            Silver = startingSilver;
-            lives = (int)(SaveData.DEFAULT_LIVES + SaveData.GetUpgrade(UpgradeType.Lives).CurrentValue);
+            level = LevelsManager.CurrentLevel ?? new Level { levelID = 1 };
+
+            // easyGoldValue = LevelsManager.easyGoldValues[level.levelID - 1];
+            // intermediateGoldValue = LevelsManager.mediumGoldValues[level.levelID - 1];
+            // expertGoldValue = LevelsManager.hardGoldValues[level.levelID - 1];
+            // lives = (int)(SaveData.DEFAULT_LIVES + SaveData.GetUpgrade(UpgradeType.Lives).CurrentValue);
+            // lives = 10;
+            // Silver = startingSilver;
 
             levelPopUpText.text = level.levelName;
 
             mainCamera = Camera.main;
 
-            UpdateStats();
+            // UpdateStats();
         }
+    }
+
+    private void Start()
+    {
+        LoadLevel(level.levelID);
     }
 
     void Update()
     {
         CurrentTime = Time.time;
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            LoadLevel((CurrentLevel.LevelId + 1) % (LevelPrefabs.Count + 1));
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            LoadLevel(CurrentLevel.LevelId - 1);
+        }
+    }
+
+    public void LoadLevel(int levelId)
+    {
+        if (CurrentLevel != null)
+        {
+            Destroy(CurrentLevel.gameObject);
+        }
+
+        var levelPrefab = LevelPrefabs.First(x => x.name == $"Level{levelId}");
+        CurrentLevel = Instantiate(levelPrefab);
+
+        WaveSpawner.Reset(CurrentLevel.LevelData);
+
+        Silver = CurrentLevel.LevelData.StartingSilver;
+        Lives = CurrentLevel.LevelData.StartingLives;
+
+        TotalEnemiesSlain = 0;
+
+        towerManagerInstance.Reset();
+        towerManagerInstance.TowerBasesInScene.AddRange(CurrentLevel.TowerBases);
+
+        monsterManagerInstance.Reset();
+        monsterManagerInstance.paths = CurrentLevel.Paths.ToArray();
+
+        uiControllerInstance.Reset();
+
+        levelPopUpText.text = $"Level {levelId}";
     }
 
     public void OnSilverChange()
     {
         SilverChanged?.Invoke();
-
-        UpdateStats();
     }
 
-    public void OnWaveStart(int wave)
+    private void OnLivesChanged()
     {
-        UpdateStats();
+        LivesChanged?.Invoke();
     }
 
     private void OnWaveEnded(int wave)
     {
-        if (WaveSpawner.IsFinished && active && lives > 0)
+        if (WaveSpawner.IsFinished && active && Lives > 0)
         {
             GameOver(GameStatus.Win);
         }
@@ -166,31 +206,20 @@ public class ValueStore : MonoBehaviour
 
             print("Enemy killed");
 
-            float value = enemy.EnemyData.SilverValue * (1 + SaveData.GetUpgrade(UpgradeType.SilverIncrease).CurrentValue);
+            float value = enemy.EnemyData.SilverValue * (1 + SaveData.GetUpgrade(UpgradeType.SilverIncrease)?.CurrentValue ?? 0);
             Silver += value;
             silverEarned += value;
         }
         else if (source == DamageSource.Exit)
         { // Killed by leaving screen
-            lives -= enemy.EnemyData.LivesValue;
+            Lives -= enemy.EnemyData.LivesValue;
         }
 
-        if (lives <= 0 && ValueStore.Instance.active)
+        if (Lives <= 0 && ValueStore.Instance.active)
         {
-            lives = 0;
+            Lives = 0;
             GameOver(GameStatus.Loss);
         }
-
-        UpdateStats();
-    }
-
-    public void UpdateStats()
-    {
-        livesText.text = string.Concat(lives);
-
-        waveText.text = WaveSpawner.CurrentWave + "/" + WaveSpawner.TotalWaves;
-
-        silverText.text = string.Concat(Silver);
     }
 
     public void LoadLevel(string levelToLoad)
@@ -234,7 +263,7 @@ public class ValueStore : MonoBehaviour
                     level.totalEnemiesSlain = TotalEnemiesSlain;
                 }
 
-                winGoldGained = (float)(CurrentGoldValue * 0.8f) + ((CurrentGoldValue * 0.2f) * ((float)lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives).level)));
+                winGoldGained = (float)(CurrentGoldValue * 0.8f) + ((CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0)));
                 level.won = true;
             }
             // If level is already won, set enemy slain count and gold gain accordingly
@@ -245,7 +274,7 @@ public class ValueStore : MonoBehaviour
                     level.totalEnemiesSlain = TotalEnemiesSlain;
                 }
 
-                winGoldGained = (CurrentGoldValue * 0.2f) * ((float)lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives).level));
+                winGoldGained = (CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0));
             }
 
             // If level is maxed for the first time, set gold gain accordingly

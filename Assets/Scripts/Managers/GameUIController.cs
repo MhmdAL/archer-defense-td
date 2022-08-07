@@ -38,6 +38,10 @@ public class GameUIController : MonoBehaviour
     public GameObject TowerDesc { get; set; }
 
     [Header("UI items")]
+    public TextMeshProUGUI LivesText;
+    public TextMeshProUGUI WaveText;
+    public TextMeshProUGUI SilverText;
+
     public Image archerIcon;
     public Image upgradeCostImage;
     public Image upgradeIcon;
@@ -90,128 +94,11 @@ public class GameUIController : MonoBehaviour
         _towerManager.TowerBaseClicked += OnTowerBaseClicked;
 
         _vs.SilverChanged += OnSilverChanged;
+        _vs.LivesChanged += OnLivesChanged;
 
         _vs.WaveSpawner.WaveStarted += OnWaveStarted;
         _vs.WaveSpawner.WaveEnded += OnWaveEnded;
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
-    }
-
-    private void OnObjectClicked(object obj)
-    {
-        if (obj is BackgroundScaler bg)
-        {
-            OnBackgroundClicked();
-        }
-        else if (obj is Tower t)
-        {
-            OnTowerClicked(t);
-        }
-        else if (obj is TowerBase tb)
-        {
-            OnTowerBaseClicked(tb);
-        }
-    }
-
-    private void OnTowerDeployed(Tower t)
-    {
-        Debug.Log("Tower deployed");
-
-        LastFocusedTower = t;
-
-        _vs.buymenu.SetActive(false);
-
-        UpdateTowerDesc(t);
-
-        TowerDesc.SetActive(true);
-    }
-
-    private void OnTowerSold()
-    {
-        SpecialtyMenu.gameObject.SetActive(false);
-        TowerDesc.SetActive(false);
-    }
-
-    private void OnTowerUpgraded(Tower t)
-    {
-        SpecialtyMenu.gameObject.SetActive(false);
-        TowerDesc.SetActive(false);
-    }
-
-    private void OnTowerSpecialised(Tower t)
-    {
-        Debug.Log("Tower specialized");
-
-        LastFocusedTower = t;
-
-        SpecialtyMenu.gameObject.SetActive(false);
-
-        UpdateTowerDesc(t);
-    }
-
-    private void OnTowerClicked(Tower t)
-    {
-        LastFocusedTower = t;
-
-        _vs.buymenu.SetActive(false);
-
-        UpdateTowerDesc(t);
-
-        SpecialtyMenu.gameObject.SetActive(false);
-        TowerDesc.SetActive(true);
-    }
-
-    private void OnTowerBaseClicked(TowerBase tb)
-    {
-        _adm.transform.position = new Vector3(10000, 10000, 0);
-        _adm.objToFollow = tb.gameObject;
-        _adm.tb = tb;
-
-        _vs.buymenu.SetActive(true);
-        _vs.buymenu.transform.SetAsLastSibling();
-        _vs.pauseMenu.transform.SetAsLastSibling();
-
-        SpecialtyMenu.gameObject.SetActive(false);
-        TowerDesc.SetActive(false);
-
-        UpdateDeployMenu();
-    }
-
-    private void OnBackgroundClicked()
-    {
-        _vs.buymenu.SetActive(false);
-        SpecialtyMenu.gameObject.SetActive(false);
-        TowerDesc.SetActive(false);
-    }
-
-    private void OnSilverChanged()
-    {
-        if (TowerDesc.activeSelf)
-        {
-            UpdateTowerDesc(LastFocusedTower);
-        }
-
-        if (_vs.buymenu.activeSelf)
-        {
-            UpdateDeployMenu();
-        }
-    }
-
-    private void OnLastFocusedTowerSkillPointsChanged(Tower tower)
-    {
-        UpdateTowerDesc(tower);
-    }
-
-    private void OnWaveStarted(int wave)
-    {
-        SpawnWaveButton.SetActive(false);
-    }
-
-    private void OnWaveEnded(int wave)
-    {
-        if (!_vs.WaveSpawner.IsFinished)
-        {
-            SpawnWaveButton.SetActive(true);
-        }
     }
 
     #region Tower Actions
@@ -242,7 +129,7 @@ public class GameUIController : MonoBehaviour
 
     public void UseSkillpoint(int skill)
     {
-        LastFocusedTower.UpgradeSkill((TowerSkill)skill);
+        LastFocusedTower.UpgradeSkill((TowerSkillType)skill);
 
         UpdateTowerDesc(LastFocusedTower);
     }
@@ -255,6 +142,15 @@ public class GameUIController : MonoBehaviour
     }
 
     #endregion
+
+    public void UpdateHUD()
+    {
+        LivesText.text = string.Concat(_vs.Lives);
+
+        WaveText.text = _vs.WaveSpawner.CurrentWave + "/" + _vs.WaveSpawner.TotalWaves;
+
+        SilverText.text = string.Concat(_vs.Silver);
+    }
 
     public void UpdateDeployMenu()
     {
@@ -398,6 +294,139 @@ public class GameUIController : MonoBehaviour
         SpecialtyMenu.SetEnhancements(nextPossibleEnhancements);
     }
 
+
+    private void OnObjectClicked(object obj)
+    {
+        if (obj is BackgroundScaler bg)
+        {
+            OnBackgroundClicked();
+        }
+        else if (obj is Tower t)
+        {
+            OnTowerClicked(t);
+        }
+        else if (obj is TowerBase tb)
+        {
+            OnTowerBaseClicked(tb);
+        }
+    }
+
+    private void OnTowerDeployed(Tower t)
+    {
+        Debug.Log("Tower deployed");
+
+        LastFocusedTower = t;
+
+        _vs.buymenu.SetActive(false);
+
+        UpdateTowerDesc(t);
+
+        TowerDesc.SetActive(true);
+    }
+
+    private void OnTowerSold()
+    {
+        SpecialtyMenu.gameObject.SetActive(false);
+        TowerDesc.SetActive(false);
+    }
+
+    private void OnTowerUpgraded(Tower t)
+    {
+        SpecialtyMenu.gameObject.SetActive(false);
+        TowerDesc.SetActive(false);
+    }
+
+    private void OnTowerSpecialised(Tower t)
+    {
+        Debug.Log("Tower specialized");
+
+        LastFocusedTower = t;
+
+        SpecialtyMenu.gameObject.SetActive(false);
+
+        UpdateTowerDesc(t);
+    }
+
+    private void OnTowerClicked(Tower t)
+    {
+        LastFocusedTower = t;
+
+        _vs.buymenu.SetActive(false);
+
+        UpdateTowerDesc(t);
+
+        SpecialtyMenu.gameObject.SetActive(false);
+        TowerDesc.SetActive(true);
+    }
+
+    private void OnTowerBaseClicked(TowerBase tb)
+    {
+        _adm.transform.position = new Vector3(10000, 10000, 0);
+        _adm.objToFollow = tb.gameObject;
+        _adm.tb = tb;
+
+        _vs.buymenu.SetActive(true);
+        _vs.buymenu.transform.SetAsLastSibling();
+        _vs.pauseMenu.transform.SetAsLastSibling();
+
+        SpecialtyMenu.gameObject.SetActive(false);
+        TowerDesc.SetActive(false);
+
+        UpdateDeployMenu();
+    }
+
+    private void OnBackgroundClicked()
+    {
+        _vs.buymenu.SetActive(false);
+        SpecialtyMenu.gameObject.SetActive(false);
+        TowerDesc.SetActive(false);
+    }
+
+    private void OnSilverChanged()
+    {
+        if (TowerDesc.activeSelf)
+        {
+            UpdateTowerDesc(LastFocusedTower);
+        }
+
+        if (_vs.buymenu.activeSelf)
+        {
+            UpdateDeployMenu();
+        }
+
+        UpdateHUD();
+    }
+
+    private void OnLivesChanged()
+    {
+        UpdateHUD();
+    }
+
+    private void OnLastFocusedTowerSkillPointsChanged(Tower tower)
+    {
+        UpdateTowerDesc(tower);
+    }
+
+    private void OnWaveStarted(int wave)
+    {
+        SpawnWaveButton.SetActive(false);
+
+        UpdateHUD();
+    }
+
+    private void OnWaveEnded(int wave)
+    {
+        if (!_vs.WaveSpawner.IsFinished)
+        {
+            SpawnWaveButton.SetActive(true);
+        }
+    }
+
+    public void Reset()
+    {
+        SpawnWaveButton.SetActive(true);
+    }
+
     private void OnDestroy()
     {
         _vs.WaveSpawner.WaveStarted -= OnWaveStarted;
@@ -411,6 +440,7 @@ public class GameUIController : MonoBehaviour
         _towerManager.TowerBaseClicked -= OnTowerBaseClicked;
 
         _vs.SilverChanged -= OnSilverChanged;
+        _vs.LivesChanged -= OnLivesChanged;
 
         _vs.userClickHandlerInstance.ObjectClicked -= OnObjectClicked;
     }

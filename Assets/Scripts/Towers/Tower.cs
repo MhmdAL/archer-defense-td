@@ -11,6 +11,7 @@ using UnityTimer;
 public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable, IShooter
 {
     public event Action<Tower> SkillPointsChanged;
+    public event Action SkillUpgraded;
     public event Action<Modifier> ModifierEnded;
     public event Action AttackFinished;
     public event Action CombatEnded;
@@ -18,7 +19,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     [field: SerializeField]
     public TowerSkillData TowerSkillsData { get; set; }
-
+    [field: SerializeField]
+    public TowerData TowerData { get; set; }
 
     [field: SerializeField]
     public TowerAttackStrategy TowerAttackStrategy { get; set; }
@@ -27,7 +29,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public List<TargetHitEffect> OnHitEffects { get; set; }
 
     public Dictionary<string, object> ExtraData { get; set; }
-
 
     [field: SerializeField]
     public int SecondaryTargetCount { get; set; } = 0;
@@ -103,11 +104,16 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     [field: SerializeField]
     public float CombatCooldown { get; set; }
 
+    public TowerSkill ADSkill { get; set; }
+    public TowerSkill ARSkill { get; set; }
+    public TowerSkill ASSkill { get; set; }
+
     public float baseUpgradeCost;
     public float bulletSpeed;
     public float bulletRadius;
 
     public Sprite icon;
+
 
     public string title;
 
@@ -257,10 +263,15 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         AR = new Stat(Type.ATTACK_RANGE);
         AP = new Stat(Type.ARMOR_PENETRATION);
 
-        AD.BaseValue = SaveData.DEFAULT_AD * (1 + SaveData.GetUpgrade(UpgradeType.AD).CurrentValue);
-        AS.BaseValue = SaveData.DEFAULT_AS * (1 + SaveData.GetUpgrade(UpgradeType.AS).CurrentValue);
-        AR.BaseValue = SaveData.DEFAULT_AR * (1 + SaveData.GetUpgrade(UpgradeType.AR).CurrentValue);
-        AP.BaseValue = SaveData.GetUpgrade(UpgradeType.AP).CurrentValue;
+        AD.BaseValue = TowerData.BaseAttackDamage * (1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0);
+        AS.BaseValue = TowerData.BaseAttackSpeed * (1 + SaveData.GetUpgrade(UpgradeType.AS)?.CurrentValue ?? 0);
+        AR.BaseValue = TowerData.BaseAttackRange * (1 + SaveData.GetUpgrade(UpgradeType.AR)?.CurrentValue ?? 0);
+
+        AP.BaseValue = SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0;
+
+        ADSkill = new TowerSkill { SkillType = TowerSkillType.AttackDamage };
+        ARSkill = new TowerSkill { SkillType = TowerSkillType.AttackRange };
+        ASSkill = new TowerSkill { SkillType = TowerSkillType.AttackSpeed };
     }
 
     public virtual void AddStartingModifiers() { }
@@ -497,7 +508,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         enhancement.Apply(this);
     }
 
-    public void UpgradeSkill(TowerSkill skill)
+    public void UpgradeSkill(TowerSkillType skill)
     {
         if (CurrentSkillLevel - 1 < 0)
         {
@@ -508,30 +519,38 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         var currentSkillValues = TowerSkillsData.SkillValues[CurrentSkillLevel - 1];
 
-        switch ((TowerSkill)skill)
+        switch ((TowerSkillType)skill)
         {
-            case TowerSkill.AttackDamage:
+            case TowerSkillType.AttackDamage:
                 AD.Modify(currentSkillValues.ADValue,
                  currentSkillValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
                   BuffNames.TOWER_SKILL_AD + CurrentSkillLevel);
 
+                ADSkill.CurrentLevel++;
+
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_DAMAGE);
                 break;
-            case TowerSkill.AttackSpeed:
+            case TowerSkillType.AttackSpeed:
                 AS.Modify(currentSkillValues.ASValue,
                  currentSkillValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
                   BuffNames.TOWER_SKILL_AS + CurrentSkillLevel);
 
+                ASSkill.CurrentLevel++;
+
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_SPEED);
                 break;
-            case TowerSkill.AttackRange:
+            case TowerSkillType.AttackRange:
                 AR.Modify(currentSkillValues.ARValue,
                  currentSkillValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
                   BuffNames.TOWER_SKILL_AR + CurrentSkillLevel);
 
+                ARSkill.CurrentLevel++;
+
                 buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
                 break;
         }
+
+        SkillUpgraded?.Invoke();
     }
 
     public void OnModifierEnded(Modifier m)

@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Gold
+  - Wave
+  - Tower2
+  - Tower4
+  - Tower3
+  - Monster3
   layers:
   - Default
   - TransparentFX
@@ -38,14 +44,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 4250941897
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Layer 1
     uniqueID: 2425651459
-    locked: 0
-  - name: Layer 2
-    uniqueID: 4250941897
     locked: 0
   - name: Layer 3
     uniqueID: 4189426099

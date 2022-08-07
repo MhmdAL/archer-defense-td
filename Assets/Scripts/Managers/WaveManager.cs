@@ -56,7 +56,6 @@ public class WaveManager : MonoBehaviour {
 				totalEnemies += item2.num;
 			}
 		}
-		ValueStore.Instance.UpdateStats ();
     }
 
 	public void OnEnemyDied(Monster m, DamageSource source){
@@ -82,7 +81,7 @@ public class WaveManager : MonoBehaviour {
 		curWave += 1;
 		lastWaveSilver = ValueStore.Instance.Silver;
 		lastWave = curWave - 1;
-		lastWaveLives = ValueStore.Instance.lives;
+		lastWaveLives = ValueStore.Instance.Lives;
 
 		// Raise WaveStarted event
 		if (WaveStarted != null) {

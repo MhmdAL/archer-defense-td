@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d3e99aeee4bd34e8906955459625a2, type: 3}
+  m_Name: ArcherSkillSpriteData
+  m_EditorClassIdentifier: 
+  ADSkillExpressions:
+  - {fileID: -6536313042873951222, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: 416977522018492314, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: 3761550492440648941, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: -8964884550064223534, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: 5178970970891300758, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: -3329391503284305889, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: 1151274233003227950, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  - {fileID: 4684977106587291246, guid: 74a56461a7c300d4da149aa6e2f90e72, type: 3}
+  ARSkillHats:
+  - {fileID: 0}
+  - {fileID: -7385730198165640530, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  - {fileID: 7995978703954012832, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  - {fileID: 3673621553240236559, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  - {fileID: -298276913856879174, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  - {fileID: 3301326659851873516, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  - {fileID: 8755791251197083157, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  - {fileID: -2490703628380683336, guid: d981f49262194a045b0c726adaadf847, type: 3}
+  ASSkillFacials:
+  - {fileID: 0}
+  - {fileID: -7132924394741762074, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}
+  - {fileID: -7132924394741762074, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}
+  - {fileID: 2873443860867281986, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}
+  - {fileID: 2873443860867281986, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}
+  - {fileID: -4681715193494958371, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}
+  - {fileID: -4681715193494958371, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}
+  - {fileID: 8160479127886479190, guid: 91288576a6135934d8ec4ebc6fec5464, type: 3}

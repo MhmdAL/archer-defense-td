@@ -15,6 +15,8 @@ public class DataService : MonoBehaviour {
 				if (_instance == null) {
 					GameObject go = new GameObject (typeof(DataService).ToString ());
 					_instance = go.AddComponent<DataService> ();
+
+					_instance.LoadSaveData(1);
 				}
 			}
 

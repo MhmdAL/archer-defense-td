@@ -7,6 +7,9 @@ using UnityEngine;
 [CreateAssetMenu]
 public class LevelData : ScriptableObject
 {
+    public float StartingSilver;
+    public int StartingLives;
+    
     public List<WaveData> Waves;
 
     public float DefaultSpawnDelay;

@@ -13,7 +13,8 @@ public class AbilityArtillery : Ability {
 
 	public override void InitializeValues ()
 	{
-		baseCooldown = SaveData.baseUpgradeValues[UpgradeType.ArtilleryCooldown] + SaveData.GetUpgrade (UpgradeType.ArtilleryCooldown).CurrentValue;
+		// baseCooldown = SaveData.baseUpgradeValues[UpgradeType.ArtilleryCooldown] + SaveData.GetUpgrade (UpgradeType.ArtilleryCooldown).CurrentValue;
+		baseCooldown = 10;
 
 		cd = new CooldownTimer (0);
 	}
@@ -39,7 +40,7 @@ public class AbilityArtillery : Ability {
 	IEnumerator StartArtillery(){
 		// Loop over current amount of arrows shot per target
 		int arrowCount = (int)(SaveData.baseUpgradeValues[UpgradeType.ArtilleryArrowCount] + 
-			SaveData.GetUpgrade(UpgradeType.ArtilleryArrowCount).CurrentValue);
+			SaveData.GetUpgrade(UpgradeType.ArtilleryArrowCount)?.CurrentValue ?? 0);
 
 		for (int i = 0; i < arrowCount; i++) {
 			// Loop over current monsters in scene
@@ -48,9 +49,9 @@ public class AbilityArtillery : Ability {
 				GameObject arrow = (GameObject)Instantiate (arrowPrefab, startPos.position, Quaternion.identity);
 				ArtilleryArrow p = arrow.AddComponent<ArtilleryArrow> ();
 				p.owner = this;
-				p.damage = (1 + SaveData.GetUpgrade(UpgradeType.ArtilleryDamage).CurrentValue * Mathf.Clamp(vs.monsterManagerInstance.CurrentMultiplier * 0.75f, 1, 5)) * 
-					(1 + SaveData.GetUpgrade(UpgradeType.AD).CurrentValue) * ArtilleryBaseDamage;
-				p.armorPen = SaveData.GetUpgrade(UpgradeType.AP).CurrentValue;
+				p.damage = ((1 + SaveData.GetUpgrade(UpgradeType.ArtilleryDamage)?.CurrentValue ?? 0) * Mathf.Clamp(vs.monsterManagerInstance.CurrentMultiplier * 0.75f, 1, 5)) * 
+					(1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0) * ArtilleryBaseDamage;
+				p.armorPen = SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0;
 				p.speed = arrowSpeed;
 				p.target = m;
 			}

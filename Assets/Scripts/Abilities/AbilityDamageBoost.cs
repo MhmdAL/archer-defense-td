@@ -7,7 +7,8 @@ public class AbilityDamageBoost : Ability
     public override void InitializeValues()
     {
         vs.towerManagerInstance.TowersInSceneChanged += OnTowersInSceneChange;
-        baseCooldown = SaveData.baseUpgradeValues[UpgradeType.DamageBoostCooldown] + SaveData.GetUpgrade(UpgradeType.DamageBoostCooldown).CurrentValue;
+        // baseCooldown = SaveData.baseUpgradeValues[UpgradeType.DamageBoostCooldown] + SaveData.GetUpgrade(UpgradeType.DamageBoostCooldown).CurrentValue;
+        baseCooldown = 10;
 
         cd = new CooldownTimer(0);
     }
@@ -35,10 +36,10 @@ public class AbilityDamageBoost : Ability
         base.Activate();
 
         float damageBoostValue = SaveData.baseUpgradeValues[UpgradeType.DamageBoostValue] +
-                                 SaveData.GetUpgrade(UpgradeType.DamageBoostValue).CurrentValue;
+                                 SaveData.GetUpgrade(UpgradeType.DamageBoostValue)?.CurrentValue ?? 0;
 
         float damageBoostDuration = SaveData.baseUpgradeValues[UpgradeType.DamageBoostDuration] +
-                                    SaveData.GetUpgrade(UpgradeType.DamageBoostDuration).CurrentValue;
+                                    SaveData.GetUpgrade(UpgradeType.DamageBoostDuration)?.CurrentValue ?? 0;
 
         foreach (Tower item in vs.towerManagerInstance.TowersInScene)
         {

@@ -9,7 +9,7 @@ public class WaveSpawner : MonoBehaviour
     public event Action<int> WaveStarted;
     public event Action<int> WaveEnded;
 
-    public LevelData LevelData;
+    public LevelData LevelData { get; set; }
 
     public int TotalWaves => LevelData.Waves.Count;
     public int TotalEnemies => LevelData.Waves.Sum(x => x.WaveComponents.Sum(y => y.Count));
@@ -18,6 +18,8 @@ public class WaveSpawner : MonoBehaviour
     public int EnemiesRemainingInCurrentWave { get; private set; }
 
     public bool IsFinished => EnemiesRemainingInCurrentWave == 0 && CurrentWave == TotalWaves;
+
+    private IEnumerator _activeRoutine;
 
     private void Start()
     {
@@ -45,7 +47,8 @@ public class WaveSpawner : MonoBehaviour
 
         WaveStarted?.Invoke(CurrentWave);
 
-        StartCoroutine(SpawnWave(LevelData.Waves[CurrentWave - 1]));
+        _activeRoutine = SpawnWave(LevelData.Waves[CurrentWave - 1]);
+        StartCoroutine(_activeRoutine);
     }
 
     private IEnumerator SpawnWave(WaveData wave)
@@ -73,5 +76,18 @@ public class WaveSpawner : MonoBehaviour
     private void SpawnEnemy(GameObject prefab, int entranceId, int exitId)
     {
         ValueStore.Instance.monsterManagerInstance.SpawnEnemy(prefab, entranceId, exitId);
+    }
+
+    public void Reset(LevelData levelData)
+    {
+        if (_activeRoutine != null)
+        {
+            StopCoroutine(_activeRoutine);
+        }
+
+        this.LevelData = levelData;
+
+        CurrentWave = 0;
+        EnemiesRemainingInCurrentWave = 0;
     }
 }
