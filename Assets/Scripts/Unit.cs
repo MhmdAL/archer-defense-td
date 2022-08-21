@@ -9,6 +9,8 @@ public abstract class Unit : MonoBehaviour
     public event Action HealthChanged;
     public event Action<Unit, float, IAttacker> Damaged;
 
+    public GameObject HitParticles;
+
     public Stat MaxHP { get; set; }
     public Stat Armor { get; set; }
     public Stat DamageModifier { get; set; }
@@ -102,6 +104,12 @@ public abstract class Unit : MonoBehaviour
         {
             Destroy(transform.root.gameObject);
 
+
+            var pool = Instantiate(HitParticles, transform.position, Quaternion.identity);
+
+            var rand = UnityEngine.Random.Range(1, 1.25f);
+            pool.transform.localScale = pool.transform.localScale * rand;
+
             IsDead = true;
         }
     }
@@ -114,5 +122,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void OnProjectileHit(Projectile p, Vector2 hitpoint)
     {
         p.OnTargetHit(this);
+
+        // Instantiate(HitParticles, transform.position, Quaternion.identity);
     }
 }

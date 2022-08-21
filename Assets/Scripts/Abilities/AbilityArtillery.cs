@@ -1,76 +1,107 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using static UnityEngine.ParticleSystem;
+using UnityTimer;
 
-public class AbilityArtillery : Ability {
+public class AbilityArtillery : Ability, IShooter
+{
+    public GameObject ArrowPrefab;
+    public Transform StartPosition;
+    public int ArrowCount;
+    public float DamagePerArrow;
+    public float ArrowTravelDuration;
+    public float ArrowGravity;
+    public float CooldownPerWave;
+    public float ArrowSpread;
+    public MinMaxCurve WaveCount;
 
-	public GameObject arrowPrefab;
-	public Transform startPos;
+    public GameObject ArtilleryPanel;
+    public GameObject ArtilleryIndicator;
 
-	public float arrowSpeed;
-	public float cooldownPerArrow;
+    private const float ArtilleryBaseDamage = 15;
 
-	private const float ArtilleryBaseDamage = 15;
+    public override void Initialize()
+    {
+        // baseCooldown = SaveData.baseUpgradeValues[UpgradeType.ArtilleryCooldown] + SaveData.GetUpgrade (UpgradeType.ArtilleryCooldown).CurrentValue;
+        // baseCooldown = 10;
 
-	public override void InitializeValues ()
-	{
-		// baseCooldown = SaveData.baseUpgradeValues[UpgradeType.ArtilleryCooldown] + SaveData.GetUpgrade (UpgradeType.ArtilleryCooldown).CurrentValue;
-		baseCooldown = 10;
+        CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
+    }
 
-		cd = new CooldownTimer (0);
-	}
+    public override void UpdateReadiness()
+    {
+        if (vs.monsterManagerInstance.MonstersInScene.Count <= 0)
+        {
+            SetReady(false);
+        }
+        else if (CooldownTimer.GetTimeRemaining() <= 0)
+        {
+            SetReady(true);
+        }
+    }
 
-	public override void UpdateReadiness ()
-	{
-		base.UpdateReadiness ();
+    public void ActivateArtillery()
+    {
+        ArtilleryPanel.SetActive(false);
+        ArtilleryIndicator.SetActive(true);
 
-		if (vs.monsterManagerInstance.MonstersInScene.Count <= 0) {
-			SetReady (false);
-		} else if(cd.GetCooldownRemaining() <= 0){
-			SetReady (true);
-		}
-	}
+        var targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        targetPos.z = 0;
 
-	public override void Activate ()
-	{
-		base.Activate ();
+        ArtilleryIndicator.transform.position = targetPos;
+		ArtilleryIndicator.transform.localScale = new Vector3(2 * ArrowSpread, 2 * ArrowSpread, 1);
 
-		StartCoroutine (StartArtillery ());
-	}
+        StartCoroutine(FireArtillery(targetPos));
+    }
 
-	IEnumerator StartArtillery(){
-		// Loop over current amount of arrows shot per target
-		int arrowCount = (int)(SaveData.baseUpgradeValues[UpgradeType.ArtilleryArrowCount] + 
-			SaveData.GetUpgrade(UpgradeType.ArtilleryArrowCount)?.CurrentValue ?? 0);
+    public override void Activate()
+    {
+        ArtilleryPanel.SetActive(true);
+    }
 
-		for (int i = 0; i < arrowCount; i++) {
-			// Loop over current monsters in scene
-			foreach (Monster m in vs.monsterManagerInstance.MonstersInScene) {
-				// Instantiate Arrow and set values
-				GameObject arrow = (GameObject)Instantiate (arrowPrefab, startPos.position, Quaternion.identity);
-				ArtilleryArrow p = arrow.AddComponent<ArtilleryArrow> ();
-				p.owner = this;
-				p.damage = ((1 + SaveData.GetUpgrade(UpgradeType.ArtilleryDamage)?.CurrentValue ?? 0) * Mathf.Clamp(vs.monsterManagerInstance.CurrentMultiplier * 0.75f, 1, 5)) * 
-					(1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0) * ArtilleryBaseDamage;
-				p.armorPen = SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0;
-				p.speed = arrowSpeed;
-				p.target = m;
-			}
-			yield return new WaitForSeconds (cooldownPerArrow);
-		}
-	}
-		
-	/*IEnumerator LaunchArtillery(Monster m){
-		if (m) {
-			for (int i = 0; i < SaveData.GetUpgrade(UpgradeType.ArtilleryArrowCount).CurrentValue; i++) {
-				Vector3 pos = startPos.position;
-				GameObject arrow = (GameObject)Instantiate (arrowPrefab, pos, Quaternion.identity);
-				ArtilleryArrow p = arrow.GetComponentInChildren<ArtilleryArrow> ();
-				p.owner = this;
-				p.damage = SaveData.GetUpgrade(UpgradeType.ArtilleryDamage).CurrentValue;
-				p.speed = arrowSpeed;
-				p.target = m;
+    private IEnumerator FireArtillery(Vector3 targetPos)
+    {
+        int arrowCount = (int)(SaveData.baseUpgradeValues[UpgradeType.ArtilleryArrowCount] +
+            SaveData.GetUpgrade(UpgradeType.ArtilleryArrowCount)?.CurrentValue ?? 0);
 
-			}
-		}
-	}*/
+        var waves = Mathf.Min(Random.Range((int)WaveCount.constantMin, (int)WaveCount.constantMax + 1), ArrowCount);
+        var arrowPerWave = ArrowCount / waves;
+        var remainder = ArrowCount % waves;
+
+        this.AttachTimer(ArrowTravelDuration + (waves - 1) * CooldownPerWave , (t) => ArtilleryIndicator.SetActive(false));
+
+        for (int i = 0; i < waves; i++)
+        {
+            var arrowsToSpawn = i == waves - 1 ? arrowPerWave + remainder : arrowPerWave;
+
+            for (int j = 0; j < arrowsToSpawn; j++)
+            {
+                SpawnArtilleryArrow(targetPos);
+            }
+
+            yield return new WaitForSeconds(CooldownPerWave + Random.Range(0, 0.2f));
+        }
+    }
+
+    private void SpawnArtilleryArrow(Vector3 target)
+    {
+        var arrow = Instantiate(ArrowPrefab, StartPosition.position, Quaternion.identity);
+        var p = arrow.GetComponentInChildren<Projectile>();
+
+        p.Owner = this;
+        p.Damage = DamagePerArrow;
+        p.StartPosition = StartPosition.position;
+        p.TargetPosition = target + (Vector3)Random.insideUnitCircle * ArrowSpread;
+        p.Duration = ArrowTravelDuration;
+        p.Gravity = ArrowGravity;
+    }
+
+    public void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber)
+    {
+        foreach (var unit in unitsHit)
+        {
+            unit.Damage(p.Damage, 0, DamageSource.Normal, this);
+        }
+    }
 }

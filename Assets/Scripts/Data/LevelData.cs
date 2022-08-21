@@ -9,10 +9,18 @@ public class LevelData : ScriptableObject
 {
     public float StartingSilver;
     public int StartingLives;
-    
+
     public List<WaveData> Waves;
 
+    public SerTest2 XD;
+
     public float DefaultSpawnDelay;
+}
+
+[Serializable]
+public class SerTest2
+{
+    public int xD;
 }
 
 [Serializable]
@@ -23,6 +31,18 @@ public class WaveData
 
 [Serializable]
 public class WaveComponentData
+{
+    public GameObject Prefab;
+    public int Count;
+    public float SpawnDelay;
+    public float DelayTillNextComponent;
+
+    public int EntranceId;
+    public int ExitId;
+}
+
+[Serializable]
+public class Squad
 {
     public GameObject Prefab;
     public int Count;

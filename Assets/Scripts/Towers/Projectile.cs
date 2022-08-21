@@ -11,8 +11,6 @@ public interface IShooter
 public class Projectile : MonoBehaviour
 {
     public IShooter Owner { get; set; }
-    public Unit Target { get; set; }
-
 
     public float Damage { get; set; }
     public float Radius { get; set; }
@@ -29,7 +27,7 @@ public class Projectile : MonoBehaviour
 
     private bool _reached;
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (_reached)
         {
@@ -38,7 +36,7 @@ public class Projectile : MonoBehaviour
 
         MoveParabola();
 
-        if (transform.position == TargetPosition)
+        if (Vector3.Magnitude(transform.position - TargetPosition) < .5f)
         {
             OnTargetHit(null);
         }
@@ -88,10 +86,6 @@ public class Projectile : MonoBehaviour
         {
             targets.Add(unit);
         }
-        // else
-        // {
-        //     targets.Add(Target);
-        // }
 
         if (targets.Any())
         {

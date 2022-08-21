@@ -89,7 +89,6 @@ public class MultiShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
         bullet.Owner = data.Owner;
-        bullet.Target = target;
         bullet.Damage = bulletDamage;
         bullet.ArmorPen = armorpen;
         bullet.Radius = radius;

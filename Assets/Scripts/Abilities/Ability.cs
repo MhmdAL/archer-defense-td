@@ -1,79 +1,69 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityTimer;
+using System;
 
 public enum AbilityType{
 	Arrow_Artillery,
 	Damage_boost
 }
-public class Ability : MonoBehaviour, IAttacker {
+public abstract class Ability : MonoBehaviour, IAttacker {
 
-	public delegate void AbilityActivatedEventHandler(AbilityType a);
-	public static event AbilityActivatedEventHandler AbilityActivated;
+	public static event Action<AbilityType> AbilityActivated;
 
-	Button b;
 	public AbilityType t;
 	public float baseCooldown;
-	[HideInInspector]	public float cooldown;
 
 	public Image cooldownImage;
 	public Image activeIndicator, inactiveIndicator;
 
-	[HideInInspector]	public CooldownTimer cd;
+	protected ValueStore vs;
 
-	[HideInInspector]	public AbilityManager am;
+	protected Timer CooldownTimer;
 
-	[HideInInspector]	public ValueStore vs;
+	private Button _button;
 
 	void Start () {
 		vs = ValueStore.Instance;
 
-		InitializeValues ();
+		Initialize ();
 
 		vs.WaveSpawner.WaveStarted += OnWaveStarted;
 		vs.WaveSpawner.WaveEnded += OnWaveEnded;
-		vs.monsterManagerInstance.EnemyDied += OnEnemyDied;
 
-		b = GetComponent<Button> ();
-		b.onClick.AddListener (OnClick);
+		_button = GetComponent<Button> ();
+		_button.onClick.AddListener (OnClick);
 
 		SetReady (false);
 	}
 
-	public virtual void InitializeValues(){
-		
-	}
-
-	public void OnEnemyDied(Monster m, DamageSource source){
-		
-	}
+	public abstract void Initialize();
+	public abstract void UpdateReadiness();
+	public abstract void Activate();
 
 	public void OnWaveStarted(int waveNumber){
-		cd.Start ();
-	}
-
-	public virtual void UpdateReadiness(){
-		
+		CooldownTimer.Resume ();
 	}
 
 	public void OnWaveEnded(int waveNumber){
-		cd.Stop ();
+		CooldownTimer.Pause ();
 		SetReady (false);
 	}
 
 	void Update(){
-		cooldownImage.fillAmount = cd.GetCooldownRemaining () / baseCooldown;
+		cooldownImage.fillAmount = CooldownTimer.GetTimeRemaining () / baseCooldown;
 
 		UpdateReadiness ();
 	}
 
 	public void SetReady(bool active){
 		if (active) {
-			b.interactable = true;
+			_button.interactable = true;
 			activeIndicator.gameObject.SetActive (true);
 			inactiveIndicator.gameObject.SetActive (false);
 		} else {
-			b.interactable = false;
+			_button.interactable = false;
 			activeIndicator.gameObject.SetActive (false);
 			inactiveIndicator.gameObject.SetActive (true);
 		}
@@ -86,11 +76,6 @@ public class Ability : MonoBehaviour, IAttacker {
 			AbilityActivated (t);
 
 		SetReady (false);
-		cd.ResetTimer (baseCooldown);
-	}
-
-	public virtual void Activate(){
-		// Activate the ability
-	}
-		
+		CooldownTimer.Restart (baseCooldown);
+	}		
 }

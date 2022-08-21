@@ -19,8 +19,7 @@ public class TowerManager : MonoBehaviour
     public List<Tower> TowersInScene { get; private set; }
     public List<TowerBase> TowerBasesInScene { get; set; }
 
-    [field: SerializeField]
-    private GameObject towerBaseHolder { get; set; }
+    public GameObject TowerCreateParticles;
 
     [field: SerializeField]
     private Tower untrainedArcherPrefab { get; set; }
@@ -45,11 +44,6 @@ public class TowerManager : MonoBehaviour
 
         TowersInScene = new List<Tower>();
         TowerBasesInScene = new List<TowerBase>();
-
-        // foreach (var item in towerBaseHolder.GetComponentsInChildren<TowerBase>())
-        // {
-        //     TowerBasesInScene.Add(item);
-        // }
 
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
     }
@@ -91,6 +85,8 @@ public class TowerManager : MonoBehaviour
         OnTowerDeployed(t);
 
         tb.gameObject.SetActive(false);
+
+        Instantiate(TowerCreateParticles, t.transform.position - Vector3.up * 2, Quaternion.identity);
     }
 
     public void SellTower(Tower t)

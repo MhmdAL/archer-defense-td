@@ -240,7 +240,7 @@ public abstract class Monster : Unit, IModifiable
             progress = 0;
             CurrentWaypoint++;
             AdjustDirection();
-            startPosition = CurrentPath.waypoints[CurrentWaypoint].transform.position;
+            startPosition = endPosition;
             endPosition = CurrentPath.waypoints[CurrentWaypoint + 1].transform.position;
             pathLength = Mathf.Abs(Vector3.Distance(startPosition, endPosition));
         }
@@ -266,18 +266,18 @@ public abstract class Monster : Unit, IModifiable
             up.SetActive(false);
             side.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
-        else if (endPosition.y >= startPosition.y && (deltaY >= deltaX))
-        {
-            up.SetActive(true);
-            side.SetActive(false);
-            down.SetActive(false);
-        }
-        else
-        {
-            down.SetActive(true);
-            side.SetActive(false);
-            up.SetActive(false);
-        }
+        // else if (endPosition.y >= startPosition.y && (deltaY >= deltaX))
+        // {
+        //     up.SetActive(true);
+        //     side.SetActive(false);
+        //     down.SetActive(false);
+        // }
+        // else
+        // {
+        //     down.SetActive(true);
+        //     side.SetActive(false);
+        //     up.SetActive(false);
+        // }
     }
 
     public void RecheckTargeter()

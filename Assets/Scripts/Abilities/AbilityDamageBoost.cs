@@ -1,26 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityTimer;
 
 public class AbilityDamageBoost : Ability
 {
 
-    public override void InitializeValues()
+    public override void Initialize()
     {
         vs.towerManagerInstance.TowersInSceneChanged += OnTowersInSceneChange;
         // baseCooldown = SaveData.baseUpgradeValues[UpgradeType.DamageBoostCooldown] + SaveData.GetUpgrade(UpgradeType.DamageBoostCooldown).CurrentValue;
         baseCooldown = 10;
 
-        cd = new CooldownTimer(0);
+        CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
     }
 
     public override void UpdateReadiness()
     {
-        base.UpdateReadiness();
         if (vs.towerManagerInstance.TowersInScene.Count <= 0)
         {
             SetReady(false);
         }
-        else if (cd.GetCooldownRemaining() <= 0)
+        else if (CooldownTimer.GetTimeRemaining() <= 0)
         {
             SetReady(true);
         }
@@ -33,8 +33,6 @@ public class AbilityDamageBoost : Ability
 
     public override void Activate()
     {
-        base.Activate();
-
         float damageBoostValue = SaveData.baseUpgradeValues[UpgradeType.DamageBoostValue] +
                                  SaveData.GetUpgrade(UpgradeType.DamageBoostValue)?.CurrentValue ?? 0;
 

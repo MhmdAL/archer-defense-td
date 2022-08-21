@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a903cf5efc11baa49a09c6e64b1c2398, type: 3}
+  m_Name: TEST
+  m_EditorClassIdentifier: 
+  StartingSilver: 230
+  StartingLives: 10
+  Waves:
+  - WaveComponents:
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 2
+      SpawnDelay: 3
+      DelayTillNextComponent: 0
+      EntranceId: 1
+      ExitId: 0
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 5
+      SpawnDelay: 3
+      DelayTillNextComponent: 5
+      EntranceId: 2
+      ExitId: 0
+  DefaultSpawnDelay: 1
