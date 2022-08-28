@@ -12,34 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a903cf5efc11baa49a09c6e64b1c2398, type: 3}
   m_Name: Level 2
   m_EditorClassIdentifier: 
-  StartingSilver: 400
+  StartingSilver: 250
   StartingLives: 10
   Waves:
-  - WaveComponents:
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 30
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
-  - WaveComponents:
-    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 30
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
-  - WaveComponents:
-    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 30
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 3
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
+  - Platoons:
+    - DelayTillNextComponent: 0
+      Squads:
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 30
+        SpawnDelay: 3
+        EntranceId: 0
+        ExitId: 0
+  - Platoons: []
+  - Platoons: []
+  - Platoons: []
+  - Platoons: []
+  - Platoons: []
+  - Platoons: []
   DefaultSpawnDelay: 1

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu]
 public class LevelData : ScriptableObject
@@ -12,33 +13,22 @@ public class LevelData : ScriptableObject
 
     public List<WaveData> Waves;
 
-    public SerTest2 XD;
-
     public float DefaultSpawnDelay;
-}
-
-[Serializable]
-public class SerTest2
-{
-    public int xD;
 }
 
 [Serializable]
 public class WaveData
 {
-    public List<WaveComponentData> WaveComponents;
+    [FormerlySerializedAs("WaveComponents")]
+    public List<Platoon> Platoons;
 }
 
 [Serializable]
-public class WaveComponentData
+public class Platoon
 {
-    public GameObject Prefab;
-    public int Count;
-    public float SpawnDelay;
     public float DelayTillNextComponent;
 
-    public int EntranceId;
-    public int ExitId;
+    public List<Squad> Squads;
 }
 
 [Serializable]
@@ -47,7 +37,6 @@ public class Squad
     public GameObject Prefab;
     public int Count;
     public float SpawnDelay;
-    public float DelayTillNextComponent;
 
     public int EntranceId;
     public int ExitId;

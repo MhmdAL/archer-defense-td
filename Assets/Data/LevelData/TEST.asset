@@ -15,17 +15,17 @@ MonoBehaviour:
   StartingSilver: 230
   StartingLives: 10
   Waves:
-  - WaveComponents:
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 2
-      SpawnDelay: 3
-      DelayTillNextComponent: 0
-      EntranceId: 1
-      ExitId: 0
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 5
-      SpawnDelay: 3
-      DelayTillNextComponent: 5
-      EntranceId: 2
-      ExitId: 0
+  - Platoons:
+    - DelayTillNextComponent: 5
+      Squads:
+      - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+        Count: 10
+        SpawnDelay: 3
+        EntranceId: 2
+        ExitId: 0
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 5
+        SpawnDelay: 1
+        EntranceId: 1
+        ExitId: 0
   DefaultSpawnDelay: 1
