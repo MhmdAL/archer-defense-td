@@ -42,6 +42,10 @@ public class GameUIController : MonoBehaviour
     public TextMeshProUGUI WaveText;
     public TextMeshProUGUI SilverText;
 
+    public SkillDisplayUI ADSkillDisplay;
+    public SkillDisplayUI ASSkillDisplay;
+    public SkillDisplayUI ARSkillDisplay;
+
     public Image archerIcon;
     public Image upgradeCostImage;
     public Image upgradeIcon;
@@ -240,6 +244,10 @@ public class GameUIController : MonoBehaviour
 
                 upgradeCostText.color = notEnoughSilverTextColor;
             }
+
+            ADSkillDisplay.CurrentLevel = t.ADSkill.CurrentLevel;
+            ASSkillDisplay.CurrentLevel = t.ASSkill.CurrentLevel;
+            ARSkillDisplay.CurrentLevel = t.ARSkill.CurrentLevel;
 
             if (t.SkillPoints > 0)
             {

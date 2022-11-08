@@ -24,6 +24,9 @@ public class LevelTemplate : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if(!gameObject.activeSelf)
+            return;
+            
         Paths = PathsRoot.GetComponentsInChildren<Path>().ToList();
 
         if (Paths == null || !Paths.Any())

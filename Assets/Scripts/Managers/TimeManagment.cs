@@ -40,7 +40,7 @@ public class TimeManagment : MonoBehaviour {
 
     public void fastForwardGame()
     {
-        Time.timeScale = 15f;
+        Time.timeScale = 5f;
         ffbutton.SetActive(false);
         playbutton2.SetActive(true);
         pausebutton.SetActive(true);

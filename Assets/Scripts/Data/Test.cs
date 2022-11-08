@@ -2,57 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test : MonoBehaviour
+public class Test : MonoBehaviour, IShooter
 {
-    public Transform StartTransform;
+    public GameObject ProjectilePrefab;
     public Transform TargetTransform;
 
     public float Duration;
-    public float Speed;
     public float Gravity;
+
+    public float FireInterval = 2f;
 
     private float _t;
 
-    private Vector3 Dir;
-
-    private void Start()
-    {
-        transform.position = StartTransform.position;
-
-        Dir = TargetTransform.position - StartTransform.position;
-    }
-
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        _t += Time.deltaTime;
+        if (_t >= FireInterval)
         {
             _t = 0;
+
+            FireProjectile();
         }
-
-        _t += Time.deltaTime;
-        _t = Mathf.Clamp(_t, 0, Duration);
-
-        var pos = transform.position;
-
-        var xSpeed = Dir.x / Duration;
-        var ySpeed = (Dir.y - 0.5f * Gravity * Duration * Duration) / Duration;
-
-        pos.x = StartTransform.position.x + xSpeed * _t;
-        pos.y = StartTransform.position.y + ySpeed * _t + 0.5f * Gravity * _t * _t;
-
-        transform.position = pos;
-
-        var targetDir = (Vector2)StartTransform.position + GetDeltaPos(xSpeed, ySpeed, _t + 0.1f * Duration) - (Vector2)pos;
-
-        float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    private Vector2 GetDeltaPos(float iXSpeed, float iYSpeed, float t)
+    private void FireProjectile()
     {
-        var targetDirX = iXSpeed * t;
-        var targetDirY = iYSpeed * t + 0.5f * Gravity * t * t;
+        var pref = Instantiate(ProjectilePrefab, transform.position, Quaternion.identity);
+        var proj = pref.GetComponentInChildren<Projectile>();
 
-        return new Vector2(targetDirX, targetDirY);
+        proj.Duration = Duration;
+        proj.Gravity = Gravity;
+        proj.StartPosition = transform.position;
+        proj.TargetPosition = TargetTransform.position;
+        proj.Owner = this;
+    }
+
+    public void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawSphere(transform.position, 1);
+
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawSphere(TargetTransform.position, 1);
     }
 }

@@ -272,6 +272,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         ADSkill = new TowerSkill { SkillType = TowerSkillType.AttackDamage };
         ARSkill = new TowerSkill { SkillType = TowerSkillType.AttackRange };
         ASSkill = new TowerSkill { SkillType = TowerSkillType.AttackSpeed };
+
+        UpdateTowerVisuals();
     }
 
     public virtual void AddStartingModifiers() { }
@@ -865,7 +867,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public void UpdateTowerVisuals()
     {
-        var target = targets.FirstOrDefault();
+        var target = targets?.FirstOrDefault();
 
         if (target != null)
         {
