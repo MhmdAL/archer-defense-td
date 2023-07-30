@@ -2,11 +2,6 @@ using UnityEngine;
 using UnityTimer;
 using System.Linq;
 
-public interface IEnhancement
-{
-    void Apply(Tower t);
-}
-
 public class BerzerkEnhancement : IEnhancement
 {
     public void Apply(Tower t)
@@ -80,14 +75,4 @@ public class MultiShotEnhancement : IEnhancement
 public class MultiShotEnhancementData
 {
     public int SecondaryTargetCount { get; set; }
-}
-
-public enum EnhancementType
-{
-    SlowOnAttack,
-    RampUp,
-    Headshot,
-    MultiShot,
-    Executioner,
-    Berzerk
 }

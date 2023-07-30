@@ -46,12 +46,22 @@ public class TowerManager : MonoBehaviour
         TowerBasesInScene = new List<TowerBase>();
 
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
+        _vs.WaveSpawner.WaveEnded += OnWaveEnded;
+        _vs.LevelStarted += OnLevelStarted;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CreateTower(untrainedArcherPrefab, _vs.CurrentLevel.ArcherSpawnPosition.transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 10);
+        }
     }
 
     public void Reset()
     {
         TowersInScene.ForEach(x => Destroy(x.gameObject));
-        
+
         TowerBasesInScene.Clear();
         TowersInScene.Clear();
     }
@@ -60,33 +70,66 @@ public class TowerManager : MonoBehaviour
     {
         if (_vs.Silver >= untrainedArcherPrefab.cost)
         {
-            CreateTower(tb);
+            tb.SetState(TowerBaseState.NonClicked);
+
+            var tower = CreateTower(untrainedArcherPrefab, tb.originalPos);
+
+            tower.TowerBase = tb;
+
+            tb.gameObject.SetActive(false);
         }
     }
 
-    private void CreateTower(TowerBase tb)
+    private void OnLevelStarted()
     {
-        tb.SetState(TowerBaseState.NonClicked);
+        var startingFormation = _vs.CurrentLevel.LevelData.StartingFormationPrefab;
 
-        var t = Instantiate(untrainedArcherPrefab, tb.originalPos, Quaternion.identity) as Tower;
+        if (startingFormation != null)
+        {
+            SpawnUnitFormation(startingFormation);
+        }
+    }
+
+    private void SpawnUnitFormation(GameObject formation)
+    {
+        var waveRewardFormation = _vs.WaveSpawner.LevelData.StartingFormationPrefab;
+        var spawnPos = _vs.CurrentLevel.ArcherSpawnPosition;
+
+        foreach (var tower in waveRewardFormation.GetComponentsInChildren<Tower>())
+        {
+            CreateTower(tower, spawnPos.transform.position + tower.transform.localPosition);
+        }
+    }
+
+    private void OnWaveEnded(int wave)
+    {
+        var waveRewardFormation = _vs.WaveSpawner.LevelData.Waves[wave - 1].WaveReward?.FormationPrefab;
+
+        if (waveRewardFormation != null)
+        {
+            SpawnUnitFormation(waveRewardFormation);
+        }
+    }
+
+    private Tower CreateTower(Tower prefab, Vector3 position)
+    {
+        var t = Instantiate(prefab, position, Quaternion.identity) as Tower;
         TowersInScene.Add(t);
 
-        t.TowerBase = tb;
+        // if (tb.gameObject.tag == "SuperBase")
+        // {
+        //     t.AR.Modify(superBaseAttackRangeModifier, BonusOperation.Percentage, Name.TowerBaseAttackRangeBuff.ToString());
 
-        if (tb.gameObject.tag == "SuperBase")
-        {
-            t.AR.Modify(superBaseAttackRangeModifier, BonusOperation.Percentage, Name.TowerBaseAttackRangeBuff.ToString());
-
-            t.buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
-        }
+        //     t.buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_RANGE);
+        // }
 
         _vs.Silver -= t.cost;
 
         OnTowerDeployed(t);
 
-        tb.gameObject.SetActive(false);
-
         Instantiate(TowerCreateParticles, t.transform.position - Vector3.up * 2, Quaternion.identity);
+
+        return t;
     }
 
     public void SellTower(Tower t)
@@ -264,7 +307,7 @@ public class TowerManager : MonoBehaviour
 
     private void OnTowerDeployed(Tower tower)
     {
-        tower.Focus();
+        // tower.Focus();
 
         TowerDeployed?.Invoke(tower);
         TowersInSceneChanged?.Invoke();
@@ -288,50 +331,52 @@ public class TowerManager : MonoBehaviour
 
     public void OnTowerClicked(Tower tower)
     {
-        foreach (var t in TowersInScene)
-        {
-            t.UnFocus();
-        }
+        // foreach (var t in TowersInScene)
+        // {
+        //     t.UnFocus();
+        // }
 
-        foreach (var tb in TowerBasesInScene)
-        {
-            tb.UnFocus();
-        }
+        // foreach (var tb in TowerBasesInScene)
+        // {
+        //     tb.UnFocus();
+        // }
 
-        tower.Focus();
+        // tower.Focus();
     }
 
     public void OnTowerBaseClicked(TowerBase towerBase)
     {
-        foreach (var t in TowersInScene)
-        {
-            t.UnFocus();
-        }
+        // foreach (var t in TowersInScene)
+        // {
+        //     t.UnFocus();
+        // }
 
-        foreach (var tb in TowerBasesInScene)
-        {
-            tb.UnFocus();
-        }
+        // foreach (var tb in TowerBasesInScene)
+        // {
+        //     tb.UnFocus();
+        // }
 
-        towerBase.Focus();
+        // towerBase.Focus();
     }
 
     public void OnBackgroundClicked()
     {
-        foreach (var t in TowersInScene)
-        {
-            t.UnFocus();
-        }
+        // foreach (var t in TowersInScene)
+        // {
+        //     t.UnFocus();
+        // }
 
-        foreach (var tb in TowerBasesInScene)
-        {
-            tb.UnFocus();
-        }
+        // foreach (var tb in TowerBasesInScene)
+        // {
+        //     tb.UnFocus();
+        // }
     }
 
     private void OnDestroy()
     {
         _vs.userClickHandlerInstance.ObjectClicked -= OnObjectClicked;
+        _vs.WaveSpawner.WaveStarted -= OnWaveEnded;
+        _vs.LevelStarted -= OnLevelStarted;
     }
 }
 

@@ -12,6 +12,7 @@ public class LevelTemplate : MonoBehaviour
 
     public GameObject TowerBasesRoot;
     public GameObject PathsRoot;
+    public GameObject ArcherSpawnPosition;
 
     public List<TowerBase> TowerBases { get; set; }
     public List<Path> Paths { get; set; }

@@ -3,11 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public interface IShooter
-{
-    void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber);
-}
-
 public class Projectile : MonoBehaviour
 {
     public IShooter Owner { get; set; }
@@ -108,24 +103,18 @@ public class Projectile : MonoBehaviour
 
         var dir = TargetPosition - StartPosition;
 
-        var testDir = new Vector3(dir.magnitude, 0);
+        var xSpeed = dir.x / Duration;
+        var ySpeed = (dir.y - 0.5f * Gravity * Duration * Duration) / Duration;
 
-        var xSpeed = testDir.x / Duration;
-        var ySpeed = (testDir.y - 0.5f * Gravity * Duration * Duration) / Duration;
+        pos.x = StartPosition.x + xSpeed * _curTime;
+        pos.y = StartPosition.y + ySpeed * _curTime + 0.5f * Gravity * _curTime * _curTime;
+
+        transform.position = pos;
 
         var targetDir = (Vector2)StartPosition + GetDeltaPos(xSpeed, ySpeed, _curTime + 0.1f * Duration) - (Vector2)pos;
 
         float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
-
-        var horDisplacement = xSpeed * _curTime;
-        var verDisplacement = ySpeed * _curTime + 0.5f * Gravity * _curTime * _curTime;
-
-        pos.x = StartPosition.x + horDisplacement;
-        pos.y = StartPosition.y + verDisplacement;
-
-        transform.position = pos;
-
-        // transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     private Vector2 GetDeltaPos(float iXSpeed, float iYSpeed, float t)

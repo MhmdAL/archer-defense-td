@@ -61,9 +61,14 @@ public class WaveManager : MonoBehaviour {
 	public void OnEnemyDied(Monster m, DamageSource source){
 		if(!m.IsDead)
 			enemiesRemainingThisWave -= 1;
+
+		Debug.Log("Enemy died x2");
+		Debug.Log(enemiesRemainingThisWave);
 		
 		if (enemiesRemainingThisWave == 0 && curWave != totalWaves) { // WaveEnded
 			waveActive = false;
+
+			Debug.Log("Wave ended");
 
 			if (WaveEnded != null) {
 				WaveEnded (curWave);

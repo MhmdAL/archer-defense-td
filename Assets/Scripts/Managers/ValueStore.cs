@@ -26,7 +26,8 @@ public class ValueStore : MonoBehaviour
 
     public event Action SilverChanged;
     public event Action LivesChanged;
-    public event Action<GameStatus> GameEnded;
+    public event Action<GameStatus> LevelEnded;
+    public event Action LevelStarted;
 
     public static float CurrentTime;
 
@@ -178,6 +179,8 @@ public class ValueStore : MonoBehaviour
         uiControllerInstance.Reset();
 
         levelPopUpText.text = $"Level {levelId}";
+
+        LevelStarted?.Invoke();
     }
 
     public void OnSilverChange()
@@ -240,8 +243,8 @@ public class ValueStore : MonoBehaviour
     public void GameOver(GameStatus gs)
     {
         active = false;
-        if (GameEnded != null)
-            GameEnded(gs);
+        if (LevelEnded != null)
+            LevelEnded(gs);
         Time.timeScale = 0f;
 
         SaveData save = DataService.Instance.SaveData;

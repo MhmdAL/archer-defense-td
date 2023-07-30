@@ -15,7 +15,7 @@ public class ArcherSpriteUpdater : MonoBehaviour
     public SpriteRenderer Head;
     public SpriteRenderer Facial;
 
-    private void Awake()
+    private void Start()
     {
         Owner.SkillUpgraded += UpdateVisuals;
         Owner.SkillPointsChanged += OnSkillpointsChanged;

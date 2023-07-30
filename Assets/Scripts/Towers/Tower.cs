@@ -152,6 +152,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public int consecutiveShots;
     public int shotNumber;
 
+    public GameObject FocusIndicatorArrow;
+
     private List<Monster> monstersInScene;
     private List<Monster> targets;
 
@@ -906,13 +908,21 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public void Focus()
     {
         circle.SetActive(true);
-        cooldownBarParent.SetActive(true);
+        // cooldownBarParent.SetActive(true);
+
+        FocusIndicatorArrow.SetActive(true);
+
+        GetComponent<Movable>().hasFocus = true;
     }
 
     public void UnFocus()
     {
         circle.SetActive(false);
-        cooldownBarParent.SetActive(false);
+        // cooldownBarParent.SetActive(false);
+
+        FocusIndicatorArrow.SetActive(false);
+
+        GetComponent<Movable>().hasFocus = false;
     }
 
     private void OnDestroy()
@@ -932,25 +942,4 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     }
 
     #endregion
-}
-
-public interface IFocusable
-{
-    void Focus();
-    void UnFocus();
-}
-
-public enum BuffIndicatorType
-{
-    ATTACK_RANGE,
-    ATTACK_DAMAGE,
-    ATTACK_SPEED
-}
-
-public enum ArcherType
-{
-    ClassicArcher,
-    RapidArcher,
-    LongArcher,
-    UtilityArcher
 }

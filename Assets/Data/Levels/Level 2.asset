@@ -51,6 +51,8 @@ MonoBehaviour:
         SpawnDelay: 2
         EntranceId: 0
         ExitId: 1
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   - Platoons:
     - DelayTillNextComponent: 50
       Squads:
@@ -76,6 +78,8 @@ MonoBehaviour:
         SpawnDelay: 4
         EntranceId: 0
         ExitId: 2
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   - Platoons:
     - DelayTillNextComponent: 15
       Squads:
@@ -117,6 +121,8 @@ MonoBehaviour:
         SpawnDelay: 3
         EntranceId: 0
         ExitId: 2
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   - Platoons:
     - DelayTillNextComponent: 30
       Squads:
@@ -149,6 +155,8 @@ MonoBehaviour:
         SpawnDelay: 3
         EntranceId: 0
         ExitId: 2
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   - Platoons:
     - DelayTillNextComponent: 30
       Squads:
@@ -179,6 +187,14 @@ MonoBehaviour:
         SpawnDelay: 3
         EntranceId: 0
         ExitId: 2
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   - Platoons: []
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   - Platoons: []
+    WaveReward:
+      FormationPrefab: {fileID: 0}
   DefaultSpawnDelay: 1
+  StartingFormationPrefab: {fileID: 8641165623319483890, guid: a38b524dcb5b62547885f2e364c51572,
+    type: 3}

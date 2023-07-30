@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
 
-public class BackgroundScaler : MonoBehaviour, IPointerClickHandler {
+public class BackgroundScaler : MonoBehaviour, IFocusable, IPointerClickHandler {
 
     public event Action BackgroundClicked;
 	public GameObject spike;
@@ -37,5 +37,15 @@ public class BackgroundScaler : MonoBehaviour, IPointerClickHandler {
 		// ValueStore.sharedInstance.OnClick (ClickType.Background, gameObject);
         // BackgroundClicked?.Invoke();
 	}
-	#endregion
+
+    public void Focus()
+    {
+        
+    }
+
+    public void UnFocus()
+    {
+        
+    }
+    #endregion
 }

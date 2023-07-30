@@ -14,6 +14,8 @@ public class LevelData : ScriptableObject
     public List<WaveData> Waves;
 
     public float DefaultSpawnDelay;
+
+    public GameObject StartingFormationPrefab;
 }
 
 [Serializable]
@@ -21,6 +23,13 @@ public class WaveData
 {
     [FormerlySerializedAs("WaveComponents")]
     public List<Platoon> Platoons;
+    public WaveReward WaveReward;
+}
+
+[Serializable]
+public class WaveReward
+{
+    public GameObject FormationPrefab;
 }
 
 [Serializable]
