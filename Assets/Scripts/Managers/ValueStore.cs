@@ -32,6 +32,7 @@ public class ValueStore : MonoBehaviour
     public static float CurrentTime;
 
     public List<LevelTemplate> LevelPrefabs;
+    public AudioProfile AudioProfile;
 
     public LevelTemplate CurrentLevel { get; set; }
 
@@ -105,13 +106,18 @@ public class ValueStore : MonoBehaviour
 
     [HideInInspector] public Camera mainCamera;
 
+    private AudioSource _audioSource;
+
     void Awake()
     {
         active = true;
         Instance = this;
+        _audioSource = GetComponent<AudioSource>();
+
         if (Application.isPlaying)
         {
             WaveSpawner.WaveEnded += OnWaveEnded;
+            WaveSpawner.WaveStarted += OnWaveStarted;
             monsterManagerInstance.EnemyDied += OnEnemyDeath;
             monsterManagerInstance.EnemyDied += WaveSpawner.OnEnemyDied;
 
@@ -193,8 +199,15 @@ public class ValueStore : MonoBehaviour
         LivesChanged?.Invoke();
     }
 
+    private void OnWaveStarted(int wave)
+    {
+        _audioSource.PlayOneShot(AudioProfile.wave_start);
+    }
+
     private void OnWaveEnded(int wave)
     {
+        _audioSource.PlayOneShot(AudioProfile.wave_end);
+
         if (WaveSpawner.IsFinished && active && Lives > 0)
         {
             GameOver(GameStatus.Win);

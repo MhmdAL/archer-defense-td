@@ -79,7 +79,7 @@ public class UserClickHandler : MonoBehaviour
                 .Where(x => x is IFocusable)
                 .Select(x => x as IFocusable)
                 .ToList();
-                
+
             // Debug.Log("Found " + focusables.Count + " focusables");
             foreach (var item in focusables)
             {

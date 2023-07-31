@@ -142,8 +142,6 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     [HideInInspector]
     public List<Monster> monstersInRange;
 
-    protected AudioManager audioManager;
-
     protected Animator anim;
 
     [SerializeField]
@@ -172,6 +170,11 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public bool isInCombat = false;
 
     private List<SpriteRenderer> attachedRenderers;
+
+    private AudioSource _audioSource;
+
+    [SerializeField]
+    private AudioProfile audioProfile;
 
     private int _skillPoints;
     public int SkillPoints
@@ -240,7 +243,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
         anim = GetComponent<Animator>();
 
-        audioManager = ValueStore.Instance.audioManagerInstance;
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public virtual void InitializeValues()
@@ -283,6 +286,11 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     private void Update()
     {
         UpdateTowerVisuals();
+
+        if(monstersInRange.Any() && AttackCooldownTimer.GetTimeRemaining() > FullCooldown - 0.1f)
+        {
+            PlayBowDrawSFX();
+        }
 
         var res = Physics2D.OverlapCircleAll(transform.position, AR.Value);
         foreach (var obj in res)
@@ -352,6 +360,15 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         {
             AttackCooldownTimer.Restart(FullCooldown);
         }
+    }
+
+    public void PlayArrowShotSFX() => PlayClip(audioProfile.bow_shoot);
+    public void PlayBowDrawSFX() => PlayClip(audioProfile.bow_draw);
+
+    public void PlayClip(AudioClip clip)
+    {
+        _audioSource.clip = clip;
+        _audioSource.Play();
     }
 
     private void OnBeforeAttack()
