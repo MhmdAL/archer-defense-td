@@ -4,78 +4,92 @@ using UnityEngine.UI;
 using UnityTimer;
 using System;
 
-public enum AbilityType{
-	Arrow_Artillery,
-	Damage_boost
+public enum AbilityType
+{
+    Arrow_Artillery,
+    Damage_boost
 }
-public abstract class Ability : MonoBehaviour, IAttacker {
+public abstract class Ability : MonoBehaviour, IAttacker
+{
 
-	public static event Action<AbilityType> AbilityActivated;
+    public static event Action<AbilityType> AbilityActivated;
 
-	public AbilityType t;
-	public float baseCooldown;
+    public AbilityType t;
+    public float baseCooldown;
 
-	public Image cooldownImage;
-	public Image activeIndicator, inactiveIndicator;
+    public Image cooldownImage;
+    public Image activeIndicator, inactiveIndicator;
 
-	protected ValueStore vs;
+    protected ValueStore vs;
 
-	protected Timer CooldownTimer;
+    protected Timer CooldownTimer;
 
-	private Button _button;
+    private Button _button;
 
-	void Start () {
-		vs = ValueStore.Instance;
+    void Start()
+    {
+        vs = ValueStore.Instance;
 
-		Initialize ();
+        Initialize();
 
-		vs.WaveSpawner.WaveStarted += OnWaveStarted;
-		vs.WaveSpawner.WaveEnded += OnWaveEnded;
+        vs.WaveSpawner.WaveStarted += OnWaveStarted;
+        vs.WaveSpawner.WaveEnded += OnWaveEnded;
 
-		_button = GetComponent<Button> ();
-		_button.onClick.AddListener (OnClick);
+        _button = GetComponent<Button>();
+        _button.onClick.AddListener(OnClick);
 
-		SetReady (false);
-	}
+        SetReady(false);
+    }
 
-	public abstract void Initialize();
-	public abstract void UpdateReadiness();
-	public abstract void Activate();
+    public virtual void Initialize()
+    {
+        CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
+    }
 
-	public void OnWaveStarted(int waveNumber){
-		CooldownTimer.Resume ();
-	}
+    public abstract void UpdateReadiness();
+    public abstract void Activate();
 
-	public void OnWaveEnded(int waveNumber){
-		CooldownTimer.Pause ();
-		SetReady (false);
-	}
+    public void OnWaveStarted(int waveNumber)
+    {
+        CooldownTimer.Resume();
+    }
 
-	void Update(){
-		cooldownImage.fillAmount = CooldownTimer.GetTimeRemaining () / baseCooldown;
+    public void OnWaveEnded(int waveNumber)
+    {
+        CooldownTimer.Pause();
+        SetReady(false);
+    }
 
-		UpdateReadiness ();
-	}
+    protected virtual void Update()
+    {
+        cooldownImage.fillAmount = CooldownTimer.GetTimeRemaining() / baseCooldown;
 
-	public void SetReady(bool active){
-		if (active) {
-			_button.interactable = true;
-			activeIndicator.gameObject.SetActive (true);
-			inactiveIndicator.gameObject.SetActive (false);
-		} else {
-			_button.interactable = false;
-			activeIndicator.gameObject.SetActive (false);
-			inactiveIndicator.gameObject.SetActive (true);
-		}
-	}
+        UpdateReadiness();
+    }
 
-	public virtual void OnClick(){
-		Activate ();
+    public void SetReady(bool active)
+    {
+        if (active)
+        {
+            _button.interactable = true;
+            activeIndicator.gameObject.SetActive(true);
+            inactiveIndicator.gameObject.SetActive(false);
+        }
+        else
+        {
+            _button.interactable = false;
+            activeIndicator.gameObject.SetActive(false);
+            inactiveIndicator.gameObject.SetActive(true);
+        }
+    }
 
-		if (AbilityActivated != null)
-			AbilityActivated (t);
+    public virtual void OnClick()
+    {
+        Activate();
 
-		SetReady (false);
-		CooldownTimer.Restart (baseCooldown);
-	}		
+        AbilityActivated?.Invoke(t);
+
+        SetReady(false);
+        CooldownTimer.Restart(baseCooldown);
+    }
 }

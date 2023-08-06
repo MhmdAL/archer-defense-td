@@ -73,6 +73,7 @@ public class GameUIController : MonoBehaviour
     public Sprite specialityUpgradeSprite;
 
     public GameObject SpawnWaveButton;
+    public GameObject SpawnWavePanel;
 
     [field: SerializeField]
     public GameObject ArcherSpecialtyChoiceMenu { get; set; }
@@ -417,22 +418,31 @@ public class GameUIController : MonoBehaviour
 
     private void OnWaveStarted(int wave)
     {
-        SpawnWaveButton.SetActive(false);
+        // SpawnWaveButton.SetActive(false);
+        SpawnWavePanel.GetComponent<Animator>().ResetTrigger("show");
+        SpawnWavePanel.GetComponent<Animator>().SetTrigger("hide");
 
         UpdateHUD();
     }
 
     private void OnWaveEnded(int wave)
     {
+        Debug.Log("Wave Ended");
+
         if (!_vs.WaveSpawner.IsFinished)
         {
             SpawnWaveButton.SetActive(true);
+            SpawnWavePanel.GetComponent<Animator>().SetTrigger("show");
         }
     }
 
     public void Reset()
     {
+        Debug.Log("Game Resetting");
+
         SpawnWaveButton.SetActive(true);
+        SpawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
+        SpawnWavePanel.GetComponent<Animator>().SetTrigger("show");
     }
 
     private void OnDestroy()

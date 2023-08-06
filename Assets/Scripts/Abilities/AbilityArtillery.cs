@@ -21,13 +21,6 @@ public class AbilityArtillery : Ability, IShooter
 
     private const float ArtilleryBaseDamage = 15;
 
-    public override void Initialize()
-    {
-        // baseCooldown = SaveData.baseUpgradeValues[UpgradeType.ArtilleryCooldown] + SaveData.GetUpgrade (UpgradeType.ArtilleryCooldown).CurrentValue;
-        // baseCooldown = 10;
-
-        CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
-    }
 
     public override void UpdateReadiness()
     {

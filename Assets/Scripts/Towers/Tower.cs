@@ -287,7 +287,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     {
         UpdateTowerVisuals();
 
-        if(monstersInRange.Any() && AttackCooldownTimer.GetTimeRemaining() > FullCooldown - 0.1f)
+        if (monstersInRange.Any() && AttackCooldownTimer.GetTimeRemaining() > FullCooldown - 0.1f)
         {
             PlayBowDrawSFX();
         }
@@ -362,13 +362,15 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
-    public void PlayArrowShotSFX() => PlayClip(audioProfile.bow_shoot);
-    public void PlayBowDrawSFX() => PlayClip(audioProfile.bow_draw);
+    public void PlayArrowShotSFX() => PlayClip(audioProfile?.bow_shoot);
+    public void PlayBowDrawSFX() => PlayClip(audioProfile?.bow_draw);
 
     public void PlayClip(AudioClip clip)
     {
-        _audioSource.clip = clip;
-        _audioSource.Play();
+        if (clip != null)
+        {
+            _audioSource.PlayOneShot(clip);
+        }
     }
 
     private void OnBeforeAttack()

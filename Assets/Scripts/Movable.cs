@@ -20,7 +20,8 @@ public class Movable : MonoBehaviour
             Vector3 moveDirection = new Vector3(horizontalInput, verticalInput, 0).normalized;
 
             // Move the game object
-            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+            GetComponent<Rigidbody2D>().MovePosition(transform.position + moveDirection * moveSpeed * Time.deltaTime);
+            // transform.Translate();
         }
     }
 }
