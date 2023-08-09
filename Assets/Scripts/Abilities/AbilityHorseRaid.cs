@@ -13,6 +13,9 @@ public enum HorseRaidState
 
 public class AbilityHorseRaid : Ability
 {
+    public GameObject HorseRaidScreenIndicator;
+    public GameObject HorseRaidStartIndicatorPrefab;
+    public GameObject HorseRaidEndIndicatorPrefab;
     public GameObject HorseRaiderPrefab;
     public int HorseRaiderCount = 3;
     public Transform HorseRaiderSpawnPosition;
@@ -22,10 +25,16 @@ public class AbilityHorseRaid : Ability
     private Vector2? _raidStartPosition;
     private Vector2? _raidEndPosition;
 
+    private GameObject _raidStartIndicator = null;
+    private GameObject _raidEndIndicator = null;
+
 
     public override void Activate()
     {
         _state = HorseRaidState.SetupPhase;
+        HorseRaidScreenIndicator.SetActive(true);
+
+        Debug.Log("Activating horse raid");
     }
 
     protected override void Update()
@@ -36,11 +45,27 @@ public class AbilityHorseRaid : Ability
         {
             if (_raidStartPosition == null)
             {
+                if(_raidStartIndicator != null)
+                {
+                    Destroy(_raidStartIndicator);
+                    _raidStartIndicator = null;
+                }
+
+                if(_raidEndIndicator != null)
+                {
+                    Destroy(_raidEndIndicator);
+                    _raidEndIndicator = null;
+                }
+
                 _raidStartPosition = Input.mousePosition;
+
+                _raidStartIndicator = Instantiate(HorseRaidStartIndicatorPrefab, _raidStartPosition.Value.ToWorldPosition(Camera.main), Quaternion.identity);
             }
             else if (_raidEndPosition == null)
             {
                 _raidEndPosition = Input.mousePosition;
+
+                _raidEndIndicator = Instantiate(HorseRaidEndIndicatorPrefab, _raidEndPosition.Value.ToWorldPosition(Camera.main), Quaternion.identity);
 
                 StartRaid();
             }
@@ -49,6 +74,8 @@ public class AbilityHorseRaid : Ability
 
     private void StartRaid()
     {
+        HorseRaidScreenIndicator.SetActive(false);
+
         Debug.Log("raid starting");
         _state = HorseRaidState.Commencing;
 
@@ -83,6 +110,12 @@ public class AbilityHorseRaid : Ability
             horseRaiderComponent.StartRaid(path).OnRaidFinished(() =>
             {
                 Destroy(horseRaiderObj);
+
+                Destroy(_raidStartIndicator, 2f);
+                Destroy(_raidEndIndicator, 2f);
+
+                _raidStartIndicator = null;
+                _raidEndIndicator = null;
             });
         }
     }

@@ -38,7 +38,7 @@ public class HorseRaider : MonoBehaviour
                 return;
             }
 
-            transform.position += dir.normalized * 5 * Time.deltaTime;
+            transform.position += dir.normalized * 10 * Time.deltaTime;
         }
     }
 }

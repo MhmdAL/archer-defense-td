@@ -43,7 +43,7 @@ public class AbilityArtillery : Ability, IShooter
         targetPos.z = 0;
 
         ArtilleryIndicator.transform.position = targetPos;
-		ArtilleryIndicator.transform.localScale = new Vector3(2 * ArrowSpread, 2 * ArrowSpread, 1);
+        ArtilleryIndicator.transform.localScale = new Vector3(2 * ArrowSpread, 2 * ArrowSpread, 1);
 
         StartCoroutine(FireArtillery(targetPos));
     }
@@ -51,6 +51,8 @@ public class AbilityArtillery : Ability, IShooter
     public override void Activate()
     {
         ArtilleryPanel.SetActive(true);
+
+        Debug.Log("Activating artillery");
     }
 
     private IEnumerator FireArtillery(Vector3 targetPos)
@@ -62,7 +64,7 @@ public class AbilityArtillery : Ability, IShooter
         var arrowPerWave = ArrowCount / waves;
         var remainder = ArrowCount % waves;
 
-        this.AttachTimer(ArrowTravelDuration + (waves - 1) * CooldownPerWave , (t) => ArtilleryIndicator.SetActive(false));
+        this.AttachTimer(ArrowTravelDuration + (waves - 1) * CooldownPerWave, (t) => ArtilleryIndicator.SetActive(false));
 
         for (int i = 0; i < waves; i++)
         {
