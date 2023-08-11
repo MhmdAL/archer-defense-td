@@ -17,6 +17,7 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         Unit.HealthChanged += OnHealthChanged;
+        Unit.Died += OnUnitDied;
     }
 
     private void OnHealthChanged()
@@ -26,8 +27,14 @@ public class HealthBar : MonoBehaviour
         ShieldBar.transform.localScale = new Vector3(Unit.CurrentShield / (Unit.MaxHP.Value + Unit.CurrentShield), HPBar.transform.localScale.y, HPBar.transform.localScale.z);
     }
 
+    private void OnUnitDied()
+    {
+        this.gameObject.SetActive(false);
+    }
+
     private void OnDestroy()
     {
         Unit.HealthChanged -= OnHealthChanged;
+        Unit.Died -= OnUnitDied;
     }
 }

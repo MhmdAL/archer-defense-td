@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public interface IShooter
 {
-    void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber);
+    void OnTargetHit(Vector3 TargetPosition, List<Unit> unitsHit, Projectile p, int shotNumber);
 }

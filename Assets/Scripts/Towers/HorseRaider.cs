@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class HorseRaider : MonoBehaviour
 {
+    public float Speed;
+
     private Waypoint _currentTarget;
     private Action RaidEndCallback;
 
@@ -38,7 +40,7 @@ public class HorseRaider : MonoBehaviour
                 return;
             }
 
-            transform.position += dir.normalized * 10 * Time.deltaTime;
+            transform.position += dir.normalized * Speed * Time.deltaTime;
         }
     }
 }

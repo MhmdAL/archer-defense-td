@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19aba05a889001e49a930fa5617c8870, type: 3}
+  m_Name: CatapultSkillData
+  m_EditorClassIdentifier: 
+  <SkillValues>k__BackingField:
+  - <ExpRequired>k__BackingField: 10
+    <ADValue>k__BackingField: 0.3
+    <IsADPercentage>k__BackingField: 1
+    <ASValue>k__BackingField: 0.3
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 150
+    <ADValue>k__BackingField: 0.3
+    <IsADPercentage>k__BackingField: 1
+    <ASValue>k__BackingField: 0.3
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 1000
+    <ADValue>k__BackingField: 10
+    <IsADPercentage>k__BackingField: 0
+    <ASValue>k__BackingField: 0.2
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 20
+    <ADValue>k__BackingField: 10
+    <IsADPercentage>k__BackingField: 0
+    <ASValue>k__BackingField: 0.5
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 25
+    <ADValue>k__BackingField: 10
+    <IsADPercentage>k__BackingField: 0
+    <ASValue>k__BackingField: 0.5
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 60
+    <ADValue>k__BackingField: 10
+    <IsADPercentage>k__BackingField: 0
+    <ASValue>k__BackingField: 0.5
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1
+  - <ExpRequired>k__BackingField: 70
+    <ADValue>k__BackingField: 10
+    <IsADPercentage>k__BackingField: 0
+    <ASValue>k__BackingField: 0.5
+    <IsASPercentage>k__BackingField: 1
+    <ARValue>k__BackingField: 0.3
+    <IsARPercentage>k__BackingField: 1

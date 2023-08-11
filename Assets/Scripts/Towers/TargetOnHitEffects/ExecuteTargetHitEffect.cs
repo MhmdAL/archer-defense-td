@@ -6,11 +6,14 @@ public class ExecuteTargetHitEffect : TargetHitEffect
 {
     public override void OnTargetHit(TargetHitData data)
     {
-        if (data.Target != null)
+        if (data.Targets != null)
         {
-            if(data.Target.CurrentHP < data.Target.MaxHP.Value * 0.2f)
+            foreach (var target in data.Targets)
             {
-                data.Target.Damage(999999, 0, DamageSource.Normal, data.Owner);
+                if (target.CurrentHP < target.MaxHP.Value * 0.2f)
+                {
+                    target.Damage(999999, 0, DamageSource.Normal, data.Owner);
+                }
             }
         }
     }

@@ -92,7 +92,7 @@ public class AbilityArtillery : Ability, IShooter
         p.Gravity = ArrowGravity;
     }
 
-    public void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber)
+    public void OnTargetHit(Vector3 targetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)
     {
         foreach (var unit in unitsHit)
         {

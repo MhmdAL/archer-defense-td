@@ -16,13 +16,12 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public event Action AttackFinished;
     public event Action CombatEnded;
 
-
-    [field: SerializeField]
+    [field: SerializeField, Header("Data")]
     public TowerSkillData TowerSkillsData { get; set; }
     [field: SerializeField]
     public TowerData TowerData { get; set; }
 
-    [field: SerializeField]
+    [field: SerializeField, Header("Attack Configuration")]
     public TowerAttackStrategy TowerAttackStrategy { get; set; }
 
     [field: SerializeField]
@@ -76,7 +75,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
-    public List<Stat> stats;
+    protected List<Stat> stats;
 
     public GameObject upgradeAnimationPrefab;
     public GameObject archerShotParticle;
@@ -331,7 +330,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     private void OnAttackTimerElapsed(Timer t)
     {
-        CalculateTargets();
+        monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
+        TargetDetection.CalculateTargets(this, monstersInScene, monstersInRange, targets, AR.Value, AD.Value, AP.Value);
 
         Attack();
     }
@@ -393,27 +393,25 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
             {
                 Owner = this,
                 Projectile = p,
-                Target = target
+                Targets = new List<Unit> { target }
             });
         }
     }
 
-    public void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber)
+    public void OnTargetHit(Vector3 targetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)
     {
         foreach (var ohe in OnHitEffects)
         {
-            foreach (var unit in unitsHit)
+            ohe.OnTargetHit(new TargetHitData
             {
-                ohe.OnTargetHit(new TargetHitData
-                {
-                    Owner = this,
-                    Projectile = p,
-                    Target = unit
-                });
-            }
+                Owner = this,
+                Projectile = p,
+                HitPosition = targetPosition,
+                HitRadius = bulletRadius,
+                Targets = unitsHit
+            });
         }
     }
-
 
     #region Target Calculation
 
@@ -436,7 +434,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         // Remove monsters who leave range from list of targets
         foreach (Monster t in targets.ToList())
         {
-            if (!IsInRange(t))
+            if (!IsInRange(t) || t.IsDead)
             {
                 if (targets[0] != null && targets[0].targetedBy.Count > 0)
                 {
@@ -501,7 +499,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public void RecheckTarget()
     {
         targets[0] = null;
-        SetTargets();
+        TargetDetection.SetTargets(this, monstersInRange, targets);
     }
 
     public bool IsInRange(Monster m)

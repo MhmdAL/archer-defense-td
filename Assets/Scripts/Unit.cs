@@ -1,15 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityTimer;
+using static UnityEngine.ParticleSystem;
+
 
 public abstract class Unit : MonoBehaviour
 {
     public event Action HealthChanged;
+    public event Action Died;
     public event Action<Unit, float, IAttacker> Damaged;
 
     public GameObject HitParticles;
+    public MinMaxCurve DeathTime = 1.5f;
 
     public Stat MaxHP { get; set; }
     public Stat Armor { get; set; }
@@ -102,13 +107,28 @@ public abstract class Unit : MonoBehaviour
     {
         if (!IsDead)
         {
-            Destroy(transform.root.gameObject);
+            var sprites = GetComponentsInChildren<SpriteRenderer>();
 
+            var deathTime = UnityEngine.Random.Range(DeathTime.constantMin, DeathTime.constantMax);
 
-            var pool = Instantiate(HitParticles, transform.position, Quaternion.identity);
+            this.AttachTimer(deathTime, x => Destroy(transform.root.gameObject), d =>
+            {
+                var alpha = 1 - (d / deathTime);
 
-            var rand = UnityEngine.Random.Range(1, 1.25f);
-            pool.transform.localScale = pool.transform.localScale * rand;
+                sprites.ToList().ForEach(s =>
+                {
+                    var color = s.color;
+                    color.a = alpha;
+                    s.color = color;
+                });
+            });
+
+            Died?.Invoke();
+
+            // var pool = Instantiate(HitParticles, transform.position, Quaternion.identity);
+
+            // var rand = UnityEngine.Random.Range(1, 1.25f);
+            // pool.transform.localScale = pool.transform.localScale * rand;
 
             IsDead = true;
         }

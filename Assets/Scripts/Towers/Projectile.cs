@@ -63,17 +63,17 @@ public class Projectile : MonoBehaviour
     public void OnTargetHit(Unit unit)
     {
         var targets = new List<Unit>();
-
-        if (unit == null && Radius > 0)
+        Debug.Log(Radius);
+        if (Radius > 0)
         {
             var cols = Physics2D.OverlapCircleAll(TargetPosition, Radius);
 
             foreach (var c in cols)
             {
                 var u = c.GetComponent<Unit>();
-                if (unit != null)
+                if (u != null)
                 {
-                    targets.Add(unit);
+                    targets.Add(u);
                 }
             }
         }
@@ -84,7 +84,7 @@ public class Projectile : MonoBehaviour
 
         if (targets.Any())
         {
-            Owner.OnTargetHit(targets, this, shotNumber);
+            Owner.OnTargetHit(TargetPosition, targets, this, shotNumber);
             Destroy(transform.root.gameObject);
         }
         else

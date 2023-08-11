@@ -6,9 +6,15 @@ public class SlowTargetHitEffect : TargetHitEffect
 {
     public override void OnTargetHit(TargetHitData data)
     {
-        if (data.Target is Monster m)
+        if (data.Targets != null)
         {
-            m.Movespeed.Modify(-0.9f, BonusOperation.Percentage, "SlowOnHit", 1, 1);
+            foreach (var target in data.Targets)
+            {
+                if (target is Monster m)
+                {
+                    m.Movespeed.Modify(-0.9f, BonusOperation.Percentage, "SlowOnHit", 1, 1);
+                }
+            }
         }
     }
 }

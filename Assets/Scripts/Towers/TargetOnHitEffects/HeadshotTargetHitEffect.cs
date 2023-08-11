@@ -7,19 +7,22 @@ public class HeadshotTargetHitEffect : TargetHitEffect
 {
     public override void OnTargetHit(TargetHitData data)
     {
-        if (data.Target != null)
+        if (data.Targets != null)
         {
-            var headShotTimer = data.Owner.ExtraData["HeadshotTimer"] as Timer;
-            
-            if (headShotTimer.GetTimeRemaining() <= 0)
+            foreach (var target in data.Targets)
             {
-                data.Target.Damage(data.Projectile.Damage * 5, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
+                var headShotTimer = data.Owner.ExtraData["HeadshotTimer"] as Timer;
 
-                headShotTimer.Restart();
-            }
-            else
-            {
-                data.Target.Damage(data.Projectile.Damage, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
+                if (headShotTimer.GetTimeRemaining() <= 0)
+                {
+                    target.Damage(data.Projectile.Damage * 5, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
+
+                    headShotTimer.Restart();
+                }
+                else
+                {
+                    target.Damage(data.Projectile.Damage, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
+                }
             }
         }
     }

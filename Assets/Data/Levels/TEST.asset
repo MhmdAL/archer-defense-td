@@ -19,8 +19,13 @@ MonoBehaviour:
     - DelayTillNextComponent: 5
       Squads:
       - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-        Count: 10
-        SpawnDelay: 3
+        Count: 100
+        SpawnDelay: 1
+        EntranceId: 2
+        ExitId: 0
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 100
+        SpawnDelay: 1
         EntranceId: 2
         ExitId: 0
     WaveReward:
@@ -37,5 +42,5 @@ MonoBehaviour:
     WaveReward:
       FormationPrefab: {fileID: 0}
   DefaultSpawnDelay: 1
-  StartingFormationPrefab: {fileID: 8641165623319483890, guid: 94da81cf9c0b85041b43a2c5a5e14db3,
+  StartingFormationPrefab: {fileID: 8641165623319483890, guid: 48c35b801c7e8ad4282abf33d5765605,
     type: 3}

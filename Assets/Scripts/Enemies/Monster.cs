@@ -14,6 +14,9 @@ public abstract class Monster : Unit, IModifiable
     [field: SerializeField]
     public EnemyData EnemyData { get; set; }
 
+    [SerializeField]
+    private AudioClip deathSound;
+
 
     public Stat Movespeed { get; set; }
 
@@ -56,6 +59,7 @@ public abstract class Monster : Unit, IModifiable
     public int ID;
 
     public Animator anim;
+    public AudioSource _audioSource;
 
     [HideInInspector] public bool isAboutToDie;
 
@@ -96,6 +100,8 @@ public abstract class Monster : Unit, IModifiable
     {
         base.Awake();
 
+        _audioSource = GetComponent<AudioSource>();
+
         myTransform = transform;
         m = ValueStore.Instance.monsterManagerInstance;
 
@@ -134,7 +140,10 @@ public abstract class Monster : Unit, IModifiable
 
     public virtual void FixedUpdate()
     {
-        HandleMovement();
+        if (!IsDead)
+        {
+            HandleMovement();
+        }
     }
 
     protected virtual void Update()
@@ -197,9 +206,15 @@ public abstract class Monster : Unit, IModifiable
 
         m.OnEnemyDied(this, source);
 
+        anim.SetTrigger("death");
+        anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
+
+        _audioSource.pitch = UnityEngine.Random.Range(0, 2f);
+        _audioSource.PlayOneShot(deathSound);
+
         // Add death particle effects
-        GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
-        Destroy(deathParticle, 2f);
+        // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
+        // Destroy(deathParticle, 2f);
 
         base.OnDeath(source, killer);
     }

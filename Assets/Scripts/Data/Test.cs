@@ -37,7 +37,7 @@ public class Test : MonoBehaviour, IShooter
         proj.Owner = this;
     }
 
-    public void OnTargetHit(List<Unit> unitsHit, Projectile p, int shotNumber)
+    public void OnTargetHit(Vector3 targetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)
     {
         throw new System.NotImplementedException();
     }
