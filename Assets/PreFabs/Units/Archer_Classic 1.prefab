@@ -376,7 +376,6 @@ MonoBehaviour:
   <OnHitEffects>k__BackingField:
   - {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4, type: 2}
   <SecondaryTargetCount>k__BackingField: 0
-  stats: []
   upgradeAnimationPrefab: {fileID: 120230, guid: bd1d4bf1b8595a146814cfafa007f638,
     type: 3}
   archerShotParticle: {fileID: 117056, guid: dc463a3f2c8479548a32d5c73769c430, type: 3}
@@ -404,7 +403,9 @@ MonoBehaviour:
   shotNumber: 0
   FocusIndicatorArrow: {fileID: 663634617392084561}
   isInCombat: 0
-  audioProfile: {fileID: 11400000, guid: 750c3e50e43e10748a8601eed31709d4, type: 2}
+  ShootSFX: {fileID: 8300000, guid: 64a1fba512bdc3546b62d36e21d596ac, type: 3}
+  DrawSFX: {fileID: 0}
+  HitSFX: {fileID: 8300000, guid: 848cd87ca6436c04f9b87da0aaae8b8f, type: 3}
 --- !u!212 &21265388
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -72,6 +72,6 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         // set cooldown back to full duration
         data.Owner.AttackCooldownTimer.Restart(data.Owner.FullCooldown);
 
-        data.Owner.PlayArrowShotSFX();
+        data.Owner.PlayShotSFX();
     }
 }

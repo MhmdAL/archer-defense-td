@@ -54,7 +54,7 @@ public class TowerManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CreateTower(untrainedArcherPrefab, _vs.CurrentLevel.ArcherSpawnPosition.transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 10);
+            CreateTower(untrainedArcherPrefab, _vs.CurrentLevel.FormationSpawns.GetSpawnPlatform(0).transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 10);
         }
     }
 
@@ -82,20 +82,23 @@ public class TowerManager : MonoBehaviour
 
     private void OnLevelStarted()
     {
-        var startingFormation = _vs.CurrentLevel.LevelData.StartingFormationPrefab;
-
-        if (startingFormation != null)
+        foreach (var item in _vs.CurrentLevel.LevelData.StartingFormations)
         {
-            SpawnUnitFormation(startingFormation);
+            var startingFormation = item.FormationPrefab;
+            var startingFormationSpawnIndex = item.FormationSpawnIndex;
+
+            if (startingFormation != null)
+            {
+                SpawnUnitFormation(startingFormation, startingFormationSpawnIndex);
+            }
         }
     }
 
-    private void SpawnUnitFormation(GameObject formation)
+    private void SpawnUnitFormation(GameObject formation, int spawnIndex)
     {
-        var waveRewardFormation = _vs.WaveSpawner.LevelData.StartingFormationPrefab;
-        var spawnPos = _vs.CurrentLevel.ArcherSpawnPosition;
+        var spawnPos = _vs.CurrentLevel.FormationSpawns.GetSpawnPlatform(spawnIndex);
 
-        foreach (var tower in waveRewardFormation.GetComponentsInChildren<Tower>())
+        foreach (var tower in formation.GetComponentsInChildren<Tower>())
         {
             CreateTower(tower, spawnPos.transform.position + tower.transform.localPosition);
         }
@@ -103,11 +106,12 @@ public class TowerManager : MonoBehaviour
 
     private void OnWaveEnded(int wave)
     {
-        var waveRewardFormation = _vs.WaveSpawner.LevelData.Waves[wave - 1].WaveReward?.FormationPrefab;
-
-        if (waveRewardFormation != null)
+        foreach (var item in _vs.WaveSpawner.LevelData.Waves[wave - 1].WaveRewards)
         {
-            SpawnUnitFormation(waveRewardFormation);
+            if (item != null)
+            {
+                SpawnUnitFormation(item.FormationPrefab, item.FormationSpawnIndex);
+            }
         }
     }
 

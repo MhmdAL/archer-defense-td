@@ -9,6 +9,9 @@ public class AoeBlastHitEffect : TargetHitEffect
     private GameObject BlastPrefab;
 
     [SerializeField]
+    private GameObject BlastParticles;
+
+    [SerializeField]
     private float BlastDuration;
 
     public override void OnTargetHit(TargetHitData data)
@@ -19,7 +22,7 @@ public class AoeBlastHitEffect : TargetHitEffect
 
         blast.GetComponent<Blast>().AttachTimer(BlastDuration, (t) => Destroy(blast), (f =>
         {
-            var alpha = 1 - (f / BlastDuration);
+            var alpha = 0.2f - 0.2f * (f / BlastDuration);
 
             var spirte = blast.GetComponent<SpriteRenderer>();
 
@@ -27,5 +30,7 @@ public class AoeBlastHitEffect : TargetHitEffect
             color.a = alpha;
             spirte.color = color;
         }));
+
+        Instantiate(BlastParticles, data.HitPosition, Quaternion.identity);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +16,7 @@ public class Projectile : MonoBehaviour
     public Vector3 StartPosition { get; set; }
     public Vector3 TargetPosition { get; set; }
     public float Gravity { get; set; } = -175f;
+    public bool DestroyOnTargetHit { get; set; } = true;
 
     private float _curTime;
 
@@ -48,13 +48,13 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(_reached)
+        if (_reached)
         {
             return;
         }
-        
+
         var unit = other.GetComponent<Unit>();
-        if(unit != null)
+        if (unit != null)
         {
             unit.OnProjectileHit(this, other.ClosestPoint(transform.position));
         }
@@ -63,7 +63,7 @@ public class Projectile : MonoBehaviour
     public void OnTargetHit(Unit unit)
     {
         var targets = new List<Unit>();
-        Debug.Log(Radius);
+
         if (Radius > 0)
         {
             var cols = Physics2D.OverlapCircleAll(TargetPosition, Radius);
@@ -85,7 +85,17 @@ public class Projectile : MonoBehaviour
         if (targets.Any())
         {
             Owner.OnTargetHit(TargetPosition, targets, this, shotNumber);
-            Destroy(transform.root.gameObject);
+
+            if (unit != null)
+            {
+                Destroy(transform.root.gameObject);
+                _reached = true;
+            }
+            else
+            {
+                Destroy(transform.root.gameObject, 15f);
+                _reached = true;
+            }
         }
         else
         {

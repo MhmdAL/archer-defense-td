@@ -172,8 +172,12 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     private AudioSource _audioSource;
 
+    [SerializeField, Header("Audio")]
+    private AudioClip ShootSFX;
     [SerializeField]
-    private AudioProfile audioProfile;
+    private AudioClip DrawSFX;
+    [SerializeField]
+    private AudioClip HitSFX;
 
     private int _skillPoints;
     public int SkillPoints
@@ -230,9 +234,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         // Initalize cooldown timers
         InitializeValues();
 
+
         // Add modifiers that apply from the start
         AddStartingModifiers();
-
 
         monstersInRange = new List<Monster>();
         targets = new List<Monster> { null, null };
@@ -362,8 +366,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
-    public void PlayArrowShotSFX() => PlayClip(audioProfile?.bow_shoot);
-    public void PlayBowDrawSFX() => PlayClip(audioProfile?.bow_draw);
+    public void PlayShotSFX() => PlayClip(ShootSFX);
+    public void PlayBowDrawSFX() => PlayClip(DrawSFX);
+    public void PlayHitSound() => PlayClip(HitSFX);
 
     public void PlayClip(AudioClip clip)
     {
@@ -400,6 +405,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public void OnTargetHit(Vector3 targetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)
     {
+        PlayHitSound();
+
         foreach (var ohe in OnHitEffects)
         {
             ohe.OnTargetHit(new TargetHitData

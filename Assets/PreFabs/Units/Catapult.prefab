@@ -4885,7 +4885,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -197946211
   m_SortingLayer: 0
-  m_SortingOrder: -28420
+  m_SortingOrder: 30816
   m_Sprite: {fileID: 21300000, guid: e7d9062816f51f14e8bb615e3d93481e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4988,7 +4988,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 412940989
-  m_SortingOrder: -31978
+  m_SortingOrder: 27258
   m_TargetDisplay: 0
 --- !u!114 &4178017233102619427
 MonoBehaviour:
@@ -5114,7 +5114,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -197946211
   m_SortingLayer: 0
-  m_SortingOrder: 32658
+  m_SortingOrder: 26358
   m_Sprite: {fileID: 21300118, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5290,7 +5290,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -197946211
   m_SortingLayer: 0
-  m_SortingOrder: 32656
+  m_SortingOrder: 26356
   m_Sprite: {fileID: 21300000, guid: 448760b301b23364f9a9f8c8fd94919f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5374,7 +5374,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -27870887
   m_SortingLayer: 0
-  m_SortingOrder: -2878
+  m_SortingOrder: -9178
   m_Sprite: {fileID: 21300000, guid: 3b382b6226c30814fb5b63df9b4df3d7, type: 3}
   m_Color: {r: 0, g: 1, b: 0.751724, a: 0.166}
   m_FlipX: 0
@@ -5493,7 +5493,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4178017233096030683}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -30.1, y: 6.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5510,7 +5510,7 @@ Transform:
   - {fileID: 6721521168356500055}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &4178017233102638459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5532,7 +5532,7 @@ MonoBehaviour:
   <OnHitEffects>k__BackingField:
   - {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4, type: 2}
   - {fileID: 11400000, guid: bf8153ced7a8db848b7a29904a13473f, type: 2}
-  <SecondaryTargetCount>k__BackingField: 0
+  <SecondaryTargetCount>k__BackingField: 3
   upgradeAnimationPrefab: {fileID: 120230, guid: bd1d4bf1b8595a146814cfafa007f638,
     type: 3}
   archerShotParticle: {fileID: 117056, guid: dc463a3f2c8479548a32d5c73769c430, type: 3}
@@ -5560,7 +5560,9 @@ MonoBehaviour:
   shotNumber: 0
   FocusIndicatorArrow: {fileID: 3517021736013565780}
   isInCombat: 0
-  audioProfile: {fileID: 11400000, guid: 750c3e50e43e10748a8601eed31709d4, type: 2}
+  ShootSFX: {fileID: 8300000, guid: 0dc3b8c83866a16468c095a2b36d4337, type: 3}
+  DrawSFX: {fileID: 0}
+  HitSFX: {fileID: 8300000, guid: f7681e2e2b1333145a8ad59dea68e130, type: 3}
 --- !u!212 &4178017233116611305
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5601,7 +5603,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 32658
+  m_SortingOrder: 26358
   m_Sprite: {fileID: 21300000, guid: 01aa898c8aafa7b42aff46d639c01e33, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5704,7 +5706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c72c1285b66d04bb9ce9752d85aa20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 30
+  moveSpeed: 10
   hasFocus: 0
 --- !u!82 &3921826660361468243
 AudioSource:
@@ -6072,7 +6074,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 412940989
-  m_SortingOrder: -31978
+  m_SortingOrder: 27258
   m_TargetDisplay: 0
 --- !u!114 &4178017233102628687
 MonoBehaviour:
@@ -6170,7 +6172,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4178017233712052882}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.07, y: 1.88, z: 0}
   m_LocalScale: {x: 12, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6218,7 +6220,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 32658
+  m_SortingOrder: 26358
   m_Sprite: {fileID: 21300000, guid: bbd9b0ebe3fbcd5438a03c549abd0fd1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

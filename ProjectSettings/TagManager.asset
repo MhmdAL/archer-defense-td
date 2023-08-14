@@ -22,8 +22,8 @@ TagManager:
   - 
   - 
   - Archer
-  - 
-  - 
+  - Stone
+  - Enemy
   - 
   - 
   - 
@@ -48,6 +48,9 @@ TagManager:
   - name: Background
     uniqueID: 4250941897
     locked: 0
+  - name: BackgroundProps
+    uniqueID: 1145342779
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
@@ -56,4 +59,7 @@ TagManager:
     locked: 0
   - name: Layer 3
     uniqueID: 4189426099
+    locked: 0
+  - name: particles
+    uniqueID: 1976970705
     locked: 0

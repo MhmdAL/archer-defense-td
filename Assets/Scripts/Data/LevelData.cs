@@ -15,7 +15,7 @@ public class LevelData : ScriptableObject
 
     public float DefaultSpawnDelay;
 
-    public GameObject StartingFormationPrefab;
+    public List<FormationSpawn> StartingFormations;
 }
 
 [Serializable]
@@ -23,13 +23,14 @@ public class WaveData
 {
     [FormerlySerializedAs("WaveComponents")]
     public List<Platoon> Platoons;
-    public WaveReward WaveReward;
+    public List<FormationSpawn> WaveRewards;
 }
 
 [Serializable]
-public class WaveReward
+public class FormationSpawn
 {
     public GameObject FormationPrefab;
+    public int FormationSpawnIndex;
 }
 
 [Serializable]
