@@ -18,7 +18,7 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
 
 public class TargetHitData
 {
-    public Tower Owner { get; set; }
+    public IShooter Owner { get; set; }
     public Vector3 HitPosition { get; set; }
     public float HitRadius { get; set; }
     public List<Unit> Targets { get; set; }

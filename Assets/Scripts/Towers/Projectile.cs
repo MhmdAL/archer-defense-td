@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     public Vector3 StartPosition { get; set; }
     public Vector3 TargetPosition { get; set; }
     public float Gravity { get; set; } = -175f;
-    public bool DestroyOnTargetHit { get; set; } = true;
+    public float LingerTime { get; set; } = 2f;
 
     private float _curTime;
 
@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
 
         if (Vector3.Magnitude(transform.position - TargetPosition) < .5f)
         {
-            OnTargetHit(null);
+            OnTargetHit(null, TargetPosition);
         }
     }
 
@@ -60,7 +60,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void OnTargetHit(Unit unit)
+    public void OnTargetHit(Unit unit, Vector3 hitPosition)
     {
         var targets = new List<Unit>();
 
@@ -84,7 +84,7 @@ public class Projectile : MonoBehaviour
 
         if (targets.Any())
         {
-            Owner.OnTargetHit(TargetPosition, targets, this, shotNumber);
+            Owner.OnTargetHit(hitPosition, targets, this, shotNumber);
 
             if (unit != null)
             {
@@ -93,15 +93,39 @@ public class Projectile : MonoBehaviour
             }
             else
             {
-                Destroy(transform.root.gameObject, 15f);
+                Destroy(transform.root.gameObject, LingerTime);
                 _reached = true;
             }
         }
         else
         {
-            Destroy(transform.root.gameObject, 60f);
+            Destroy(transform.root.gameObject, LingerTime);
             _reached = true;
         }
+    }
+
+    public static Projectile Fire(ProjectileSpawnData data)
+    {
+        var projectile = Instantiate(data.Prefab, data.SpawnPosition, Quaternion.identity);
+
+        var dir = data.TargetPosition - projectile.transform.position;
+
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        projectile.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+
+        projectile.Owner = data.Owner;
+        projectile.StartPosition = data.SpawnPosition;
+        projectile.TargetPosition = data.TargetPosition;
+
+        projectile.Radius = data.Radius;
+        projectile.Duration = data.Duration;
+
+        projectile.LingerTime = data.LingerTime;
+
+        projectile.Damage = data.Damage;
+        projectile.ArmorPen = data.ArmorPen;
+
+        return projectile;
     }
 
     private void MoveParabola()
@@ -134,4 +158,27 @@ public class Projectile : MonoBehaviour
 
         return new Vector2(x, y);
     }
+}
+
+public class ProjectileSpawnData
+{
+    public ProjectileSpawnData(IShooter owner, Projectile prefab, Vector3 spawnPosition, Vector3 targetPosition)
+    {
+        Owner = owner;
+        Prefab = prefab;
+        SpawnPosition = spawnPosition;
+        TargetPosition = targetPosition;
+    }
+
+    public IShooter Owner { get; set; }
+    public Projectile Prefab { get; set; }
+    public Vector3 SpawnPosition { get; set; }
+    public Vector3 TargetPosition { get; set; }
+
+    public float LingerTime { get; set; }
+
+    public float Damage { get; set; }
+    public float ArmorPen { get; set; }
+    public float Radius { get; set; }
+    public float Duration { get; set; }
 }

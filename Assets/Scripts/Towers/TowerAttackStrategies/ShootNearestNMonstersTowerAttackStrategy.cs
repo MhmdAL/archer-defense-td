@@ -44,13 +44,6 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         projectile.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
 
         Projectile bullet = projectile.GetComponentInChildren<Projectile>();
-        if (target != null)
-        {
-            if (ValueStore.Instance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
-            {
-                bullet.isAboutToKill = true;
-            }
-        }
 
         var targetDir = (target.CurrentPath.waypoints[target.CurrentWaypoint + 1].transform.position - target.transform.position).normalized;
 
@@ -66,6 +59,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         bullet.StartPosition = data.Owner.transform.position;
         bullet.TargetPosition = targetPosition;
         bullet.Duration = data.Owner.bulletSpeed;
+        bullet.LingerTime = data.Owner.bulletLinger;
 
         data.Owner.isInCombat = true;
         data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown);
@@ -73,5 +67,13 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         data.Owner.AttackCooldownTimer.Restart(data.Owner.FullCooldown);
 
         data.Owner.PlayShotSFX();
+
+        if (target != null)
+        {
+            if (ValueStore.Instance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
+            {
+                bullet.isAboutToKill = true;
+            }
+        }
     }
 }

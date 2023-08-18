@@ -33,6 +33,8 @@ public class WaveSpawner : MonoBehaviour
             EnemiesRemainingInCurrentWave--;
         }
 
+        Debug.Log("WaveSpawner: EnemyDied");
+
         if (EnemiesRemainingInCurrentWave == 0)
         {
             WaveEnded?.Invoke(CurrentWave);

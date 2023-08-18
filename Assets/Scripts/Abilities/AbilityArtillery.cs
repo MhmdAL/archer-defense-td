@@ -21,6 +21,7 @@ public class AbilityArtillery : Ability, IShooter
 
     private const float ArtilleryBaseDamage = 15;
 
+    public List<TargetHitEffect> OnHitEffects { get; set; }
 
     public override void UpdateReadiness()
     {

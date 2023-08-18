@@ -14,6 +14,8 @@ public class Test : MonoBehaviour, IShooter
 
     private float _t;
 
+    public List<TargetHitEffect> OnHitEffects { get; set; }
+
     private void Update()
     {
         _t += Time.deltaTime;

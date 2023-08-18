@@ -109,6 +109,7 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public float baseUpgradeCost;
     public float bulletSpeed;
+    public float bulletLinger;
     public float bulletRadius;
 
     public Sprite icon;
@@ -220,6 +221,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
             }
         }
     }
+
+    public bool HasFocus { get; set; }
 
     private void Awake()
     {
@@ -931,6 +934,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public void Focus()
     {
+        HasFocus = true;
+
         circle.SetActive(true);
         // cooldownBarParent.SetActive(true);
 
@@ -941,6 +946,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
 
     public void UnFocus()
     {
+        HasFocus = false;
+
         circle.SetActive(false);
         // cooldownBarParent.SetActive(false);
 

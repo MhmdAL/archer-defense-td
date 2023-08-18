@@ -123,6 +123,8 @@ public abstract class Unit : MonoBehaviour
                 });
             });
 
+            GetComponentsInChildren<Collider2D>().ToList().ForEach(x => x.enabled = false);
+
             Died?.Invoke();
 
             // var pool = Instantiate(HitParticles, transform.position, Quaternion.identity);
@@ -141,7 +143,7 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void OnProjectileHit(Projectile p, Vector2 hitpoint)
     {
-        p.OnTargetHit(this);
+        p.OnTargetHit(this, hitpoint);
 
         // Instantiate(HitParticles, transform.position, Quaternion.identity);
     }

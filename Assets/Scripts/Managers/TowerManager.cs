@@ -52,7 +52,7 @@ public class TowerManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && FindObjectOfType<BackgroundScaler>().HasFocus)
         {
             CreateTower(untrainedArcherPrefab, _vs.CurrentLevel.FormationSpawns.GetSpawnPlatform(0).transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 10);
         }

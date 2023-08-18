@@ -2,15 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(IFocusable))]
 public class Movable : MonoBehaviour
 {
     public float moveSpeed = 5f;
 
     public bool hasFocus = false;
 
+    private IFocusable _target;
+
+    private void Awake()
+    {
+        _target = GetComponent<IFocusable>();
+    }
+
     private void Update()
     {
-        if (hasFocus)
+        if (_target.HasFocus)
         {
             // Get input from WASD keys
             float horizontalInput = Input.GetAxis("Horizontal");

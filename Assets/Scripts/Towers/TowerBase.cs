@@ -23,6 +23,8 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
 
     public Animator anim;
 
+    public bool HasFocus { get; set; }
+
     void Start()
     {
         originalPos = transform.position;
@@ -89,11 +91,15 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
 
     public void Focus()
     {
+        HasFocus = true;
+
         SetState(TowerBaseState.Clicked);
     }
 
     public void UnFocus()
     {
+        HasFocus = false;
+
         SetState(TowerBaseState.NonClicked);
     }
 }
