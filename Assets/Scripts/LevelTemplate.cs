@@ -13,6 +13,7 @@ public class LevelTemplate : MonoBehaviour
     public GameObject TowerBasesRoot;
     public GameObject PathsRoot;
     public FormationSpawns FormationSpawns;
+    public GameObject PotionSpawnBounds;
 
     public List<TowerBase> TowerBases { get; set; }
     public List<Path> Paths { get; set; }

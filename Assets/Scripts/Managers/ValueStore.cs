@@ -50,6 +50,7 @@ public class ValueStore : MonoBehaviour
     public GameUIController uiControllerInstance;
     public UserClickHandler userClickHandlerInstance;
     public WaveSpawner WaveSpawner;
+    public PotionSpawner PotionSpawner;
 
     public TextMeshProUGUI levelPopUpText;
 
@@ -170,6 +171,7 @@ public class ValueStore : MonoBehaviour
         CurrentLevel = Instantiate(levelPrefab);
 
         WaveSpawner.Reset(CurrentLevel.LevelData);
+        PotionSpawner.Reset(CurrentLevel.PotionSpawnBounds);
 
         Silver = CurrentLevel.LevelData.StartingSilver;
         Lives = CurrentLevel.LevelData.StartingLives;

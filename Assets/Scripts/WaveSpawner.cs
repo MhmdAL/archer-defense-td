@@ -41,11 +41,18 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
+
     public void SpawnNextWave()
     {
+        if(CurrentWave >= LevelData.Waves.Count)
+        {
+            Debug.LogWarning("Max wave reached, can't start next wave");
+            return;
+        }
+
         CurrentWave++;
 
-        EnemiesRemainingInCurrentWave = LevelData.Waves[CurrentWave - 1].Platoons.Sum(x => x.Squads.Sum(y => y.Count));
+        EnemiesRemainingInCurrentWave += LevelData.Waves[CurrentWave - 1].Platoons.Sum(x => x.Squads.Sum(y => y.Count));
 
         WaveStarted?.Invoke(CurrentWave);
 

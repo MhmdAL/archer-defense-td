@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine.UI;
 using UnityTimer;
+using EPOOutline;
 
 public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable, IShooter
 {
@@ -147,6 +148,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     [SerializeField]
     protected Animator animator;
 
+    private Outlinable _outlinable;
+
+
     public int consecutiveShots;
     public int shotNumber;
 
@@ -222,6 +226,9 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         }
     }
 
+    [SerializeField]
+    private LineRenderer lineRenderer;
+
     public bool HasFocus { get; set; }
 
     private void Awake()
@@ -250,6 +257,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         anim = GetComponent<Animator>();
 
         _audioSource = GetComponent<AudioSource>();
+
+        _outlinable = GetComponentInChildren<Outlinable>();
     }
 
     public virtual void InitializeValues()
@@ -930,11 +939,37 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
         rangeCircleScale.x = AR.Value / 2;
 
         rangeCircleTransform.localScale = rangeCircleScale;
+
+        DrawCircle();
+    }
+
+    private void DrawCircle()
+    {
+        lineRenderer.positionCount = 501;
+
+        for(int currentStep = 0; currentStep <= 500; currentStep++)
+        {
+            float circProgress = (float) currentStep / 500;
+
+            float currentRadian = circProgress * 2 * Mathf.PI;
+
+            float xScaled = Mathf.Cos(currentRadian);
+            float yScaled = Mathf.Sin(currentRadian);
+
+            float x = xScaled * AR.Value;
+            float y = yScaled * AR.Value;
+
+            var curPos = new Vector3(x,y,0);
+
+            lineRenderer.SetPosition(currentStep, curPos + transform.position);
+        }
     }
 
     public void Focus()
     {
         HasFocus = true;
+
+        _outlinable.OutlineParameters.Enabled = true;
 
         circle.SetActive(true);
         // cooldownBarParent.SetActive(true);
@@ -947,6 +982,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     public void UnFocus()
     {
         HasFocus = false;
+
+        _outlinable.OutlineParameters.Enabled = false;
 
         circle.SetActive(false);
         // cooldownBarParent.SetActive(false);

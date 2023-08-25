@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EPOOutline;
 using UnityEngine;
 using UnityTimer;
 
@@ -17,14 +18,18 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
     private List<TargetHitEffect> _onHitEffects;
     public List<TargetHitEffect> OnHitEffects => _onHitEffects;
 
+    private Outlinable _outlinable;
+
     private void Awake()
     {
+        _outlinable = GetComponentInChildren<Outlinable>();
+
         AttackTimer = this.AttachTimer(0, OnAttackTimerElapsed, isDoneWhenElapsed: false);
     }
 
     private void Update()
     {
-        if (HasFocus && Input.GetKeyDown(KeyCode.Space) && AttackTimer.GetTimeRemaining() <= 0)
+        if (HasFocus && Input.GetKeyDown(KeyCode.F) && AttackTimer.GetTimeRemaining() <= 0)
         {
             Attack();
         }
@@ -59,6 +64,8 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
     {
         HasFocus = true;
 
+        _outlinable.OutlineParameters.Enabled = true;
+
         FocusIndicator.SetActive(true);
     }
 
@@ -66,6 +73,8 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
     {
         HasFocus = false;
 
+        _outlinable.OutlineParameters.Enabled = false;
+        
         FocusIndicator.SetActive(false);
     }
 

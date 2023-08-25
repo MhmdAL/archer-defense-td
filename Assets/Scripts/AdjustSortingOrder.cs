@@ -7,26 +7,40 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class AdjustSortingOrder : MonoBehaviour
 {
-    private List<SortingOrderOffsetData> _itemsToBeSorted;
+    [SerializeField]
+    private List<SortingOrderOffsetData> itemsToBeSorted;
 
-    private void Start()
+    private void Awake()
     {
-        _itemsToBeSorted = new List<SortingOrderOffsetData>();
+        LoadCurrentObjectSprites();
+    }
+
+    private void OnEnable()
+    {
+        LoadCurrentObjectSprites();
+    }
+
+    private void LoadCurrentObjectSprites()
+    {
+        if (itemsToBeSorted.Any())
+        {
+            return;
+        }
+
+        itemsToBeSorted = new List<SortingOrderOffsetData>();
 
         foreach (var item in transform.GetComponentsInChildren<SpriteRenderer>(true).ToList())
         {
-            _itemsToBeSorted.Add(new SortingOrderOffsetData
+            itemsToBeSorted.Add(new SortingOrderOffsetData
             {
                 SpriteRenderer = item,
                 SortingOrderOffset = item.sortingOrder
             });
-
-            // print(item.name);
         }
 
         foreach (var item in transform.GetComponentsInChildren<Canvas>(true).ToList())
         {
-            _itemsToBeSorted.Add(new SortingOrderOffsetData
+            itemsToBeSorted.Add(new SortingOrderOffsetData
             {
                 Canvas = item,
                 SortingOrderOffset = item.sortingOrder
@@ -41,7 +55,7 @@ public class AdjustSortingOrder : MonoBehaviour
 
     public void Adjust()
     {
-        foreach (var item in _itemsToBeSorted)
+        foreach (var item in itemsToBeSorted)
         {
             if (item.SpriteRenderer != null)
             {

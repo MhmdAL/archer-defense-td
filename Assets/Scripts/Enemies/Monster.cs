@@ -5,6 +5,7 @@ using System.Linq;
 using System.Diagnostics;
 using UnityTimer;
 using System;
+using EPOOutline;
 
 public abstract class Monster : Unit, IModifiable
 {
