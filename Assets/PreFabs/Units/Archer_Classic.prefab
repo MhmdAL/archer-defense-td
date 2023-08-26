@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2050
+  m_SortingOrder: 0
   m_Sprite: {fileID: -2415272506235393387, guid: 74a56461a7c300d4da149aa6e2f90e72,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -175,7 +175,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2051
+  m_SortingOrder: 1
   m_Sprite: {fileID: 3907900490378134796, guid: a5cd9a98fe9f39a4790087e2a827389f,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -273,7 +273,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2051
+  m_SortingOrder: 1
   m_Sprite: {fileID: -7451953295746623981, guid: ef1b1625664d66746afc115a84128a2b,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -372,7 +372,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2049
+  m_SortingOrder: -1
   m_Sprite: {fileID: 3907900490378134796, guid: a5cd9a98fe9f39a4790087e2a827389f,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -470,7 +470,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2052
+  m_SortingOrder: 2
   m_Sprite: {fileID: -7132924394741762074, guid: 91288576a6135934d8ec4ebc6fec5464,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -568,7 +568,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2052
+  m_SortingOrder: 2
   m_Sprite: {fileID: 8755791251197083157, guid: d981f49262194a045b0c726adaadf847,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -666,7 +666,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2051
+  m_SortingOrder: 1
   m_Sprite: {fileID: 5819186464137913789, guid: e6c9ac52a6b5c7a4da77bf5596c09efc,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -764,7 +764,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2049
+  m_SortingOrder: -1
   m_Sprite: {fileID: -415446080585258355, guid: 10e77d711a4372a4b8679362511b9d01,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -856,13 +856,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5042302, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: a92b781a69662904baca1b1dbbe5f47a, type: 2}
+    - target: {fileID: 5042302, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6177714, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: a92b781a69662904baca1b1dbbe5f47a, type: 2}
     - target: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
       value: 3050
+      objectReference: {fileID: 0}
+    - target: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1976970705
       objectReference: {fileID: 0}
     - target: {fileID: 21257874, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
@@ -878,15 +898,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22316416, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
-      value: 2050
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22321388, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
-      value: 2050
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 754566040, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
-      value: 2050
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 144801915359337531, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
@@ -1296,7 +1316,7 @@ PrefabInstance:
     - target: {fileID: 5060972671750894972, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2050
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
@@ -1306,13 +1326,63 @@ PrefabInstance:
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.size
-      value: 16
+      value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[2].Canvas
+      value: 
+      objectReference: {fileID: 6360821461243609353}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[3].Canvas
+      value: 
+      objectReference: {fileID: 6360821461243616357}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[4].Canvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[5].Canvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[6].Canvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[7].Canvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[10].Canvas
+      value: 
+      objectReference: {fileID: 6360821461243609353}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[11].Canvas
+      value: 
+      objectReference: {fileID: 6360821461243616357}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[12].Canvas
+      value: 
+      objectReference: {fileID: 6360821461243616357}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[13].Canvas
+      value: 
+      objectReference: {fileID: 6360821461243616357}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[14].Canvas
       value: 
-      objectReference: {fileID: 6360821461243609353}
+      objectReference: {fileID: 6360821461243616357}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[15].Canvas
@@ -1322,111 +1392,136 @@ PrefabInstance:
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[0].SpriteRenderer
       value: 
-      objectReference: {fileID: 6360821461242585609}
+      objectReference: {fileID: 6360821460498782845}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[1].SpriteRenderer
       value: 
-      objectReference: {fileID: 6360821461242587621}
+      objectReference: {fileID: 2056048780886370739}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[2].SpriteRenderer
       value: 
-      objectReference: {fileID: 6360821461242578807}
+      objectReference: {fileID: 3687587907965368186}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[3].SpriteRenderer
       value: 
-      objectReference: {fileID: 6360821461242582833}
+      objectReference: {fileID: 7790841752841046701}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[4].SpriteRenderer
       value: 
-      objectReference: {fileID: 6360821460498782845}
+      objectReference: {fileID: 5300670007940172824}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[5].SpriteRenderer
       value: 
-      objectReference: {fileID: 2056048780886370739}
+      objectReference: {fileID: 403906395153816501}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[6].SpriteRenderer
       value: 
-      objectReference: {fileID: 3687587907965368186}
+      objectReference: {fileID: 4000874095369580970}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[7].SpriteRenderer
       value: 
-      objectReference: {fileID: 7790841752841046701}
+      objectReference: {fileID: 5953931301350102332}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[8].SpriteRenderer
       value: 
-      objectReference: {fileID: 5300670007940172824}
+      objectReference: {fileID: 3849846412215138343}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[9].SpriteRenderer
       value: 
-      objectReference: {fileID: 403906395153816501}
+      objectReference: {fileID: 2196070784737488025}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[10].SpriteRenderer
       value: 
-      objectReference: {fileID: 4000874095369580970}
+      objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[11].SpriteRenderer
       value: 
-      objectReference: {fileID: 5953931301350102332}
+      objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[12].SpriteRenderer
       value: 
-      objectReference: {fileID: 3849846412215138343}
+      objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[13].SpriteRenderer
       value: 
-      objectReference: {fileID: 2196070784737488025}
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[0].SortingOrderOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[1].SortingOrderOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[2].SortingOrderOffset
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[3].SortingOrderOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+        type: 3}
+      propertyPath: itemsToBeSorted.Array.data[4].SortingOrderOffset
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[5].SortingOrderOffset
-      value: 2050
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[6].SortingOrderOffset
-      value: 2051
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[7].SortingOrderOffset
-      value: 2052
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[8].SortingOrderOffset
-      value: 2052
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[9].SortingOrderOffset
-      value: 2049
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[10].SortingOrderOffset
-      value: 2051
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[11].SortingOrderOffset
-      value: 2051
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[12].SortingOrderOffset
-      value: 2049
+      value: 2050
       objectReference: {fileID: 0}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
@@ -1458,7 +1553,8 @@ PrefabInstance:
       propertyPath: Facial
       value: 
       objectReference: {fileID: 7790841752841046701}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 21265388, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
 --- !u!212 &2196070784737488025 stripped
 SpriteRenderer:
@@ -1475,30 +1571,6 @@ Transform:
 --- !u!212 &6360821460498782845 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 754566040, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 6360821461230279141}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6360821461242578807 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21257874, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 6360821461230279141}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6360821461242582833 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 6360821461230279141}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6360821461242585609 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21265388, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 6360821461230279141}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6360821461242587621 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21262336, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
     type: 3}
   m_PrefabInstance: {fileID: 6360821461230279141}
   m_PrefabAsset: {fileID: 0}

@@ -10,6 +10,7 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
     public Timer AttackTimer;
     public float AttackCooldown = 1;
     public float AttackDamage = 10;
+    public float ProjectileDuration = 1f;
     public Projectile BoltPrefab;
 
     public bool HasFocus { get; set; }
@@ -54,7 +55,7 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
         Projectile.Fire(new ProjectileSpawnData(this, BoltPrefab, transform.position, targetPosition)
         {
             Radius = 0,
-            Duration = .3f,
+            Duration = ProjectileDuration,
             Damage = AttackDamage,
             LingerTime = 2f
         });
