@@ -15,12 +15,16 @@ public class UserClickHandler : MonoBehaviour
     private CustomStandaloneInputModule _inputModule;
     private Camera _mainCamera;
     private RectTransform _selectionImageRectTransform;
+    
+    private CanvasScaler _canvasScaler;
 
     private void Awake()
     {
         _inputModule = FindObjectOfType<CustomStandaloneInputModule>();
         _mainCamera = Camera.main;
         _selectionImageRectTransform = SelectionImage.GetComponent<RectTransform>();
+
+        _canvasScaler = SelectionImage.canvas.GetComponent<CanvasScaler>();
     }
 
     private Vector3 initialSelectPosition;
@@ -48,9 +52,11 @@ public class UserClickHandler : MonoBehaviour
             var start = initialSelectPosition.ToWorldPosition(_mainCamera);
             var end = finalSelectPosition.ToWorldPosition(_mainCamera);
 
+            var dir = end - start;
+
             var hits = new List<Collider2D>();
 
-            if (start == end)
+            if (dir.magnitude < 0.2f)
             {
                 hits = new List<Collider2D> { Physics2D.Raycast(start, Vector2.one).collider };
             }
@@ -59,7 +65,7 @@ public class UserClickHandler : MonoBehaviour
                 hits = Physics2D.OverlapAreaAll(start, end).ToList();
             }
 
-            if (!hits.Any() || _inputModule.IsPointerOverGameObject<GraphicRaycaster>())
+            if (!hits.Any() || _inputModule.IsPointerOverGameObject<GraphicRaycaster>()) // is mouse over ui? if so don't process.
             {
                 return;
             }
@@ -116,8 +122,13 @@ public class UserClickHandler : MonoBehaviour
         _selectionImageRectTransform.position = initialSelectPosition;
 
         _selectionImageRectTransform.pivot = new Vector2((Mathf.Sign(initialWorldPos.x - finalWorldPos.x) + 1) / 2,
-        (Mathf.Sign(initialWorldPos.y - finalWorldPos.y) + 1) / 2);
+            (Mathf.Sign(initialWorldPos.y - finalWorldPos.y) + 1) / 2);
 
-        _selectionImageRectTransform.sizeDelta = (maxScreen - minScreen) * 1.45f; // TODO: figure out how to get this value
+        var sizeDelta = (maxScreen - minScreen);
+
+        // TODO: this only works when screen aspect and ref aspect are equal atm.
+        sizeDelta.Scale(new Vector2(_canvasScaler.referenceResolution.x / Screen.width, _canvasScaler.referenceResolution.y / Screen.height));
+
+        _selectionImageRectTransform.sizeDelta = sizeDelta;
     }
 }

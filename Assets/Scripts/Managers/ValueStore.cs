@@ -167,11 +167,19 @@ public class ValueStore : MonoBehaviour
             Destroy(CurrentLevel.gameObject);
         }
 
-        var levelPrefab = LevelPrefabs.First(x => x.name == $"Level{levelId}");
+        var levelPrefab = LevelPrefabs.First(x => x.LevelId == levelId);
         CurrentLevel = Instantiate(levelPrefab);
 
         WaveSpawner.Reset(CurrentLevel.LevelData);
-        PotionSpawner.Reset(CurrentLevel.PotionSpawnBounds);
+
+        if (CurrentLevel.SpawnPotions)
+        {
+            PotionSpawner.Reset(CurrentLevel.PotionSpawnBounds);
+        }
+        else
+        {
+            PotionSpawner.SetActive(false);
+        }
 
         Silver = CurrentLevel.LevelData.StartingSilver;
         Lives = CurrentLevel.LevelData.StartingLives;

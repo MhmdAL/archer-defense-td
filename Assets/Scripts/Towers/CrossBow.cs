@@ -5,7 +5,6 @@ using UnityTimer;
 
 public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
 {
-    public GameObject FocusIndicator;
     public SpriteRenderer SpearSprite;
     public Timer AttackTimer;
     public float AttackCooldown = 1;
@@ -66,8 +65,6 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
         HasFocus = true;
 
         _outlinable.OutlineParameters.Enabled = true;
-
-        FocusIndicator.SetActive(true);
     }
 
     public void UnFocus()
@@ -75,8 +72,6 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
         HasFocus = false;
 
         _outlinable.OutlineParameters.Enabled = false;
-        
-        FocusIndicator.SetActive(false);
     }
 
     public void OnTargetHit(Vector3 TargetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)

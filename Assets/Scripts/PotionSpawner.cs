@@ -49,6 +49,14 @@ public class PotionSpawner : MonoBehaviour
         StartCoroutine(Spawn());
     }
 
+    public void SetActive(bool active)
+    {
+        if (!active)
+        {
+            StopAllCoroutines();
+        }
+    }
+
     private IEnumerator Spawn()
     {
         yield return new WaitForSeconds(10);
