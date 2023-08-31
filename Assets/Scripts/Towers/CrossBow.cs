@@ -84,6 +84,8 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
                 HitRadius = 0,
                 Owner = this,
                 Projectile = p,
+                Damage = p.Damage,
+                ArmorPen = p.ArmorPen,
                 Targets = unitsHit
             });
         }

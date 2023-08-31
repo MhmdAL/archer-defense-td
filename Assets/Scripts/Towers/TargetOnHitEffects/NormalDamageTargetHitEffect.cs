@@ -10,7 +10,7 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
         {
             foreach (var target in data.Targets)
             {
-                target.Damage(data.Projectile.Damage, data.Projectile.ArmorPen, DamageSource.Normal, data.Owner);
+                target.Damage(data.Damage, data.ArmorPen, DamageSource.Normal, data.Owner);
             }
         }
     }
@@ -22,5 +22,8 @@ public class TargetHitData
     public Vector3 HitPosition { get; set; }
     public float HitRadius { get; set; }
     public List<Unit> Targets { get; set; }
+
+    public float Damage { get; set; }
+    public float ArmorPen { get; set; }
     public Projectile Projectile { get; set; }
 }

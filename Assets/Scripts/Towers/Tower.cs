@@ -425,6 +425,8 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
             {
                 Owner = this,
                 Projectile = p,
+                Damage = p.Damage,
+                ArmorPen = p.ArmorPen,
                 HitPosition = targetPosition,
                 HitRadius = bulletRadius,
                 Targets = unitsHit

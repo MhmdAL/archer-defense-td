@@ -126,7 +126,7 @@ public class UserClickHandler : MonoBehaviour
 
         var sizeDelta = (maxScreen - minScreen);
 
-        // TODO: this only works when screen aspect and ref aspect are equal atm.
+        // TODO: this only works when screen aspect ratio and reference (in canvas) aspect ratio are equal atm.
         sizeDelta.Scale(new Vector2(_canvasScaler.referenceResolution.x / Screen.width, _canvasScaler.referenceResolution.y / Screen.height));
 
         _selectionImageRectTransform.sizeDelta = sizeDelta;

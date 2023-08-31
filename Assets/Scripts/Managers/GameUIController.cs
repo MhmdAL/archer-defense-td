@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -81,6 +82,11 @@ public class GameUIController : MonoBehaviour
     [field: SerializeField]
     private BackgroundScaler background { get; set; }
 
+    [SerializeField]
+    private Image fadeInOut;
+    [SerializeField]
+    private float fadeInOutDuration;
+
     private TowerManager _towerManager;
     private ValueStore _vs;
     private ArcherDeployMenu _adm;
@@ -104,6 +110,20 @@ public class GameUIController : MonoBehaviour
         _vs.WaveSpawner.WaveStarted += OnWaveStarted;
         _vs.WaveSpawner.WaveEnded += OnWaveEnded;
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
+
+        _vs.LevelStarted += OnLevelStarted;
+    }
+
+    private void OnLevelStarted()
+    {
+        FadeIn();
+    }
+
+    private void FadeIn()
+    {
+        fadeInOut.SetAlpha(1f);
+
+        fadeInOut.DOFade(0f, fadeInOutDuration);
     }
 
     #region Tower Actions
@@ -461,5 +481,7 @@ public class GameUIController : MonoBehaviour
         _vs.LivesChanged -= OnLivesChanged;
 
         _vs.userClickHandlerInstance.ObjectClicked -= OnObjectClicked;
+
+        _vs.LevelStarted -= OnLevelStarted;
     }
 }
