@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityTimer;
 using EPOOutline;
 
-public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker, IFocusable, IShooter
+public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 {
     public event Action<Tower> SkillPointsChanged;
     public event Action SkillUpgraded;
@@ -406,22 +406,22 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     {
         foreach (var ohe in OnHitEffects)
         {
-            ohe.OnTargetHit(new TargetHitData
+            ohe.OnTargetHit(new AttackData
             {
                 Owner = this,
                 Projectile = p,
-                Targets = new List<Unit> { target }
+                Targets = new List<IProjectileTarget> { target }
             });
         }
     }
 
-    public void OnTargetHit(Vector3 targetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)
+    public void OnTargetHit(Vector3 targetPosition, List<IProjectileTarget> unitsHit, Projectile p, int shotNumber)
     {
         PlayHitSound();
 
         foreach (var ohe in OnHitEffects)
         {
-            ohe.OnTargetHit(new TargetHitData
+            ohe.OnTargetHit(new AttackData
             {
                 Owner = this,
                 Projectile = p,
@@ -999,17 +999,4 @@ public class Tower : MonoBehaviour, IPointerClickHandler, IModifiable, IAttacker
     {
         ModifierEnded -= OnModifierEnded;
     }
-
-    #region IPointerClickHandler implementation
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        // ValueStore vs = ValueStore.sharedInstance;
-        // vs.lastClickedTower = this;
-        // vs.OnClick(ClickType.Tower, gameObject);
-
-        // _vs.towerManagerInstance.OnTowerClicked(this);
-    }
-
-    #endregion
 }

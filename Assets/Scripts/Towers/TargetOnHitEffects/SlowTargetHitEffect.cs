@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class SlowTargetHitEffect : TargetHitEffect
 {
-    public override void OnTargetHit(TargetHitData data)
+    public override void OnTargetHit(AttackData data)
     {
         if (data.Targets != null)
         {

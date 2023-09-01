@@ -53,16 +53,28 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        var unit = other.GetComponent<Unit>();
-        if (unit != null)
+        if (other.TryGetComponent<IProjectileTarget>(out var target))
         {
-            unit.OnProjectileHit(this, other.ClosestPoint(transform.position));
+            target.OnProjectileHit(this, other.ClosestPoint(transform.position));
         }
     }
 
-    public void OnTargetHit(Unit unit, Vector3 hitPosition)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        var targets = new List<Unit>();
+        if (_reached)
+        {
+            return;
+        }
+
+        if (other.collider.TryGetComponent<IProjectileTarget>(out var target))
+        {
+            target.OnProjectileHit(this, other.collider.ClosestPoint(transform.position));
+        }
+    }
+
+    public void OnTargetHit(IProjectileTarget target, Vector3 hitPosition)
+    {
+        var targets = new List<IProjectileTarget>();
 
         if (Radius > 0)
         {
@@ -70,23 +82,23 @@ public class Projectile : MonoBehaviour
 
             foreach (var c in cols)
             {
-                var u = c.GetComponent<Unit>();
+                var u = c.GetComponent<IProjectileTarget>();
                 if (u != null)
                 {
                     targets.Add(u);
                 }
             }
         }
-        else if (unit != null)
+        else if (target != null)
         {
-            targets.Add(unit);
+            targets.Add(target);
         }
 
         if (targets.Any())
         {
             Owner.OnTargetHit(hitPosition, targets, this, shotNumber);
 
-            if (unit != null)
+            if (target != null)
             {
                 Destroy(transform.root.gameObject);
                 _reached = true;

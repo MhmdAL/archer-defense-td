@@ -45,10 +45,14 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         Projectile bullet = projectile.GetComponentInChildren<Projectile>();
 
-        var targetDir = (target.CurrentPath.waypoints[target.CurrentWaypoint + 1].transform.position - target.transform.position).normalized;
 
-        var randomOffset = Random.Range(-1, 1f);
-        var targetPosition = target.transform.position + targetDir * (1f * target.Movespeed.Value);
+        var targetPosition = target.transform.position;
+
+        if (target.HasPathAssigned)
+        {
+            var targetDir = (target.CurrentPath.waypoints[target.CurrentWaypoint + 1].transform.position - target.transform.position).normalized;
+            targetPosition += targetDir * (1f * target.Movespeed.Value);
+        }
 
         //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
         bullet.Owner = data.Owner;

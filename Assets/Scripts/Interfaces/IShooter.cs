@@ -3,6 +3,5 @@ using UnityEngine;
 
 public interface IShooter : IAttacker
 {
-    List<TargetHitEffect> OnHitEffects { get; }
-    void OnTargetHit(Vector3 TargetPosition, List<Unit> unitsHit, Projectile p, int shotNumber);
+    void OnTargetHit(Vector3 TargetPosition, List<IProjectileTarget> unitsHit, Projectile p, int shotNumber);
 }

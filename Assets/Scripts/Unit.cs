@@ -7,10 +7,10 @@ using UnityTimer;
 using static UnityEngine.ParticleSystem;
 
 
-public abstract class Unit : MonoBehaviour
+public abstract class Unit : MonoBehaviour, IProjectileTarget
 {
     public event Action HealthChanged;
-    public event Action Died;
+    public event Action<Unit, DamageSource> OnDeath;
     public event Action<Unit, float, IAttacker> Damaged;
 
     public GameObject HitParticles;
@@ -98,12 +98,12 @@ public abstract class Unit : MonoBehaviour
 
             if (CurrentHP <= 0)
             {
-                OnDeath(source, killer);
+                Die(source, killer);
             }
         }
     }
 
-    protected virtual void OnDeath(DamageSource source, IAttacker killer)
+    protected virtual void Die(DamageSource source, IAttacker killer)
     {
         if (!IsDead)
         {
@@ -125,7 +125,7 @@ public abstract class Unit : MonoBehaviour
 
             GetComponentsInChildren<Collider2D>().ToList().ForEach(x => x.enabled = false);
 
-            Died?.Invoke();
+            OnDeath?.Invoke(this, source);
 
             // var pool = Instantiate(HitParticles, transform.position, Quaternion.identity);
 

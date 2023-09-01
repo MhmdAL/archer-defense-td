@@ -74,11 +74,11 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
         _outlinable.OutlineParameters.Enabled = false;
     }
 
-    public void OnTargetHit(Vector3 TargetPosition, List<Unit> unitsHit, Projectile p, int shotNumber)
+    public void OnTargetHit(Vector3 TargetPosition, List<IProjectileTarget> unitsHit, Projectile p, int shotNumber)
     {
         foreach (var ohe in OnHitEffects)
         {
-            ohe.OnTargetHit(new TargetHitData
+            ohe.OnTargetHit(new AttackData
             {
                 HitPosition = TargetPosition,
                 HitRadius = 0,

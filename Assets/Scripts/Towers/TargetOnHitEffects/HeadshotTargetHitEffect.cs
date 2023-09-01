@@ -5,7 +5,7 @@ using UnityTimer;
 [CreateAssetMenu]
 public class HeadshotTargetHitEffect : TargetHitEffect
 {
-    public override void OnTargetHit(TargetHitData data)
+    public override void OnTargetHit(AttackData data)
     {
         if (data.Targets != null)
         {

@@ -8,7 +8,9 @@ public class Spike : MonoBehaviour, IAttacker {
 	public float fullcooldown;
 	float cooldown;
 
-	void Update(){
+    public List<TargetHitEffect> OnHitEffects => throw new System.NotImplementedException();
+
+    void Update(){
 		cooldown -= Time.deltaTime;	
 		if (monstersInSpike.Count > 0) {
 			foreach (Monster m in monstersInSpike) {

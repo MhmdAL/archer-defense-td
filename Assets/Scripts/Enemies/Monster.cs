@@ -86,6 +86,7 @@ public abstract class Monster : Unit, IModifiable
 
     public Path CurrentPath { get; set; }
     public int CurrentWaypoint { get; set; }
+    public bool HasPathAssigned => CurrentPath != null;
 
     private float progress = 0;
     private float previousX;
@@ -141,9 +142,9 @@ public abstract class Monster : Unit, IModifiable
 
     public virtual void FixedUpdate()
     {
-        if (!IsDead)
+        if (!IsDead && HasPathAssigned)
         {
-            HandleMovement();
+            FollowPath();
         }
     }
 
@@ -197,11 +198,11 @@ public abstract class Monster : Unit, IModifiable
         Movespeed.locked = false;
     }
 
-    protected override void OnDeath(DamageSource source, IAttacker killer)
+    protected override void Die(DamageSource source, IAttacker killer)
     {
         if (IsDead)
         {
-            base.OnDeath(source, killer);
+            base.Die(source, killer);
             return;
         }
 
@@ -217,7 +218,7 @@ public abstract class Monster : Unit, IModifiable
         // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
         // Destroy(deathParticle, 2f);
 
-        base.OnDeath(source, killer);
+        base.Die(source, killer);
     }
 
     public virtual void SetPath(Path path)
@@ -228,7 +229,7 @@ public abstract class Monster : Unit, IModifiable
         pathLength = Vector3.Distance(startPosition, endPosition);
     }
 
-    public void HandleMovement()
+    public void FollowPath()
     {
         if (CurrentWaypoint < CurrentPath.waypoints.Count - 1)
         {

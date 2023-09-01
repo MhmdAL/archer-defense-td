@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityTimer;
 using System;
+using System.Collections.Generic;
 
 public enum AbilityType
 {
@@ -25,6 +26,8 @@ public abstract class Ability : MonoBehaviour, IAttacker
     protected Timer CooldownTimer;
 
     private Button _button;
+
+    public List<TargetHitEffect> OnHitEffects => throw new NotImplementedException();
 
     void Start()
     {

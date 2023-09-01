@@ -120,7 +120,7 @@ public class ValueStore : MonoBehaviour
             WaveSpawner.WaveEnded += OnWaveEnded;
             WaveSpawner.WaveStarted += OnWaveStarted;
             monsterManagerInstance.EnemyDied += OnEnemyDeath;
-            monsterManagerInstance.EnemyDied += WaveSpawner.OnEnemyDied;
+            // monsterManagerInstance.EnemyDied += WaveSpawner.OnEnemyDied;
 
             // SaveData s = DataService.Instance.SaveData;
 

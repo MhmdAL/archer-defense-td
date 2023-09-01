@@ -14,7 +14,7 @@ public class AoeBlastHitEffect : TargetHitEffect
     [SerializeField]
     private float BlastDuration;
 
-    public override void OnTargetHit(TargetHitData data)
+    public override void OnTargetHit(AttackData data)
     {
         var blast = Instantiate(BlastPrefab, data.HitPosition, Quaternion.identity);
 

@@ -42,6 +42,11 @@ public class MonsterManager : MonoBehaviour
     [Header("Star rating Options")]
     public float maximumArmor, maximumHP;
 
+    private void Start()
+    {
+        monstersInScene = FindObjectsOfType<Monster>().ToList();
+    }
+
     public void Reset()
     {
         MonstersInScene.ForEach(x => Destroy(x.transform.root.gameObject));
@@ -66,12 +71,12 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    public void SpawnEnemy(GameObject prefab, int entrance, int exit)
+    public Monster SpawnEnemy(GameObject prefab, int entrance, int exit)
     {
         // Spawn enemy
         GameObject m = (GameObject)Instantiate(prefab, new Vector3(1000, 1000, 0), Quaternion.identity);
         Monster mon = m.GetComponentInChildren<Monster>();
-        
+
         // Set Path
         List<Path> relevantPaths;
         if (entrance != 0 && exit != 0)
@@ -96,6 +101,8 @@ public class MonsterManager : MonoBehaviour
 
         // Raise enemyspawned event
         OnEnemySpawned(mon);
+
+        return mon;
     }
 
     public bool DoesKill(Monster m, float damage, float armorPen)

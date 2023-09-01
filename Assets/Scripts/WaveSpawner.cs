@@ -44,7 +44,7 @@ public class WaveSpawner : MonoBehaviour
 
     public void SpawnNextWave()
     {
-        if(CurrentWave >= LevelData.Waves.Count)
+        if (CurrentWave >= LevelData.Waves.Count)
         {
             Debug.LogWarning("Max wave reached, can't start next wave");
             return;
@@ -95,7 +95,9 @@ public class WaveSpawner : MonoBehaviour
 
     private void SpawnEnemy(GameObject prefab, int entranceId, int exitId)
     {
-        ValueStore.Instance.monsterManagerInstance.SpawnEnemy(prefab, entranceId, exitId);
+        var monster = ValueStore.Instance.monsterManagerInstance.SpawnEnemy(prefab, entranceId, exitId);
+
+        monster.OnDeath += (unit, ds) => OnEnemyDied(unit as Monster, ds);
     }
 
     public void Reset(LevelData levelData)
