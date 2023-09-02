@@ -1,35 +1,48 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IFocusable))]
+[RequireComponent(typeof(IMovable))]
 public class Movable : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public Animator animator;
+    public Rigidbody2D rigidbody2D;
+    public Transform body;
 
-    public bool hasFocus = false;
-
-    private IFocusable _target;
+    private IFocusable _focusable;
+    private IMovable _movable;
 
     private void Awake()
     {
-        _target = GetComponent<IFocusable>();
+        _focusable = GetComponent<IFocusable>();
+        _movable = GetComponent<IMovable>();
     }
 
     private void Update()
     {
-        if (_target.HasFocus)
+        animator.SetFloat("movespeed", rigidbody2D.velocity.magnitude);
+
+        if (_focusable.HasFocus)
         {
-            // Get input from WASD keys
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
 
-            // Calculate movement direction
             Vector3 moveDirection = new Vector3(horizontalInput, verticalInput, 0).normalized;
 
-            // Move the game object
-            GetComponent<Rigidbody2D>().MovePosition(transform.position + moveDirection * moveSpeed * Time.deltaTime);
-            // transform.Translate();
+            if (Mathf.Abs(moveDirection.x) > 0)
+            {
+                AdjustSpriteDirection(moveDirection.x > 0 ? true : false);
+            }
+
+            rigidbody2D.AddForce(moveDirection * _movable.MoveSpeed.Value);
         }
+    }
+
+    private void AdjustSpriteDirection(bool lookRight)
+    {
+        var angle = lookRight ? 180 : 0;
+        body.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
     }
 }

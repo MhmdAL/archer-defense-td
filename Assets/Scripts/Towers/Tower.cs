@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityTimer;
 using EPOOutline;
 
-public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
+public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter, IMovable
 {
     public event Action<Tower> SkillPointsChanged;
     public event Action SkillUpgraded;
@@ -97,6 +97,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
     public Stat AS { get; set; }
     public Stat AR { get; set; }
     public Stat AP { get; set; }
+    public Stat MoveSpeed { get; set; }
 
     public Timer AttackCooldownTimer { get; set; }
     public Timer CombatTimer { get; set; }
@@ -239,7 +240,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
         ExtraData = new Dictionary<string, object>();
 
-        stats = new List<Stat>() { AD, AS, AR, AP };
+        stats = new List<Stat>() { AD, AS, AR, AP, MoveSpeed };
 
         // Initalize cooldown timers
         InitializeValues();
@@ -282,10 +283,13 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         AS = new Stat(Type.ATTACK_SPEED);
         AR = new Stat(Type.ATTACK_RANGE);
         AP = new Stat(Type.ARMOR_PENETRATION);
+        MoveSpeed = new Stat(Type.MOVEMENT_SPEED);
 
         AD.BaseValue = TowerData.BaseAttackDamage * (1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0);
         AS.BaseValue = TowerData.BaseAttackSpeed * (1 + SaveData.GetUpgrade(UpgradeType.AS)?.CurrentValue ?? 0);
         AR.BaseValue = TowerData.BaseAttackRange * (1 + SaveData.GetUpgrade(UpgradeType.AR)?.CurrentValue ?? 0);
+
+        MoveSpeed.BaseValue = TowerData.BaseMoveSpeed;
 
         AP.BaseValue = SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0;
 
@@ -326,7 +330,8 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
         // print("combat restarted");
 
-        animator.SetTrigger("attack");
+        // animator.SetBool("idle", false);
+        animator.SetBool("isAttacking", true);
     }
 
     private void OnCombatTimerElapsed(Timer t)
@@ -336,7 +341,8 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
         // print("combat elapsed");
 
-        animator.SetTrigger("idle");
+        // animator.SetBool("idle", true);
+        animator.SetBool("isAttacking", false);
 
         AttackCooldownTimer.Restart(FullCooldown);
         AttackCooldownTimer.Pause();
@@ -923,7 +929,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
             }
         }
 
-        animator.SetFloat("progress", 1 - Mathf.Clamp01(AttackCooldownTimer.GetTimeRemaining() / FullCooldown));
+        animator.SetFloat("attackProgress", 1 - Mathf.Clamp01(AttackCooldownTimer.GetTimeRemaining() / FullCooldown));
 
         if (!IsDisabled && monstersInRange.Count > 0)
         { // If tower is active and monsters nearby, update cooldown bar
@@ -977,8 +983,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         // cooldownBarParent.SetActive(true);
 
         FocusIndicatorArrow.SetActive(true);
-
-        GetComponent<Movable>().hasFocus = true;
     }
 
     public void UnFocus()
@@ -991,8 +995,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         // cooldownBarParent.SetActive(false);
 
         FocusIndicatorArrow.SetActive(false);
-
-        GetComponent<Movable>().hasFocus = false;
     }
 
     private void OnDestroy()

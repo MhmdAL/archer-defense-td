@@ -365,6 +365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3019499501395816211}
   - component: {fileID: 8044024481788338765}
+  - component: {fileID: 2277074132572319916}
   m_Layer: 20
   m_Name: PF Props Brick T2
   m_TagString: Untagged
@@ -426,9 +427,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -1200
   m_Sprite: {fileID: 21300154, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -440,6 +441,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2277074132572319916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225025914830396747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToBeSorted:
+  - SpriteRenderer: {fileID: 8044024481788338765}
+    Canvas: {fileID: 0}
+    SortingOrderOffset: 0
+  - SpriteRenderer: {fileID: 1247607905730623799}
+    Canvas: {fileID: 0}
+    SortingOrderOffset: 0
 --- !u!1 &1359456361085988840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,9 +1044,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingLayerID: 1145342779
+  m_SortingLayer: -1
+  m_SortingOrder: -1200
   m_Sprite: {fileID: 21300058, guid: ed7554aeefd5da44a9fe1ee9b93afe77, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2139,30 +2159,40 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -47.132973, y: -2.654642}
-  - {x: 2.4897423, y: -2.6257744}
-  - {x: 2.788992, y: -4.5404854}
-  - {x: 6.358448, y: -4.7357473}
-  - {x: 6.7167463, y: -6.5883446}
-  - {x: 10.164253, y: -6.762681}
-  - {x: 10.658695, y: -10.501908}
-  - {x: 21.26423, y: -10.389917}
-  - {x: 23.474024, y: -12.7847185}
-  - {x: 29.99142, y: -12.530431}
-  - {x: 30.289206, y: -13.966333}
-  - {x: 28.797203, y: -14.348745}
-  - {x: 28.626629, y: -16.307495}
-  - {x: 29.000221, y: -14.601643}
-  - {x: 35.886776, y: -14.496061}
-  - {x: 36.37179, y: -18.005434}
-  - {x: 32.637726, y: -18.233747}
-  - {x: 32.489094, y: -20.132998}
-  - {x: 30.55447, y: -20.258076}
-  - {x: 30.565037, y: -22.14736}
-  - {x: 24.769571, y: -22.22392}
-  - {x: 24.630949, y: -24.352842}
-  - {x: 18.130867, y: -24.255848}
-  - {x: 18.274097, y: -26.113188}
+  - {x: -47.391624, y: -3.0857258}
+  - {x: 1.7459698, y: -3.0507889}
+  - {x: 1.9260921, y: -4.355918}
+  - {x: 2.4375076, y: -4.5167856}
+  - {x: 2.4436684, y: -5.0186253}
+  - {x: 5.800617, y: -4.9748173}
+  - {x: 5.905632, y: -6.293597}
+  - {x: 6.4186, y: -6.40271}
+  - {x: 6.4511127, y: -7.0399218}
+  - {x: 9.792367, y: -7.0548773}
+  - {x: 9.864581, y: -10.326211}
+  - {x: 10.4748535, y: -10.410918}
+  - {x: 10.472752, y: -11.006612}
+  - {x: 20.759527, y: -10.921185}
+  - {x: 21.96972, y: -10.882245}
+  - {x: 21.903242, y: -12.297453}
+  - {x: 22.418043, y: -12.362749}
+  - {x: 22.438055, y: -12.997225}
+  - {x: 29.885166, y: -12.849191}
+  - {x: 29.943882, y: -14.072588}
+  - {x: 28.425316, y: -14.029985}
+  - {x: 28.48614, y: -16.329512}
+  - {x: 29.211023, y: -16.334059}
+  - {x: 29.372108, y: -15.000093}
+  - {x: 35.807087, y: -14.921075}
+  - {x: 35.840523, y: -18.005434}
+  - {x: 31.761135, y: -17.968115}
+  - {x: 31.825008, y: -20.053308}
+  - {x: 29.810696, y: -19.939316}
+  - {x: 29.821262, y: -21.8286}
+  - {x: 23.866417, y: -21.82547}
+  - {x: 23.807486, y: -23.980957}
+  - {x: 17.971487, y: -23.88396}
+  - {x: 17.955338, y: -26.113188}
   - {x: -47.409847, y: -26.162783}
   - {x: 15.214445, y: -31.11137}
   - {x: 11.360765, y: -37.351006}
