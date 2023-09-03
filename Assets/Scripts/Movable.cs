@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IFocusable))]
-[RequireComponent(typeof(IMovable))]
+[RequireComponent(typeof(IMoving))]
 public class Movable : MonoBehaviour
 {
     public Animator animator;
@@ -12,12 +12,12 @@ public class Movable : MonoBehaviour
     public Transform body;
 
     private IFocusable _focusable;
-    private IMovable _movable;
+    private IMoving _movable;
 
     private void Awake()
     {
         _focusable = GetComponent<IFocusable>();
-        _movable = GetComponent<IMovable>();
+        _movable = GetComponent<IMoving>();
     }
 
     private void Update()

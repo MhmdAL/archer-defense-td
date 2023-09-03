@@ -5,7 +5,7 @@ public interface IFocusable
     void UnFocus();
 }
 
-public interface IMovable
+public interface IMoving
 {
     Stat MoveSpeed { get; set; }
 }

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityTimer;
 using EPOOutline;
 
-public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter, IMovable
+public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter, IMoving
 {
     public event Action<Tower> SkillPointsChanged;
     public event Action SkillUpgraded;

@@ -10,9 +10,9 @@ public class SlowTargetHitEffect : TargetHitEffect
         {
             foreach (var target in data.Targets)
             {
-                if (target is Monster m)
+                if (target is IMoving m)
                 {
-                    m.Movespeed.Modify(-0.9f, BonusOperation.Percentage, "SlowOnHit", 1, 1);
+                    m.MoveSpeed.Modify(-0.9f, BonusOperation.Percentage, "SlowOnHit", 1, 1);
                 }
             }
         }

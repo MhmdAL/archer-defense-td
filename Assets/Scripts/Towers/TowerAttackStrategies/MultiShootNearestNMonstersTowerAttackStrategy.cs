@@ -85,7 +85,7 @@ public class MultiShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         var targetDir = (target.CurrentPath.waypoints[target.CurrentWaypoint + 1].transform.position - target.transform.position).normalized;
 
         var randomOffset = UnityEngine.Random.Range(-1, 1f);
-        var targetPosition = target.transform.position + targetDir * (data.Owner.bulletSpeed * 0.9f * target.Movespeed.Value + randomOffset);
+        var targetPosition = target.transform.position + targetDir * (data.Owner.bulletSpeed * 0.9f * target.MoveSpeed.Value + randomOffset);
 
         //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
         bullet.Owner = data.Owner;

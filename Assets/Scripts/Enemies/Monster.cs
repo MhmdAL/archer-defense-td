@@ -7,7 +7,7 @@ using UnityTimer;
 using System;
 using EPOOutline;
 
-public abstract class Monster : Unit, IModifiable
+public abstract class Monster : Unit, IModifiable, IMoving
 {
     public delegate void ModifierEndedEventHandler(Modifier m);
     public event ModifierEndedEventHandler ModifierEnded;
@@ -19,7 +19,7 @@ public abstract class Monster : Unit, IModifiable
     private AudioClip deathSound;
 
 
-    public Stat Movespeed { get; set; }
+    public Stat MoveSpeed { get; set; }
 
     public List<Stat> Stats
     {
@@ -130,14 +130,14 @@ public abstract class Monster : Unit, IModifiable
         //currentColor = new MyColor (GetComponentInChildren<SpriteRenderer> ().color, 0);
 
         Armor = new Stat(Type.Armor);
-        Movespeed = new Stat(Type.MOVEMENT_SPEED);
+        MoveSpeed = new Stat(Type.MOVEMENT_SPEED);
         DamageModifier = new Stat(Type.DAMAGE_TAKEN);
 
-        stats = new List<Stat>() { MaxHP, Armor, Movespeed, DamageModifier };
+        stats = new List<Stat>() { MaxHP, Armor, MoveSpeed, DamageModifier };
         DamageModifier.BaseValue = 1;
 
         MaxHP.BaseValue = EnemyData.MaxHealth;
-        Movespeed.BaseValue = EnemyData.Movespeed;
+        MoveSpeed.BaseValue = EnemyData.Movespeed;
     }
 
     public virtual void FixedUpdate()
@@ -187,15 +187,15 @@ public abstract class Monster : Unit, IModifiable
 
     public void FixedMovespeed(float value, float duration)
     {
-        Movespeed.Value = value;
-        Movespeed.locked = true;
+        MoveSpeed.Value = value;
+        MoveSpeed.locked = true;
         MyTimer t = ValueStore.Instance.timerManagerInstance.StartTimer(duration);
         t.TimerElapsed += FixedMoveSpeedEnded;
     }
 
     public void FixedMoveSpeedEnded()
     {
-        Movespeed.locked = false;
+        MoveSpeed.locked = false;
     }
 
     protected override void Die(DamageSource source, IAttacker killer)
@@ -233,7 +233,7 @@ public abstract class Monster : Unit, IModifiable
     {
         if (CurrentWaypoint < CurrentPath.waypoints.Count - 1)
         {
-            float speed = Movespeed.Value * Time.deltaTime;
+            float speed = MoveSpeed.Value * Time.deltaTime;
             step = speed / pathLength;
             distanceTravelled += speed;
             progress += step;
