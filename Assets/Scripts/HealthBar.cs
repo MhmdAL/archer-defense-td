@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
@@ -14,15 +15,19 @@ public class HealthBar : MonoBehaviour
     [field: SerializeField]
     public GameObject ShieldBar { get; set; }
 
+    private Image currentHpBar;
+
     private void Awake()
     {
         Unit.HealthChanged += OnHealthChanged;
         Unit.OnDeath += OnUnitDied;
+
+        currentHpBar = HPBar.GetComponent<Image>();
     }
 
     private void OnHealthChanged()
     {
-        HPBar.transform.localScale = new Vector3(Unit.CurrentHP / (Unit.MaxHP.Value + Unit.CurrentShield), HPBar.transform.localScale.y, HPBar.transform.localScale.z);
+        currentHpBar.fillAmount = Unit.CurrentHP / (Unit.MaxHP.Value + Unit.CurrentShield);
 
         ShieldBar.transform.localScale = new Vector3(Unit.CurrentShield / (Unit.MaxHP.Value + Unit.CurrentShield), HPBar.transform.localScale.y, HPBar.transform.localScale.z);
     }

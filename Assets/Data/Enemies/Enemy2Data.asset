@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Enemy2Data
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Enemy 2
-  <Description>k__BackingField: 2nd
-  <MaxHealth>k__BackingField: 60
-  <Movespeed>k__BackingField: 2.5
+  <Description>k__BackingField: 'The most basic enemy type.
+
+
+'
+  <MaxHealth>k__BackingField: 120
+  <Movespeed>k__BackingField: 0.9
   <SilverValue>k__BackingField: 2
   <LivesValue>k__BackingField: 1

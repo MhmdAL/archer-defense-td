@@ -14,7 +14,7 @@ public class EnemyTunneler : Monster {
 
 	CooldownTimer counterTimer;
 
-	public override void InitializeValues ()
+    public override void InitializeValues ()
 	{
 		base.InitializeValues ();
 
