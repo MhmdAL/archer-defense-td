@@ -90,9 +90,9 @@ public class Modifier {
 	public float currentStack;
 	public int intendedLevel;
 
-	public BonusOperation bonusOperation;
+	public BonusType bonusOperation;
 
-	public Modifier(float value, Name name, Type type, BonusOperation bo, int level){
+	public Modifier(float value, Name name, Type type, BonusType bo, int level){
 		this.value = value;
 		this.name = name;
 		this.type = type;
@@ -102,7 +102,7 @@ public class Modifier {
 		this.bonusOperation = bo;
 	}
 
-	public Modifier(float value, Name name, Type type, BonusOperation bo){
+	public Modifier(float value, Name name, Type type, BonusType bo){
 		this.value = value;	
 		this.name = name;
 		this.type = type;
@@ -111,7 +111,7 @@ public class Modifier {
 		this.bonusOperation = bo;
 	}
 
-	public Modifier(float value, Name name, Type type, BonusOperation bo, MyTimer cdTimer, Action<IModifiable> deapplication = null){
+	public Modifier(float value, Name name, Type type, BonusType bo, MyTimer cdTimer, Action<IModifiable> deapplication = null){
 		this.value = value;	
 		this.name = name;
 		this.type = type;
@@ -162,11 +162,4 @@ public class Modifier {
 			DeApplyModifier -= deapplication;
 		}
 	}
-}
-
-public enum BonusOperation
-{
-	Flat,
-	Percentage,
-	OverallMultiplier
 }

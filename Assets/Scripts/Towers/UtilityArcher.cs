@@ -9,7 +9,7 @@ public class UtilityArcher : Tower {
 
 	public UtilityArcherSlowCircle slowCirclePrefab;
 
-	public Stat Slow = new Stat(Type.SLOW_ON_ATTACK);
+	public Stat Slow = new Stat(Type.SLOW_ON_ATTACK, 1);
 
 	public float slowDuration;
 	public float utilityT4Cooldown;
@@ -51,7 +51,7 @@ public class UtilityArcher : Tower {
 
 			// Apply Vulnerability
 			target.AddModifier (new Modifier (baseVulnerabilityValue + SaveData.GetUpgrade(UpgradeType.Utility_3).CurrentValue,
-				Name.Utility_Vulnerability, Type.DAMAGE_TAKEN, BonusOperation.Percentage, ValueStore.Instance.timerManagerInstance.StartTimer(2)), StackOperation.HighestValue, 1);
+				Name.Utility_Vulnerability, Type.DAMAGE_TAKEN, BonusType.Percentage, ValueStore.Instance.timerManagerInstance.StartTimer(2)), StackOperation.HighestValue, 1);
 			
 			// Apply stun if upgraded
 			if (SaveData.GetUpgrade(UpgradeType.Utility_4).level > 0 && aoeTargets != null) {
@@ -80,7 +80,7 @@ public class UtilityArcher : Tower {
 	}
 
 	public void ApplySlow(Monster m){
-		m.AddModifier(new Modifier (Slow.Value, Name.Utility_Slow, Type.MOVEMENT_SPEED, BonusOperation.Percentage, 
+		m.AddModifier(new Modifier (Slow.Value, Name.Utility_Slow, Type.MOVEMENT_SPEED, BonusType.Percentage, 
 			ValueStore.Instance.timerManagerInstance.StartTimer(slowDuration), DeApplySlowModifier), StackOperation.HighestValue, 1);
 		
 		foreach (var item in m.GetComponentsInChildren<SpriteRenderer>(true)) {
@@ -148,7 +148,7 @@ public class UtilityArcher : Tower {
 	public override void AddStartingModifiers ()
 	{
 		if (SaveData.GetUpgrade (UpgradeType.Utility_2).level > 0) {
-			this.AD.Modify(CurrentValue (UpgradeType.Utility_2), BonusOperation.Percentage, BuffNames.TOWER_AD_UPGRADE, null, 1);
+			this.AD.Modify(CurrentValue (UpgradeType.Utility_2), BonusType.Percentage, BuffNames.TOWER_AD_UPGRADE, null, 1);
 		}
 	}
 		

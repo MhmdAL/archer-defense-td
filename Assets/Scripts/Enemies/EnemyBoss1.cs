@@ -11,7 +11,7 @@ public class EnemyBoss1 : Monster
         Tower t = killer as Tower;
         if (t != null)
         {
-            t.AS.Modify(EnemyData.AttackSpeedDebuffValue, BonusOperation.Percentage, Name.EnemyBoss1_AtkSlow.ToString(),
+            t.AS.Modify(EnemyData.AttackSpeedDebuffValue, BonusType.Percentage, Name.EnemyBoss1_AtkSlow.ToString(),
              EnemyData.AttackSpeedDebuffDuration, 1);
         }
     }

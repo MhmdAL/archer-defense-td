@@ -10,15 +10,15 @@ public class StatModifyPotionEffect : PotionEffect
     {
         if (StatToAffect == StatEffect.AD)
         {
-            target.AD.Modify(PercentValue, BonusOperation.Percentage, this.GetInstanceID().ToString());
+            target.AD.Modify(PercentValue, BonusType.Percentage, this.GetInstanceID().ToString());
         }
         else if (StatToAffect == StatEffect.AR)
         {
-            target.AR.Modify(PercentValue, BonusOperation.Percentage, this.GetInstanceID().ToString());
+            target.AR.Modify(PercentValue, BonusType.Percentage, this.GetInstanceID().ToString());
         }
         else if (StatToAffect == StatEffect.AS)
         {
-            target.AS.Modify(PercentValue, BonusOperation.Percentage, this.GetInstanceID().ToString());
+            target.AS.Modify(PercentValue, BonusType.Percentage, this.GetInstanceID().ToString());
         }
     }
 }

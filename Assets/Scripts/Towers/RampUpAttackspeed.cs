@@ -25,7 +25,7 @@ public class RampUpAttackspeed : MonoBehaviour
 
     private void OnAfterAttack()
     {
-        Owner.AR.Modify(AttackSpeedPerAttack, BonusOperation.Percentage, BuffNames.RAMP_UP_ATK_SPD, 2f, RampUpStackLimit);
+        Owner.AR.Modify(AttackSpeedPerAttack, BonusType.Percentage, BuffNames.RAMP_UP_ATK_SPD, 2f, RampUpStackLimit);
     }
 
     private void OnDestroy()

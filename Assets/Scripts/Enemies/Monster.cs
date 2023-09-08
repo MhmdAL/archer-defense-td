@@ -129,15 +129,13 @@ public abstract class Monster : Unit, IModifiable, IMoving
 
         //currentColor = new MyColor (GetComponentInChildren<SpriteRenderer> ().color, 0);
 
-        Armor = new Stat(Type.Armor);
-        MoveSpeed = new Stat(Type.MOVEMENT_SPEED);
-        DamageModifier = new Stat(Type.DAMAGE_TAKEN);
+        Armor = new Stat(Type.Armor, 0);
+        MoveSpeed = new Stat(Type.MOVEMENT_SPEED, EnemyData.Movespeed);
+        DamageModifier = new Stat(Type.DAMAGE_TAKEN, 1);
 
         stats = new List<Stat>() { MaxHP, Armor, MoveSpeed, DamageModifier };
-        DamageModifier.BaseValue = 1;
 
         MaxHP.BaseValue = EnemyData.MaxHealth;
-        MoveSpeed.BaseValue = EnemyData.Movespeed;
     }
 
     public virtual void FixedUpdate()
@@ -187,7 +185,7 @@ public abstract class Monster : Unit, IModifiable, IMoving
 
     public void FixedMovespeed(float value, float duration)
     {
-        MoveSpeed.Value = value;
+        // MoveSpeed.Value = value;
         MoveSpeed.locked = true;
         MyTimer t = ValueStore.Instance.timerManagerInstance.StartTimer(duration);
         t.TimerElapsed += FixedMoveSpeedEnded;
@@ -437,15 +435,15 @@ public abstract class Monster : Unit, IModifiable, IMoving
                     }
                     if (s != null)
                     {
-                        if (m.bonusOperation == BonusOperation.Percentage)
+                        if (m.bonusOperation == BonusType.Percentage)
                         {
                             s.multiplier += m.value;
                         }
-                        else if (m.bonusOperation == BonusOperation.Flat)
+                        else if (m.bonusOperation == BonusType.Flat)
                         {
                             s.flatBonus += m.value;
                         }
-                        else if (m.bonusOperation == BonusOperation.OverallMultiplier)
+                        else if (m.bonusOperation == BonusType.OverallMultiplier)
                         { // <--- temporary If
                             s.overallMultiplier = m.value;
                         }
@@ -466,7 +464,7 @@ public abstract class Monster : Unit, IModifiable, IMoving
             //item.Value = item.baseValue + item.BonusValue;
             if (item.type == Type.MOVEMENT_SPEED)
             {
-                item.Value = Mathf.Clamp(item.Value, 0, 10);
+                // item.Value = Mathf.Clamp(item.Value, 0, 10);
             }
         }
 

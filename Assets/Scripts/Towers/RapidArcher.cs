@@ -28,7 +28,7 @@ public class RapidArcher : Tower {
 		}
 
 			if (GetModifier (Name.Rapid_Fury) == null) {
-				AddModifier (new Modifier (baseAtkSpdPerAtkValue + SaveData.GetUpgrade(UpgradeType.Rapid_3).CurrentValue, Name.Rapid_AtkSpdPerAttack, Type.ATTACK_SPEED, BonusOperation.Percentage,
+				AddModifier (new Modifier (baseAtkSpdPerAtkValue + SaveData.GetUpgrade(UpgradeType.Rapid_3).CurrentValue, Name.Rapid_AtkSpdPerAttack, Type.ATTACK_SPEED, BonusType.Percentage,
 					ValueStore.Instance.timerManagerInstance.StartTimer(2)), StackOperation.Additive, 5);
 			}
 
@@ -73,7 +73,7 @@ public class RapidArcher : Tower {
 	public override void AddStartingModifiers ()
 	{
 		if (SaveData.GetUpgrade (UpgradeType.Rapid_2).level > 0) {
-			AddModifier (new Modifier (CurrentValue (UpgradeType.Rapid_2), Name.ArcherAD_Upgrade, Type.ATTACK_DAMAGE, BonusOperation.Percentage), StackOperation.Additive, 1);
+			AddModifier (new Modifier (CurrentValue (UpgradeType.Rapid_2), Name.ArcherAD_Upgrade, Type.ATTACK_DAMAGE, BonusType.Percentage), StackOperation.Additive, 1);
 		}
 	}
 

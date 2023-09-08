@@ -70,7 +70,7 @@ public class LongArcher : Tower {
 	{
 		base.AddStartingModifiers ();
 		if (SaveData.GetUpgrade (UpgradeType.Long_2).level > 0) {
-			AddModifier (new Modifier (CurrentValue (UpgradeType.Long_2), Name.ArcherAD_Upgrade, Type.ATTACK_DAMAGE, BonusOperation.Percentage), StackOperation.Additive, 1);			
+			AddModifier (new Modifier (CurrentValue (UpgradeType.Long_2), Name.ArcherAD_Upgrade, Type.ATTACK_DAMAGE, BonusType.Percentage), StackOperation.Additive, 1);			
 		}
 	}
 }

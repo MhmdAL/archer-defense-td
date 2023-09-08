@@ -14,7 +14,7 @@ public class UtilityArcherSlowCircle : MonoBehaviour {
 				ShopUpgrade aT5 = SaveData.GetUpgrade (UpgradeType.All_1);
 				float stunDuration = aT5.level > 0 ? uT4.CurrentValue * (1 + aT5.CurrentValue / 2) : uT4.CurrentValue;
 
-				m.MoveSpeed.Modify(0, BonusOperation.OverallMultiplier, Name.Utility_Stun.ToString(), stunDuration, 1);
+				m.MoveSpeed.Modify(0, BonusType.OverallMultiplier, Name.Utility_Stun.ToString(), stunDuration, 1);
 
 				m.anim.speed = 0;
 				m.stunImage.SetActive (true);
@@ -36,7 +36,7 @@ public class UtilityArcherSlowCircle : MonoBehaviour {
 
 			// Apply Vulnerability			
 			var val = owner.baseVulnerabilityValue + SaveData.GetUpgrade(UpgradeType.Utility_3).CurrentValue;
-			m.DamageModifier.Modify(val, BonusOperation.Percentage, Name.Utility_Vulnerability.ToString(), 2, 1);
+			m.DamageModifier.Modify(val, BonusType.Percentage, Name.Utility_Vulnerability.ToString(), 2, 1);
 		}
 	}
 

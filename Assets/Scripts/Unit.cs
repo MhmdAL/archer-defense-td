@@ -10,6 +10,7 @@ using static UnityEngine.ParticleSystem;
 public abstract class Unit : MonoBehaviour, IProjectileTarget
 {
     public event Action HealthChanged;
+    
     public event Action<Unit, DamageSource> OnDeath;
     public event Action<Unit, float, IAttacker> Damaged;
 
@@ -59,12 +60,24 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
     {
         _combatTimer = Timer.Register(CombatTimer, OnCombatTimerElapsed, isDoneWhenElapsed: false);
 
-        MaxHP = new Stat(Type.Health);
+        MaxHP = new Stat(Type.Health, 1, OnMaxHealthModified);
     }
 
     protected virtual void Start()
     {
         CurrentHP = MaxHP.Value;
+    }
+
+    private void OnMaxHealthModified(float oldValue, float newValue)
+    {
+        if (newValue > oldValue)
+        {
+            CurrentHP += newValue - oldValue;
+        }
+        else
+        {
+            CurrentHP = Mathf.Clamp(CurrentHP, 0, MaxHP.Value);
+        }
     }
 
     public virtual void Damage(float damage, float armorpen, DamageSource source, IAttacker killer)

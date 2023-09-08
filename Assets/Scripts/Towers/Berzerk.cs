@@ -34,7 +34,7 @@ public class Berzerk : MonoBehaviour
 
         if (consecutiveShots == 8)
         {
-            Owner.AS.Modify(BerzerkAtkSpdBuffValue, BonusOperation.Percentage, BuffNames.BERZERK, BerzerkDuration, 1, () => IsBerzerking = false);
+            Owner.AS.Modify(BerzerkAtkSpdBuffValue, BonusType.Percentage, BuffNames.BERZERK, BerzerkDuration, 1, () => IsBerzerking = false);
 
             IsBerzerking = true;
 

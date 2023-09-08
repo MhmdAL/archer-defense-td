@@ -7,4 +7,5 @@ public class EnemyGrouperData : EnemyData
 {
     public float GroupBuffRadius;
     public float GroupBuffHealthPercentage;
+    public float GroupBuffMSPercentage;
 }

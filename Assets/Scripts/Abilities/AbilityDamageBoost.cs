@@ -41,7 +41,7 @@ public class AbilityDamageBoost : Ability
 
         foreach (Tower item in vs.towerManagerInstance.TowersInScene)
         {
-            item.AD.Modify(damageBoostValue, BonusOperation.Percentage, BuffNames.DMG_BOOST_ABILITY, damageBoostDuration);
+            item.AD.Modify(damageBoostValue, BonusType.Percentage, BuffNames.DMG_BOOST_ABILITY, damageBoostDuration);
 
             item.buffIndicatorPanel.AddIndicator(BuffIndicatorType.ATTACK_DAMAGE, new CooldownTimer(damageBoostDuration));
         }

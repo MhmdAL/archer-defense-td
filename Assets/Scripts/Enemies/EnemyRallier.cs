@@ -25,7 +25,7 @@ public class EnemyRallier : Monster {
 			foreach (Collider2D c in cols) {
 				Monster m = c.GetComponent<Monster> ();
 				if (c != null && m != null && m != this) {
-					m.AddModifier (new Modifier (msBuffValue, Name.EnemyRallier_MsIncrease, Type.MOVEMENT_SPEED, BonusOperation.Percentage,
+					m.AddModifier (new Modifier (msBuffValue, Name.EnemyRallier_MsIncrease, Type.MOVEMENT_SPEED, BonusType.Percentage,
 						ValueStore.Instance.timerManagerInstance.StartTimer (msBuffDuration)), StackOperation.Additive, msBuffStackCount);
 				}
 			}

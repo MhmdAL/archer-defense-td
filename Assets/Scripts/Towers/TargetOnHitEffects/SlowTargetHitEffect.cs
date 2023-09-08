@@ -12,7 +12,7 @@ public class SlowTargetHitEffect : TargetHitEffect
             {
                 if (target is IMoving m)
                 {
-                    m.MoveSpeed.Modify(-0.9f, BonusOperation.Percentage, "SlowOnHit", 1, 1);
+                    m.MoveSpeed.Modify(-0.9f, BonusType.Percentage, "SlowOnHit", 1, 1);
                 }
             }
         }

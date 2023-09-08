@@ -287,7 +287,7 @@ public class TowerManager : MonoBehaviour
             if (newTower.TowerBase.tag == "SuperBase")
             {
                 newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
-                    Type.ATTACK_RANGE, BonusOperation.Percentage), StackOperation.Additive, 1);
+                    Type.ATTACK_RANGE, BonusType.Percentage), StackOperation.Additive, 1);
             }
 
             newTower.silverSpent = t.cost;

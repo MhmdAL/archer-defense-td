@@ -279,19 +279,11 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
         cooldownBarParent = cooldownBarTransform.parent.gameObject;
 
-        AD = new Stat(Type.ATTACK_DAMAGE);
-        AS = new Stat(Type.ATTACK_SPEED);
-        AR = new Stat(Type.ATTACK_RANGE);
-        AP = new Stat(Type.ARMOR_PENETRATION);
-        MoveSpeed = new Stat(Type.MOVEMENT_SPEED);
-
-        AD.BaseValue = TowerData.BaseAttackDamage * (1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0);
-        AS.BaseValue = TowerData.BaseAttackSpeed * (1 + SaveData.GetUpgrade(UpgradeType.AS)?.CurrentValue ?? 0);
-        AR.BaseValue = TowerData.BaseAttackRange * (1 + SaveData.GetUpgrade(UpgradeType.AR)?.CurrentValue ?? 0);
-
-        MoveSpeed.BaseValue = TowerData.BaseMoveSpeed;
-
-        AP.BaseValue = SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0;
+        AD = new Stat(Type.ATTACK_DAMAGE, TowerData.BaseAttackDamage * (1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0));
+        AS = new Stat(Type.ATTACK_SPEED, TowerData.BaseAttackSpeed * (1 + SaveData.GetUpgrade(UpgradeType.AS)?.CurrentValue ?? 0));
+        AR = new Stat(Type.ATTACK_RANGE, TowerData.BaseAttackRange * (1 + SaveData.GetUpgrade(UpgradeType.AR)?.CurrentValue ?? 0));
+        AP = new Stat(Type.ARMOR_PENETRATION, SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0);
+        MoveSpeed = new Stat(Type.MOVEMENT_SPEED, TowerData.BaseMoveSpeed);
 
         ADSkill = new TowerSkill { SkillType = TowerSkillType.AttackDamage };
         ARSkill = new TowerSkill { SkillType = TowerSkillType.AttackRange };
@@ -571,7 +563,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         {
             case TowerSkillType.AttackDamage:
                 AD.Modify(currentSkillValues.ADValue,
-                 currentSkillValues.IsADPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
+                 currentSkillValues.IsADPercentage ? BonusType.Percentage : BonusType.Flat,
                   BuffNames.TOWER_SKILL_AD + CurrentSkillLevel);
 
                 ADSkill.CurrentLevel++;
@@ -580,7 +572,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
                 break;
             case TowerSkillType.AttackSpeed:
                 AS.Modify(currentSkillValues.ASValue,
-                 currentSkillValues.IsASPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
+                 currentSkillValues.IsASPercentage ? BonusType.Percentage : BonusType.Flat,
                   BuffNames.TOWER_SKILL_AS + CurrentSkillLevel);
 
                 ASSkill.CurrentLevel++;
@@ -589,7 +581,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
                 break;
             case TowerSkillType.AttackRange:
                 AR.Modify(currentSkillValues.ARValue,
-                 currentSkillValues.IsARPercentage ? BonusOperation.Percentage : BonusOperation.Flat,
+                 currentSkillValues.IsARPercentage ? BonusType.Percentage : BonusType.Flat,
                   BuffNames.TOWER_SKILL_AR + CurrentSkillLevel);
 
                 ARSkill.CurrentLevel++;
@@ -786,11 +778,11 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
                     if (s != null)
                     {
-                        if (m.bonusOperation == BonusOperation.Percentage)
+                        if (m.bonusOperation == BonusType.Percentage)
                         {
                             s.multiplier += m.value;
                         }
-                        else if (m.bonusOperation == BonusOperation.Flat)
+                        else if (m.bonusOperation == BonusType.Flat)
                         {
                             s.flatBonus += m.value;
                         }
@@ -845,7 +837,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
             {
                 string[] upgradeValues = upgradeTypes[z].Split(';');
                 towerUpgrades.Add(new Modifier(float.Parse(upgradeValues[3]), (Name)int.Parse(upgradeValues[1]),
-                    (Type)int.Parse(upgradeValues[0]), (BonusOperation)int.Parse(upgradeValues[2]), x + 1));
+                    (Type)int.Parse(upgradeValues[0]), (BonusType)int.Parse(upgradeValues[2]), x + 1));
             }
         }
     }
