@@ -7,17 +7,13 @@ using UnityTimer;
 using System;
 using EPOOutline;
 
-public abstract class Monster : Unit, IModifiable, IMoving
+public abstract class Monster : Unit, IMoving
 {
-    public delegate void ModifierEndedEventHandler(Modifier m);
-    public event ModifierEndedEventHandler ModifierEnded;
-
     [field: SerializeField]
     public EnemyData EnemyData { get; set; }
 
     [SerializeField]
     private AudioClip deathSound;
-
 
     public Stat MoveSpeed { get; set; }
 
@@ -30,18 +26,6 @@ public abstract class Monster : Unit, IModifiable, IMoving
         set
         {
             stats = value;
-        }
-    }
-
-    public List<Modifier> Modifiers
-    {
-        get
-        {
-            return modifiers;
-        }
-        set
-        {
-            modifiers = value;
         }
     }
 
@@ -72,8 +56,6 @@ public abstract class Monster : Unit, IModifiable, IMoving
 
     // Protected Fields
     protected List<Stat> stats;
-
-    protected List<Modifier> modifiers = new List<Modifier>();
 
     protected MonsterManager m;
 
@@ -107,16 +89,12 @@ public abstract class Monster : Unit, IModifiable, IMoving
         myTransform = transform;
         m = ValueStore.Instance.monsterManagerInstance;
 
-        ModifierEnded += OnModifierEnded;
-
         InitializeValues();
     }
 
     protected override void Start()
     {
         base.Start();
-
-        AdjustStats();
 
         AdjustDirection();
     }
@@ -138,6 +116,14 @@ public abstract class Monster : Unit, IModifiable, IMoving
         MaxHP.BaseValue = EnemyData.MaxHealth;
     }
 
+    public virtual void SetPath(Path path)
+    {
+        CurrentPath = path;
+        startPosition = CurrentPath.waypoints[CurrentWaypoint].transform.position;
+        endPosition = CurrentPath.waypoints[CurrentWaypoint + 1].transform.position;
+        pathLength = Vector3.Distance(startPosition, endPosition);
+    }
+
     public virtual void FixedUpdate()
     {
         if (!IsDead && HasPathAssigned)
@@ -148,83 +134,7 @@ public abstract class Monster : Unit, IModifiable, IMoving
 
     protected virtual void Update()
     {
-        AdjustStats();
-    }
 
-    /*
-	public void AdjustStats2(){
-		List<Modifier> banList = new List<Modifier> ();
-		float curSpdMod = 1;
-		float curDmgTakenMod = 1;
-		float curArmorMod = 1;
-		if (modifiers.Count > 0) {
-			foreach (Modifier x in modifiers) {
-				if (x.active == false) {
-					banList.Add (x);
-				} else {
-					if (x.type == Type.MOVEMENT_SPEED) {
-						curSpdMod += x.value;
-						if (GetModifier (Name.Utility_Stun) != null)
-							curSpdMod = 0;
-					} else if (x.type == Type.DAMAGE_TAKEN) {
-						curDmgTakenMod += x.value;
-					} else if (x.type == Type.Armor) {
-						curArmorMod += x.value;
-					}
-				}
-			}
-		}
-		foreach (Modifier m in banList) {
-			modifiers.Remove (m);
-			ModifierEnded (m);
-		}
-		//speed = Mathf.Clamp(baseMoveSpeed * curSpdMod, 0, 10);
-
-		damageModifier = 1 * curDmgTakenMod;
-	}*/
-
-    public void FixedMovespeed(float value, float duration)
-    {
-        // MoveSpeed.Value = value;
-        MoveSpeed.locked = true;
-        MyTimer t = ValueStore.Instance.timerManagerInstance.StartTimer(duration);
-        t.TimerElapsed += FixedMoveSpeedEnded;
-    }
-
-    public void FixedMoveSpeedEnded()
-    {
-        MoveSpeed.locked = false;
-    }
-
-    protected override void Die(DamageSource source, IAttacker killer)
-    {
-        if (IsDead)
-        {
-            base.Die(source, killer);
-            return;
-        }
-
-        m.OnEnemyDied(this, source);
-
-        anim.SetTrigger("death");
-        anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
-
-        _audioSource.pitch = UnityEngine.Random.Range(0, 2f);
-        _audioSource.PlayOneShot(deathSound);
-
-        // Add death particle effects
-        // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
-        // Destroy(deathParticle, 2f);
-
-        base.Die(source, killer);
-    }
-
-    public virtual void SetPath(Path path)
-    {
-        CurrentPath = path;
-        startPosition = CurrentPath.waypoints[CurrentWaypoint].transform.position;
-        endPosition = CurrentPath.waypoints[CurrentWaypoint + 1].transform.position;
-        pathLength = Vector3.Distance(startPosition, endPosition);
     }
 
     public void FollowPath()
@@ -266,7 +176,7 @@ public abstract class Monster : Unit, IModifiable, IMoving
         float wdeltaX = endPosition.x - startPosition.x;
         float wdeltaY = endPosition.y - startPosition.y;
 
-        side.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+        transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
 
         if (endPosition.x >= startPosition.x && (deltaX >= deltaY * 0.8f))
         {
@@ -279,7 +189,7 @@ public abstract class Monster : Unit, IModifiable, IMoving
             side.SetActive(true);
             down.SetActive(false);
             up.SetActive(false);
-            side.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+            transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
         // else if (endPosition.y >= startPosition.y && (deltaY >= deltaX))
         // {
@@ -325,192 +235,26 @@ public abstract class Monster : Unit, IModifiable, IMoving
         }
     }
 
-    public void OnModifierEnded(Modifier m)
+    protected override void Die(DamageSource source, IAttacking killer)
     {
-
-    }
-
-    public void AddModifier(Modifier m, StackOperation s, int stackLimit)
-    {
-        if (GetModifier(m.name) != null)
-        { // if Modifier already exists
-            Modifier x = GetModifier(m.name);
-            if (s == StackOperation.Additive)
-            {
-                if (stackLimit != 0)
-                {
-                    // if still didnt reach stack limit
-                    if (x.currentStack < stackLimit)
-                    {
-                        // inc value and reset duration
-                        x.value += m.value;
-                        if (m.lifetime == ModifierLife.Temporary)
-                        {
-                            x.cdTimer.Duration = m.cdTimer.Duration;
-                        }
-                        x.currentStack++;
-                    }
-                    else
-                    {
-                        if (m.lifetime == ModifierLife.Temporary)
-                        {
-                            x.cdTimer.Duration = m.cdTimer.Duration;
-                        }
-                    }
-                }
-                else if (stackLimit == 0)
-                { // if stacklimit is 0 then it stacks infinitly
-                    x.value += m.value;
-                    if (m.lifetime == ModifierLife.Temporary)
-                    {
-                        x.cdTimer.Duration = m.cdTimer.Duration;
-                    }
-                }
-            }
-            else if (s == StackOperation.HighestValue)
-            {
-                float mA = m.value < 0 ? -m.value : m.value;
-                float xA = x.value < 0 ? -x.value : x.value;
-
-                if (mA > xA)
-                { // if passed modifier is higher value than current
-                    x.value = m.value;
-                    if (m.lifetime == ModifierLife.Temporary)
-                    {
-                        x.cdTimer.Duration = m.cdTimer.Duration;
-                    }
-                }
-                else if (mA == xA)
-                {
-                    if (m.lifetime == ModifierLife.Temporary)
-                    {
-                        x.cdTimer.Duration = m.cdTimer.Duration;
-                    }
-                }
-            }
-        }
-        else
-        { // add modifier if it doesnt exist
-            modifiers.Add(m);
-            GetModifier(m.name).currentStack++;
-        }
-    }
-
-    public void RemoveModifier(Name name)
-    {
-        foreach (Modifier x in modifiers)
+        if (IsDead)
         {
-            if (x.name == name)
-                modifiers.Remove(x);
-        }
-    }
-
-    public Modifier GetModifier(Name name)
-    {
-        return modifiers.FirstOrDefault(x => x.name == name);
-    }
-
-    public virtual void AdjustStats()
-    {
-        // TODO: Fix this mess of a method..
-        List<Modifier> banList = new List<Modifier>();
-        foreach (var item in stats)
-        {
-            item.multiplier = 0;
-            item.overallMultiplier = 1;
-            item.flatBonus = 0;
-        }
-        if (modifiers.Count > 0)
-        {
-            foreach (Modifier m in modifiers)
-            {
-                if (m.active == false)
-                    banList.Add(m);
-                if (m.active == true)
-                {
-                    Stat s = stats.FirstOrDefault(x => x.type == m.type);
-                    for (int i = 0; i < m.currentStack; i++)
-                    {
-                        m.Apply(this);
-                    }
-                    if (s != null)
-                    {
-                        if (m.bonusOperation == BonusType.Percentage)
-                        {
-                            s.multiplier += m.value;
-                        }
-                        else if (m.bonusOperation == BonusType.Flat)
-                        {
-                            s.flatBonus += m.value;
-                        }
-                        else if (m.bonusOperation == BonusType.OverallMultiplier)
-                        { // <--- temporary If
-                            s.overallMultiplier = m.value;
-                        }
-                    }
-                }
-            }
-        }
-        foreach (Modifier m in banList)
-        {
-            m.DeApply(this);
-            modifiers.Remove(m);
-            ModifierEnded(m);
+            base.Die(source, killer);
+            return;
         }
 
-        foreach (var item in stats)
-        {
-            //item.BonusValue = (item.baseValue * item.multiplier) + item.flatBonus;
-            //item.Value = item.baseValue + item.BonusValue;
-            if (item.type == Type.MOVEMENT_SPEED)
-            {
-                // item.Value = Mathf.Clamp(item.Value, 0, 10);
-            }
-        }
+        m.OnEnemyDied(this, source);
 
+        anim.SetTrigger("death");
+        anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
+
+        _audioSource.pitch = UnityEngine.Random.Range(0, 2f);
+        _audioSource.PlayOneShot(deathSound);
+
+        // Add death particle effects
+        // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
+        // Destroy(deathParticle, 2f);
+
+        base.Die(source, killer);
     }
-
-    public IEnumerator ColorFade(List<SpriteRenderer> s)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            foreach (var item in s)
-            {
-                item.color = Color.Lerp(item.color, Color.white, 0.1f * (i + 1));
-            }
-            yield return new WaitForSeconds(0.05f);
-        }
-    }
-
-    void OnDestroy()
-    {
-        ModifierEnded -= OnModifierEnded;
-    }
-}
-
-public enum DamageSource
-{
-    Normal,
-    Exit
-}
-
-public class MyColor
-{
-
-    public Color color;
-    public int importance;
-
-    public MyColor(Color c, int importance)
-    {
-        this.color = color;
-        this.importance = importance;
-    }
-}
-
-
-
-public enum EnemyType
-{
-    Normal,
-    Boss
 }

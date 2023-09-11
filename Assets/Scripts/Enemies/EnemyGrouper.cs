@@ -30,7 +30,7 @@ public class EnemyGrouper : Monster
             MaxHP.Modify(EnemyData.GroupBuffHealthPercentage * nearbyGroupers.Count, BonusType.Percentage, "GroupHPBuff", 0.2f, 1);
             MoveSpeed.Modify(EnemyData.GroupBuffMSPercentage, BonusType.Percentage, "GroupMSBuff", 0.2f, 1);
 
-            if (_isGrouped == false) // just grouped
+            if (_isGrouped == false) // first time grouping
             {
                 _isGrouped = true;
                 anim.SetTrigger("groupup");

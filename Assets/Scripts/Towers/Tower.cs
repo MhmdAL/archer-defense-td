@@ -8,12 +8,13 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityTimer;
 using EPOOutline;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 
-public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter, IMoving
+public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 {
     public event Action<Tower> SkillPointsChanged;
     public event Action SkillUpgraded;
-    public event Action<Modifier> ModifierEnded;
     public event Action AttackFinished;
     public event Action CombatEnded;
 
@@ -25,6 +26,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
     [field: SerializeField, Header("Attack Configuration")]
     public TowerAttackStrategy TowerAttackStrategy { get; set; }
 
+    
     [field: SerializeField]
     public List<TargetHitEffect> OnHitEffects { get; set; }
 
@@ -52,18 +54,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         }
     }
 
-    public List<Modifier> Modifiers
-    {
-        get
-        {
-            return modifiers;
-        }
-        set
-        {
-            modifiers = value;
-        }
-    }
-
     public float UpgradeCost
     {
         get
@@ -81,6 +71,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
     public GameObject upgradeAnimationPrefab;
     public GameObject archerShotParticle;
 
+    [AssetsOnly]
     public GameObject bullet;
     public GameObject circle;
     public GameObject cooldownBar;
@@ -116,7 +107,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
     public Sprite icon;
 
-
     public string title;
 
     public int maxLevel;
@@ -137,9 +127,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
     [HideInInspector]
     public int level;
-
-    [HideInInspector]
-    public List<Modifier> modifiers = new List<Modifier>();
 
     [HideInInspector]
     public List<Monster> monstersInRange;
@@ -234,8 +221,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
 
     private void Awake()
     {
-        ModifierEnded += OnModifierEnded;
-
         Enhancements = new List<IEnhancement>();
 
         ExtraData = new Dictionary<string, object>();
@@ -593,207 +578,6 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         SkillUpgraded?.Invoke();
     }
 
-    public void OnModifierEnded(Modifier m)
-    {
-
-    }
-
-    public void AddModifier(Modifier m, StackOperation s, int stackLimit)
-    {
-        switch (m.type)
-        {
-            case Type.ATTACK_SPEED:
-                AS.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
-                break;
-            case Type.ATTACK_DAMAGE:
-                AD.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
-                break;
-            case Type.ATTACK_RANGE:
-                AR.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
-                break;
-            case Type.ARMOR_PENETRATION:
-                AP.Modify(m.value, m.bonusOperation, m.name.ToString(), m.cdTimer?.Duration);
-                break;
-        }
-
-        return;
-
-        // TODO: fix multiple If checks
-        if (GetModifier(m.name) != null)
-        { // if Modifier already exists
-            Modifier x = GetModifier(m.name);
-            if (s == StackOperation.Additive)
-            {
-                if (stackLimit != 0)
-                {
-                    // if still didnt reach stack limit
-                    if (x.currentStack < stackLimit)
-                    {
-                        // inc value and reset duration
-                        x.value += m.value;
-                        if (m.lifetime == ModifierLife.Temporary)
-                        {
-                            x.cdTimer.Duration = m.cdTimer.Duration;
-                        }
-                        x.currentStack++;
-                    }
-                    else
-                    {
-                        if (m.lifetime == ModifierLife.Temporary)
-                        {
-                            x.cdTimer.Duration = m.cdTimer.Duration;
-
-                        }
-                    }
-                }
-                else if (stackLimit == 0)
-                { // if stacklimit is 0 then it stacks infinitly
-                    x.value += m.value;
-                    if (m.lifetime == ModifierLife.Temporary)
-                    {
-                        x.cdTimer.Duration = m.cdTimer.Duration;
-                    }
-                }
-            }
-            else if (s == StackOperation.HighestValue)
-            {
-                if (Mathf.Abs(m.value) > x.value)
-                { // if passed modifier is higher value than current
-                    x.value = m.value;
-                    if (m.lifetime == ModifierLife.Temporary)
-                    {
-                        x.cdTimer.Duration = m.cdTimer.Duration;
-                    }
-                }
-                else if (Mathf.Abs(m.value) == x.value)
-                {
-                    if (m.lifetime == ModifierLife.Temporary)
-                    {
-                        x.cdTimer.Duration = m.cdTimer.Duration;
-                    }
-                }
-            }
-        }
-        else
-        { // add modifier if it doesnt exist
-            modifiers.Add(m);
-            GetModifier(m.name).currentStack++;
-        }
-        AdjustStats();
-    }
-
-    public void RemoveModifier(Name name)
-    {
-        foreach (Modifier x in modifiers)
-        {
-            if (x.name == name)
-                modifiers.Remove(x);
-        }
-    }
-
-    public Modifier GetModifier(Name name)
-    {
-        return modifiers.FirstOrDefault(x => x.name == name);
-    }
-
-    /*
-	public virtual void AdjustStats(){
-		List<Modifier> banList = new List<Modifier>();
-		float bonusAD, bonusAS, bonusAR;
-		float atkSpdMod = 0;
-		float atkDmgMod = 0;
-		float atkRngMod = 0;
-		float slowValueMod = 0;
-		if (modifiers.Count > 0) {
-			foreach (Modifier x in modifiers) {
-				if (x.active == false)
-					banList.Add(x);
-				if (x.active == true) {
-					if (x.type == Type.ATTACK_SPEED) {
-						atkSpdMod += x.value;
-					} else if (x.type == Type.ATTACK_DAMAGE) {
-						atkDmgMod += x.value;
-					} else if (x.type == Type.ATTACK_RANGE) {
-						atkRngMod += x.value;
-					} else if (x.type == Type.SLOW_ON_ATTACK) {
-						slowValueMod += x.value;
-					}
-				}
-			}
-		}
-		foreach (Modifier m in banList) {
-			modifiers.Remove (m);
-			ModifierEnded (m);
-		}
-		baseDamage = SaveData.DEFAULT_AD * (1 + SaveData.GetUpgrade(UpgradeType.AD).CurrentValue);
-		baseAttackSpeed = SaveData.DEFAULT_AS * (1 + SaveData.GetUpgrade(UpgradeType.AS).CurrentValue);
-		baseRange = SaveData.DEFAULT_AR * (1 + SaveData.GetUpgrade(UpgradeType.AR).CurrentValue);
-		bonusAD = baseDamage * (atkDmgMod);
-		bonusAS = baseAttackSpeed * (atkSpdMod);
-		bonusAR = baseRange * (atkRngMod);
-		attackSpeed = baseAttackSpeed + bonusAS;
-		damage = baseDamage + bonusAD;
-		range = baseRange + bonusAR;
-
-		slowValue = baseSlowValue + (baseSlowValue * slowValueMod);
-
-		armorpen = SaveData.GetUpgrade (UpgradeType.AP).CurrentValue;
-
-		fullcooldown = 1 / attackSpeed;
-	}
-	*/
-
-    public virtual void AdjustStats()
-    {
-        // FullCooldown = 1 / AS.Value;
-
-        return;
-        // TODO: Fix this mess of a method..
-
-        foreach (var item in Stats)
-        {
-            item.multiplier = 0;
-            item.flatBonus = 0;
-        }
-
-        if (modifiers.Count > 0)
-        {
-            foreach (Modifier m in modifiers.ToList())
-            {
-                if (m.active == false)
-                {
-                    m.DeApply(this);
-                    modifiers.Remove(m);
-                    if (ModifierEnded != null)
-                        ModifierEnded(m);
-                }
-
-                if (m.active == true)
-                {
-                    Stat s = Stats.FirstOrDefault(x => x.type == m.type);
-                    for (int i = 0; i < m.currentStack; i++)
-                    {
-                        m.Apply(this);
-                    }
-
-                    if (s != null)
-                    {
-                        if (m.bonusOperation == BonusType.Percentage)
-                        {
-                            s.multiplier += m.value;
-                        }
-                        else if (m.bonusOperation == BonusType.Flat)
-                        {
-                            s.flatBonus += m.value;
-                        }
-                    }
-                }
-            }
-        }
-
-        // FullCooldown = 1 / AS.Value;
-    }
-
     public virtual void Upgrade()
     {
         Instantiate(upgradeAnimationPrefab, upgradeAnimSpawnPoint.position, Quaternion.identity);
@@ -803,7 +587,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
             {
                 if (towerUpgrades[i].intendedLevel == level + 1)
                 {
-                    AddModifier(towerUpgrades[i], StackOperation.Additive, 1);
+                    // AddModifier(towerUpgrades[i], StackOperation.Additive, 1);
                 }
             }
         }
@@ -813,7 +597,7 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
             {
                 if (towerUpgrades[i].intendedLevel == level + 1)
                 {
-                    GetModifier(towerUpgrades[i].name).value += towerUpgrades[i].value;
+                    // GetModifier(towerUpgrades[i].name).value += towerUpgrades[i].value;
                 }
             }
         }
@@ -987,10 +771,5 @@ public class Tower : MonoBehaviour, IModifiable, IAttacker, IFocusable, IShooter
         // cooldownBarParent.SetActive(false);
 
         FocusIndicatorArrow.SetActive(false);
-    }
-
-    private void OnDestroy()
-    {
-        ModifierEnded -= OnModifierEnded;
     }
 }

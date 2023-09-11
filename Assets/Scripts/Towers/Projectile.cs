@@ -4,7 +4,7 @@ using System.Linq;
 
 public class Projectile : MonoBehaviour
 {
-    public IShooter Owner { get; set; }
+    public IShooting Owner { get; set; }
 
     public float Damage { get; set; }
     public float Radius { get; set; }
@@ -174,7 +174,7 @@ public class Projectile : MonoBehaviour
 
 public class ProjectileSpawnData
 {
-    public ProjectileSpawnData(IShooter owner, Projectile prefab, Vector3 spawnPosition, Vector3 targetPosition)
+    public ProjectileSpawnData(IShooting owner, Projectile prefab, Vector3 spawnPosition, Vector3 targetPosition)
     {
         Owner = owner;
         Prefab = prefab;
@@ -182,7 +182,7 @@ public class ProjectileSpawnData
         TargetPosition = targetPosition;
     }
 
-    public IShooter Owner { get; set; }
+    public IShooting Owner { get; set; }
     public Projectile Prefab { get; set; }
     public Vector3 SpawnPosition { get; set; }
     public Vector3 TargetPosition { get; set; }

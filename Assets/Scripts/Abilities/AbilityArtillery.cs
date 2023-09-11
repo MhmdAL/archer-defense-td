@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using static UnityEngine.ParticleSystem;
 using UnityTimer;
 
-public class AbilityArtillery : Ability, IShooter
+public class AbilityArtillery : Ability, IShooting
 {
     public GameObject ArrowPrefab;
     public Transform StartPosition;

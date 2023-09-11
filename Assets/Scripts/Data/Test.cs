@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test : MonoBehaviour, IShooter
+public class Test : MonoBehaviour, IShooting
 {
     public GameObject ProjectilePrefab;
     public Transform TargetTransform;

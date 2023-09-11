@@ -22,3 +22,16 @@ public enum EnhancementType
     Executioner,
     Berzerk
 }
+
+
+public enum DamageSource
+{
+    Normal,
+    Exit
+}
+
+public enum EnemyType
+{
+    Normal,
+    Boss
+}

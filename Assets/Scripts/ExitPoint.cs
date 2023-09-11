@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ExitPoint : MonoBehaviour, IAttacker
+public class ExitPoint : MonoBehaviour, IAttacking
 {
 	public List<TargetHitEffect> OnHitEffects => new List<TargetHitEffect>();
 

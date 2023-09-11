@@ -13,7 +13,7 @@ public class BalancingDpsText : MonoBehaviour {
 		// Monster.UnitDamaged += OnMonsterDamaged;
 	}
 
-	public void OnMonsterDamaged(Unit m, float damage, IAttacker source){
+	public void OnMonsterDamaged(Unit m, float damage, IAttacking source){
 		if (source.GetType() == t.GetType() ) {
 			damageValue += damage;
 			textObject.text = "Damage:  " + damageValue;

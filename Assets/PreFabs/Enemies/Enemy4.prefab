@@ -359,7 +359,7 @@ Animator:
   m_GameObject: {fileID: 5284815991476355588}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 65f198b7ad1dac240a937a5a193b4348, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -578,7 +578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5284815991476731688}
-  - component: {fileID: 6455272842612335542}
+  - component: {fileID: 3405870321853136442}
   - component: {fileID: 4873272668420630981}
   - component: {fileID: 5284815991473028136}
   - component: {fileID: 5284815991474168250}
@@ -610,7 +610,7 @@ Transform:
   m_Father: {fileID: 5284815991476811748}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6455272842612335542
+--- !u!114 &3405870321853136442
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -619,13 +619,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5284815991476373886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46cbbbd1622edfe4aaac15354efc6124, type: 3}
+  m_Script: {fileID: 11500000, guid: 763c45c2d308d37409d06c0bdef60f56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   HitParticles: {fileID: 6396953465742684978, guid: 0d998b07b9165a143ab1035c876981a1,
     type: 3}
   DeathTime:
-    m_Mode: 3
+    m_Mode: 0
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -639,8 +639,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ConstantMin: 1.25
-    m_ConstantMax: 2.5
+    m_ConstantMin: 0
+    m_ConstantMax: 1.5
   <EnemyData>k__BackingField: {fileID: 11400000, guid: 8b0b3968b02ad2549b2334bf25fa474a,
     type: 2}
   deathSound: {fileID: 8300000, guid: ef1cf1830d819ef4eb4f10f4b022a5a3, type: 3}
@@ -649,10 +649,9 @@ MonoBehaviour:
   down: {fileID: 5284815991476368332}
   stunImage: {fileID: 5284815991476553670}
   icon: {fileID: 21300038, guid: ff7bb83a011b48f47993aa220c51ed8f, type: 3}
-  colorChangeBlockList:
-  - {fileID: 5284815991476380070}
+  colorChangeBlockList: []
   enemyType: 0
-  ID: 2
+  ID: 4
   anim: {fileID: 3269991312558016800}
   _audioSource: {fileID: 0}
   isAboutToDie: 0
@@ -2552,7 +2551,7 @@ PrefabInstance:
         type: 3}
       propertyPath: <Unit>k__BackingField
       value: 
-      objectReference: {fileID: 6455272842612335542}
+      objectReference: {fileID: 3405870321853136442}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

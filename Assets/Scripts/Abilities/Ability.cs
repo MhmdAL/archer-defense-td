@@ -10,7 +10,7 @@ public enum AbilityType
     Arrow_Artillery,
     Damage_boost
 }
-public abstract class Ability : MonoBehaviour, IAttacker
+public abstract class Ability : MonoBehaviour, IAttacking
 {
 
     public static event Action<AbilityType> AbilityActivated;

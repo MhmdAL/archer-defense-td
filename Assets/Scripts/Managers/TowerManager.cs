@@ -273,7 +273,6 @@ public class TowerManager : MonoBehaviour
             TowersInScene.Remove(t);
             TowersInScene.Add(newTower);
 
-            newTower.modifiers.AddRange(t.modifiers);
             newTower.TowerBase = t.TowerBase;
             newTower.SkillPoints = t.SkillPoints;
             newTower.CurrentSkillLevel = t.CurrentSkillLevel;
@@ -286,8 +285,8 @@ public class TowerManager : MonoBehaviour
 
             if (newTower.TowerBase.tag == "SuperBase")
             {
-                newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
-                    Type.ATTACK_RANGE, BonusType.Percentage), StackOperation.Additive, 1);
+                // newTower.AddModifier(new Modifier(superBaseAttackRangeModifier, Name.TowerBaseAttackRangeBuff,
+                //     Type.ATTACK_RANGE, BonusType.Percentage), StackOperation.Additive, 1);
             }
 
             newTower.silverSpent = t.cost;

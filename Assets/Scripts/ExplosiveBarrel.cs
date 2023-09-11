@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityTimer;
 
-public class ExplosiveBarrel : MonoBehaviour, IAttacker, IFocusable, IProjectileTarget
+public class ExplosiveBarrel : MonoBehaviour, IAttacking, IFocusable, IProjectileTarget
 {
     public Transform DetonationPoint;
     public float ExplosionRadius = 5;

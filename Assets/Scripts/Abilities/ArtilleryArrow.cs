@@ -7,7 +7,7 @@ public class ArtilleryArrow : MonoBehaviour
 {
 
 	[HideInInspector] public Monster target;
-	[HideInInspector] public IAttacker owner;
+	[HideInInspector] public IAttacking owner;
 
 	[HideInInspector] public float damage;
 	[HideInInspector] public float radius;

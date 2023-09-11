@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Spike : MonoBehaviour, IAttacker {
+public class Spike : MonoBehaviour, IAttacking {
 
 	public List<Monster> monstersInSpike = new List<Monster> ();
 	public float fullcooldown;
@@ -20,9 +20,9 @@ public class Spike : MonoBehaviour, IAttacker {
 						m.Damage (Mathf.Clamp(SaveData.GetUpgrade(UpgradeType.ArtilleryCooldown).valuePerLevel
 							* SaveData.GetUpgrade(UpgradeType.ArtilleryCooldown).level, 3, 100), 0, DamageSource.Normal, this);
 					}
-					m.AddModifier (new Modifier (-(Mathf.Clamp (SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).valuePerLevel
-						* SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).level, 0.1f, 0.6f)), Name.Spike_Slow, Type.MOVEMENT_SPEED, BonusType.Percentage,
-						ValueStore.Instance.timerManagerInstance.StartTimer(0.1f)), StackOperation.HighestValue, 1);
+					// m.AddModifier (new Modifier (-(Mathf.Clamp (SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).valuePerLevel
+					// 	* SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).level, 0.1f, 0.6f)), Name.Spike_Slow, Type.MOVEMENT_SPEED, BonusType.Percentage,
+					// 	ValueStore.Instance.timerManagerInstance.StartTimer(0.1f)), StackOperation.HighestValue, 1);
 				}
 			}
 			if (!(cooldown > 0))

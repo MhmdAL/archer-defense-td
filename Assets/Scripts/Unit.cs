@@ -12,7 +12,7 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
     public event Action HealthChanged;
     
     public event Action<Unit, DamageSource> OnDeath;
-    public event Action<Unit, float, IAttacker> Damaged;
+    public event Action<Unit, float, IAttacking> Damaged;
 
     public GameObject HitParticles;
     public MinMaxCurve DeathTime = 1.5f;
@@ -80,7 +80,7 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
         }
     }
 
-    public virtual void Damage(float damage, float armorpen, DamageSource source, IAttacker killer)
+    public virtual void Damage(float damage, float armorpen, DamageSource source, IAttacking killer)
     {
         InCombat = true;
         _combatTimer.Restart(CombatTimer);
@@ -116,7 +116,7 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
         }
     }
 
-    protected virtual void Die(DamageSource source, IAttacker killer)
+    protected virtual void Die(DamageSource source, IAttacking killer)
     {
         if (!IsDead)
         {

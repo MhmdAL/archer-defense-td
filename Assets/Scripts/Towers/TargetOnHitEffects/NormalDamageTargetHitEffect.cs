@@ -21,7 +21,7 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
 
 public class AttackData
 {
-    public IAttacker Owner { get; set; }
+    public IAttacking Owner { get; set; }
     public Vector3 HitPosition { get; set; }
     public float HitRadius { get; set; }
     public List<IProjectileTarget> Targets { get; set; }

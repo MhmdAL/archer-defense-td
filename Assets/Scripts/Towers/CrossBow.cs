@@ -3,7 +3,7 @@ using EPOOutline;
 using UnityEngine;
 using UnityTimer;
 
-public class CrossBow : MonoBehaviour, IFocusable, IShooter, IAttacker
+public class CrossBow : MonoBehaviour, IFocusable, IShooting, IAttacking
 {
     public SpriteRenderer SpearSprite;
     public Timer AttackTimer;
