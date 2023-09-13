@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class WindController : MonoBehaviour
 
             var windStrength = UnityEngine.Random.Range(WindStrength.x, WindStrength.y);
 
-            WindMaterial.SetFloat("_WindStrength", windStrength);
+            WindMaterial.DOFloat(windStrength, "_WindStrength", 2f);
         }
     }
 }
