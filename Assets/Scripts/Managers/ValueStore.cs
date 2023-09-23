@@ -109,6 +109,11 @@ public class ValueStore : MonoBehaviour
 
     private AudioSource _audioSource;
 
+    [SerializeField]
+    private AudioSource ambientAudioSource;
+    [SerializeField]
+    private AudioSource ambientWindAudioSource;
+
     void Awake()
     {
         active = true;
@@ -136,6 +141,9 @@ public class ValueStore : MonoBehaviour
             levelPopUpText.text = level.levelName;
 
             mainCamera = Camera.main;
+
+            ambientAudioSource.PlayOneShot(AudioProfile.ambient);
+            ambientWindAudioSource.PlayOneShot(AudioProfile.ambient_wind);
 
             // UpdateStats();
         }

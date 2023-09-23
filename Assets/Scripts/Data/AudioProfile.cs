@@ -13,4 +13,6 @@ public class AudioProfile : ScriptableObject
     public AudioClip enemy_killed;
     public AudioClip level_victory;
     public AudioClip level_defeat;
+    public AudioClip ambient;
+    public AudioClip ambient_wind;
 }

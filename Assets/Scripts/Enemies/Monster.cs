@@ -257,4 +257,14 @@ public abstract class Monster : Unit, IMoving
 
         base.Die(source, killer);
     }
+
+    public void OnMovementStarted()
+    {
+        
+    }
+
+    public void OnMovementEnded()
+    {
+        
+    }
 }

@@ -10,6 +10,7 @@ using UnityTimer;
 using EPOOutline;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using DG.Tweening;
 
 public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 {
@@ -26,7 +27,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     [field: SerializeField, Header("Attack Configuration")]
     public TowerAttackStrategy TowerAttackStrategy { get; set; }
 
-    
+
     [field: SerializeField]
     public List<TargetHitEffect> OnHitEffects { get; set; }
 
@@ -165,12 +166,17 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     private AudioSource _audioSource;
 
+    [SerializeField]
+    private AudioSource walkingAudioSource;
+
     [SerializeField, Header("Audio")]
     private AudioClip ShootSFX;
     [SerializeField]
     private AudioClip DrawSFX;
     [SerializeField]
     private AudioClip HitSFX;
+    [SerializeField]
+    private AudioClip WalkingSFX;
 
     private int _skillPoints;
     public int SkillPoints
@@ -298,6 +304,31 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
                 break;
             }
         }
+    }
+
+    [SerializeField]
+    private ParticleSystem dustPs;
+
+    public void OnMovementStarted()
+    {
+        if (!walkingAudioSource.isPlaying)
+        {
+            walkingAudioSource.clip = WalkingSFX;
+            walkingAudioSource.Play();
+        }
+        else
+        {
+            walkingAudioSource.DOFade(.25f, .2f);
+        }
+
+        dustPs.Play();
+    }
+
+    public void OnMovementEnded()
+    {
+        walkingAudioSource.DOFade(0, .2f);
+
+        dustPs.Stop();
     }
 
     private void OnEnemyInRange()
@@ -731,9 +762,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         lineRenderer.positionCount = 501;
 
-        for(int currentStep = 0; currentStep <= 500; currentStep++)
+        for (int currentStep = 0; currentStep <= 500; currentStep++)
         {
-            float circProgress = (float) currentStep / 500;
+            float circProgress = (float)currentStep / 500;
 
             float currentRadian = circProgress * 2 * Mathf.PI;
 
@@ -743,7 +774,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
             float x = xScaled * AR.Value;
             float y = yScaled * AR.Value;
 
-            var curPos = new Vector3(x,y,0);
+            var curPos = new Vector3(x, y, 0);
 
             lineRenderer.SetPosition(currentStep, curPos + transform.position);
         }

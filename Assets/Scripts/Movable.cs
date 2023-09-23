@@ -14,6 +14,8 @@ public class Movable : MonoBehaviour
     private IFocusable _focusable;
     private IMoving _movable;
 
+    private bool _isMoving;
+
     private void Awake()
     {
         _focusable = GetComponent<IFocusable>();
@@ -36,8 +38,32 @@ public class Movable : MonoBehaviour
                 AdjustSpriteDirection(moveDirection.x > 0 ? true : false);
             }
 
-            rigidbody2D.AddForce(moveDirection * _movable.MoveSpeed.Value);
+            var force = moveDirection * _movable.MoveSpeed.Value * Time.deltaTime;
+
+            var isMoving = force.sqrMagnitude > 0;
+
+            UpdateMovementState(isMoving);
+
+            rigidbody2D.AddForce(force);
         }
+        else if (!_focusable.HasFocus && _isMoving) // player unfocused but still moving. Should stop moving
+        {
+            UpdateMovementState(false);
+        }
+    }
+
+    private void UpdateMovementState(bool isMoving)
+    {
+        if (!_isMoving && isMoving)
+        {
+            _movable.OnMovementStarted();
+        }
+        else if (_isMoving && !isMoving)
+        {
+            _movable.OnMovementEnded();
+        }
+
+        _isMoving = isMoving;
     }
 
     private void AdjustSpriteDirection(bool lookRight)
