@@ -23,11 +23,11 @@ public class EnemyAdaptive : Monster {
 	public float damageModifierValue;
 	public float maxReduction;
 
-	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer)
+	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer, DamageMetaData damageMeta)
 	{
 		if (attackers.FirstOrDefault (x => x.t == killer.GetType ()) == null) {
 			attackers.Add (new AdaptiveAttacker (killer.GetType (), 1));
-			base.Damage (damage, armorpen, source, killer);
+			base.Damage (damage, armorpen, source, killer, null);
 		} else {
 			AdaptiveAttacker a = attackers.FirstOrDefault (x => x.t == killer.GetType ());
 			a.shotCount++;
@@ -36,7 +36,7 @@ public class EnemyAdaptive : Monster {
 				a.shotCount = 0;
 				a.modifier = Mathf.Clamp (a.modifier, 0, maxReduction);
 			}
-			base.Damage (damage * (1 - a.modifier), armorpen, source, killer);
+			base.Damage (damage * (1 - a.modifier), armorpen, source, killer, damageMeta);
 		}
 		/*if (killer is ExitPoint) {
 			base.Damage (damage * (1 - ), armorpen, source, killer);	

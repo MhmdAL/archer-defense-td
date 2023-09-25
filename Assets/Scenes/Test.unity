@@ -4260,6 +4260,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -15533
       objectReference: {fileID: 0}
+    - target: {fileID: 6283577261911282508, guid: f23c1d48b73e03f4e91938a3084641de,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 7355959
+      objectReference: {fileID: 0}
     - target: {fileID: 6283577261913002704, guid: f23c1d48b73e03f4e91938a3084641de,
         type: 3}
       propertyPath: m_SortingOrder
@@ -7586,6 +7591,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingOrder
       value: -15535
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261530033916567830, guid: 494085203b0488740a055a8545303aa1,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 7355959
       objectReference: {fileID: 0}
     - target: {fileID: 6261530033948663946, guid: 494085203b0488740a055a8545303aa1,
         type: 3}

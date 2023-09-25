@@ -35,3 +35,8 @@ public enum EnemyType
     Normal,
     Boss
 }
+
+public enum DamageDirection
+{
+    
+}

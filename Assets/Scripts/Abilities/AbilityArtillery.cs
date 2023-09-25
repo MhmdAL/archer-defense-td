@@ -99,7 +99,7 @@ public class AbilityArtillery : Ability, IShooting
         {
             if (unit is Unit u)
             {
-                u.Damage(p.Damage, 0, DamageSource.Normal, this);
+                u.Damage(p.Damage, 0, DamageSource.Normal, this, null);
             }
         }
     }

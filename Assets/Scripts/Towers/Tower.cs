@@ -680,7 +680,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         {
             if (target != null)
             {
-                target.Damage(dmg / 10, AP.Value, DamageSource.Normal, this);
+                target.Damage(dmg / 10, AP.Value, DamageSource.Normal, this, null);
             }
             else
             {

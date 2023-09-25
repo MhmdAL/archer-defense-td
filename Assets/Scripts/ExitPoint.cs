@@ -11,7 +11,7 @@ public class ExitPoint : MonoBehaviour, IAttacking
 		Monster m = other.GetComponent<Monster>();
 		if (m != null)
 		{
-			m.Damage(1000000, 1000000, DamageSource.Exit, this);
+			m.Damage(1000000, 1000000, DamageSource.Exit, this, null);
 		}
 	}
 }

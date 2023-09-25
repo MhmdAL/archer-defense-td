@@ -80,7 +80,7 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
         }
     }
 
-    public virtual void Damage(float damage, float armorpen, DamageSource source, IAttacking killer)
+    public virtual void Damage(float damage, float armorpen, DamageSource source, IAttacking killer, DamageMetaData damageMeta)
     {
         InCombat = true;
         _combatTimer.Restart(CombatTimer);
@@ -111,12 +111,12 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
 
             if (CurrentHP <= 0)
             {
-                Die(source, killer);
+                Die(source, killer, damageMeta);
             }
         }
     }
 
-    protected virtual void Die(DamageSource source, IAttacking killer)
+    protected virtual void Die(DamageSource source, IAttacking killer, DamageMetaData damageMeta)
     {
         if (!IsDead)
         {
@@ -160,4 +160,9 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget
 
         // Instantiate(HitParticles, transform.position, Quaternion.identity);
     }
+}
+
+public class DamageMetaData
+{
+    public Projectile Projectile;
 }

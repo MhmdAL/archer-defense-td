@@ -18,7 +18,7 @@ public class Spike : MonoBehaviour, IAttacking {
 					if (cooldown <= 0) {
 						m.gameObject.GetComponent<Monster> ();
 						m.Damage (Mathf.Clamp(SaveData.GetUpgrade(UpgradeType.ArtilleryCooldown).valuePerLevel
-							* SaveData.GetUpgrade(UpgradeType.ArtilleryCooldown).level, 3, 100), 0, DamageSource.Normal, this);
+							* SaveData.GetUpgrade(UpgradeType.ArtilleryCooldown).level, 3, 100), 0, DamageSource.Normal, this, null);
 					}
 					// m.AddModifier (new Modifier (-(Mathf.Clamp (SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).valuePerLevel
 					// 	* SaveData.GetUpgrade (UpgradeType.ArtilleryArrowCount).level, 0.1f, 0.6f)), Name.Spike_Slow, Type.MOVEMENT_SPEED, BonusType.Percentage,

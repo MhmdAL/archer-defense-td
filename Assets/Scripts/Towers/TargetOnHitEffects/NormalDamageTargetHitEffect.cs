@@ -12,7 +12,7 @@ public class NormalDamageTargetHitEffect : TargetHitEffect
             {
                 if (target is Unit unit)
                 {
-                    unit.Damage(data.Damage, data.ArmorPen, DamageSource.Normal, data.Owner);
+                    unit.Damage(data.Damage, data.ArmorPen, DamageSource.Normal, data.Owner, new DamageMetaData { Projectile = data.Projectile });
                 }
             }
         }

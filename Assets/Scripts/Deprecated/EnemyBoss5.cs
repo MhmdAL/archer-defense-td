@@ -59,10 +59,10 @@ public class EnemyBoss5 : EnemyAdaptive {
 		}
 	}
 
-	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer)
+	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer, DamageMetaData damageMeta)
 	{
 		if (!immune || killer is ExitPoint) {
-			base.Damage (damage, armorpen, source, killer);
+			base.Damage (damage, armorpen, source, killer, damageMeta);
 		} 
 	}
 

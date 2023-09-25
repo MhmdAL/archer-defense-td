@@ -146,7 +146,14 @@ public abstract class Monster : Unit, IMoving
             distanceTravelled += speed;
             progress += step;
         }
+
+        var prevPos = myTransform.root.position;
+
         myTransform.root.position = Vector3.Lerp(startPosition, endPosition, Mathf.Clamp(progress, progress, 1));
+
+        var xDiff = Mathf.Abs(myTransform.root.position.x - prevPos.x);
+
+        anim.SetFloat("walk_speed", 0.5f + xDiff * 20);
 
         deltaX = Mathf.Abs(endPosition.x - startPosition.x);
         deltaY = Mathf.Abs(endPosition.y - startPosition.y);
@@ -235,18 +242,28 @@ public abstract class Monster : Unit, IMoving
         }
     }
 
-    protected override void Die(DamageSource source, IAttacking killer)
+    protected override void Die(DamageSource source, IAttacking killer, DamageMetaData damageMeta)
     {
         if (IsDead)
         {
-            base.Die(source, killer);
+            base.Die(source, killer, damageMeta);
             return;
         }
 
         m.OnEnemyDied(this, source);
 
         anim.SetTrigger("death");
-        anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
+
+        if (damageMeta?.Projectile != null)
+        {
+            var diff = damageMeta.Projectile.transform.position.x - transform.position.x;
+
+            anim.SetInteger("death_index", diff < 0 ? 0 : 1); // index 0: right death animation, index 1: left death animation
+        }
+        else
+        {
+            anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
+        }
 
         _audioSource.pitch = UnityEngine.Random.Range(0, 2f);
         _audioSource.PlayOneShot(deathSound);
@@ -255,16 +272,16 @@ public abstract class Monster : Unit, IMoving
         // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
         // Destroy(deathParticle, 2f);
 
-        base.Die(source, killer);
+        base.Die(source, killer, damageMeta);
     }
 
     public void OnMovementStarted()
     {
-        
+
     }
 
     public void OnMovementEnded()
     {
-        
+
     }
 }

@@ -74,7 +74,7 @@ public class ArtilleryArrow : MonoBehaviour
 
 	public void BulletHit()
 	{
-		target.Damage(damage, 0, DamageSource.Normal, owner);
+		target.Damage(damage, 0, DamageSource.Normal, owner, null);
 		Destroy(gameObject);
 	}
 

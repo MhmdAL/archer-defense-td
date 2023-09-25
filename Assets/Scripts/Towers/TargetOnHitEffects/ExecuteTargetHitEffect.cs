@@ -12,7 +12,7 @@ public class ExecuteTargetHitEffect : TargetHitEffect
             {
                 if (target is Unit unit && unit.CurrentHP < unit.MaxHP.Value * 0.2f)
                 {
-                    unit.Damage(999999, 0, DamageSource.Normal, data.Owner);
+                    unit.Damage(999999, 0, DamageSource.Normal, data.Owner, new DamageMetaData { Projectile = data.Projectile });
                 }
             }
         }

@@ -35,9 +35,9 @@ public class EnemyDasher : Monster {
 		anim.SetBool ("Dash", false);
 	}
 
-	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer)
+	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer, DamageMetaData damageMeta)
 	{
-		base.Damage (damage, armorpen, source, killer);
+		base.Damage (damage, armorpen, source, killer, damageMeta);
 		if (killer is Tower) {
 			shotNumber += 1;
 		}

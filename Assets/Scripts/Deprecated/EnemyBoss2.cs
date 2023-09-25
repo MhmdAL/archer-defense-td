@@ -17,9 +17,9 @@ public class EnemyBoss2 : Monster {
 		armorBuffCooldownTimer = new CooldownTimer (0);
 	}
 
-	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer)
+	public override void Damage (float damage, float armorpen, DamageSource source, IAttacking killer, DamageMetaData damageMeta)
 	{
-		base.Damage (damage, armorpen, source, killer);
+		base.Damage (damage, armorpen, source, killer, damageMeta);
 		if (killer is Tower) {
 			shotNumber += 1;
 		}
