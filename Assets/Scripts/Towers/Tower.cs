@@ -19,17 +19,19 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     public event Action AttackFinished;
     public event Action CombatEnded;
 
-    [field: SerializeField, Header("Data")]
-    public TowerSkillData TowerSkillsData { get; set; }
-    [field: SerializeField]
-    public TowerData TowerData { get; set; }
+    public List<TargetHitEffect> OnHitEffects => onHitEffects;
 
-    [field: SerializeField, Header("Attack Configuration")]
-    public TowerAttackStrategy TowerAttackStrategy { get; set; }
+    [SerializeField, Header("Data")]
+    private TowerSkillData towerSkillsData;
 
+    [SerializeField]
+    private TowerData towerData;
 
-    [field: SerializeField]
-    public List<TargetHitEffect> OnHitEffects { get; set; }
+    [SerializeField, Header("Attack Configuration")]
+    private TowerAttackStrategy towerAttackStrategy;
+
+    [SerializeField]
+    private List<TargetHitEffect> onHitEffects;
 
     public Dictionary<string, object> ExtraData { get; set; }
 
@@ -206,9 +208,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         {
             _currentXP = value;
 
-            if (TowerSkillsData.SkillValues.Count > CurrentSkillLevel)
+            if (towerSkillsData.SkillValues.Count > CurrentSkillLevel)
             {
-                var nextLevelXp = TowerSkillsData.SkillValues[CurrentSkillLevel];
+                var nextLevelXp = towerSkillsData.SkillValues[CurrentSkillLevel];
 
                 if (CurrentXP >= nextLevelXp.ExpRequired)
                 {
@@ -270,11 +272,11 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         cooldownBarParent = cooldownBarTransform.parent.gameObject;
 
-        AD = new Stat(Type.ATTACK_DAMAGE, TowerData.BaseAttackDamage * (1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0));
-        AS = new Stat(Type.ATTACK_SPEED, TowerData.BaseAttackSpeed * (1 + SaveData.GetUpgrade(UpgradeType.AS)?.CurrentValue ?? 0));
-        AR = new Stat(Type.ATTACK_RANGE, TowerData.BaseAttackRange * (1 + SaveData.GetUpgrade(UpgradeType.AR)?.CurrentValue ?? 0));
+        AD = new Stat(Type.ATTACK_DAMAGE, towerData.BaseAttackDamage * (1 + SaveData.GetUpgrade(UpgradeType.AD)?.CurrentValue ?? 0));
+        AS = new Stat(Type.ATTACK_SPEED, towerData.BaseAttackSpeed * (1 + SaveData.GetUpgrade(UpgradeType.AS)?.CurrentValue ?? 0));
+        AR = new Stat(Type.ATTACK_RANGE, towerData.BaseAttackRange * (1 + SaveData.GetUpgrade(UpgradeType.AR)?.CurrentValue ?? 0));
         AP = new Stat(Type.ARMOR_PENETRATION, SaveData.GetUpgrade(UpgradeType.AP)?.CurrentValue ?? 0);
-        MoveSpeed = new Stat(Type.MOVEMENT_SPEED, TowerData.BaseMoveSpeed);
+        MoveSpeed = new Stat(Type.MOVEMENT_SPEED, towerData.BaseMoveSpeed);
 
         ADSkill = new TowerSkill { SkillType = TowerSkillType.AttackDamage };
         ARSkill = new TowerSkill { SkillType = TowerSkillType.AttackRange };
@@ -377,7 +379,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
             secondaryTargets = secondaryTargets.Take(SecondaryTargetCount).ToList();
 
-            TowerAttackStrategy.Attack(new TowerAttackData
+            towerAttackStrategy.Attack(new TowerAttackData
             {
                 Owner = this,
                 PrimaryTarget = targets.FirstOrDefault(),
@@ -573,7 +575,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         SkillPoints--;
 
-        var currentSkillValues = TowerSkillsData.SkillValues[CurrentSkillLevel - 1];
+        var currentSkillValues = towerSkillsData.SkillValues[CurrentSkillLevel - 1];
 
         switch ((TowerSkillType)skill)
         {

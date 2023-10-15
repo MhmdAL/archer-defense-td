@@ -3,49 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 [ExecuteInEditMode]
 public class AdjustSortingOrder : MonoBehaviour
 {
+    public int CurrentSortingOrder => _canvas != null ? _canvas.sortingOrder : _spriteRenderer.sortingOrder;
+
+    [SerializeField, Header("If not null, the root's y position is used.")]
+    private Transform root;
+
     [SerializeField]
-    private List<SortingOrderOffsetData> itemsToBeSorted;
+    private int sortingOffset;
+
+    private Canvas _canvas;
+    private SpriteRenderer _spriteRenderer;
 
     private void Awake()
     {
-        LoadCurrentObjectSprites();
-    }
-
-    private void OnEnable()
-    {
-        LoadCurrentObjectSprites();
-    }
-
-    private void LoadCurrentObjectSprites()
-    {
-        if (itemsToBeSorted.Any())
-        {
-            return;
-        }
-
-        itemsToBeSorted = new List<SortingOrderOffsetData>();
-
-        foreach (var item in transform.GetComponentsInChildren<SpriteRenderer>(true).ToList())
-        {
-            itemsToBeSorted.Add(new SortingOrderOffsetData
-            {
-                SpriteRenderer = item,
-                SortingOrderOffset = item.sortingOrder
-            });
-        }
-
-        foreach (var item in transform.GetComponentsInChildren<Canvas>(true).ToList())
-        {
-            itemsToBeSorted.Add(new SortingOrderOffsetData
-            {
-                Canvas = item,
-                SortingOrderOffset = item.sortingOrder
-            });
-        }
+        TryGetComponent<Canvas>(out _canvas);
+        TryGetComponent<SpriteRenderer>(out _spriteRenderer);
     }
 
     private void Update()
@@ -55,16 +32,16 @@ public class AdjustSortingOrder : MonoBehaviour
 
     public void Adjust()
     {
-        foreach (var item in itemsToBeSorted)
+        if (_canvas != null)
         {
-            if (item.SpriteRenderer != null)
-            {
-                item.SpriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * -500) + item.SortingOrderOffset;
-            }
-            else
-            {
-                item.Canvas.sortingOrder = Mathf.RoundToInt(transform.position.y * -500) + item.SortingOrderOffset;
-            }
+            _canvas.sortingOrder = root != null ? Mathf.RoundToInt(root.position.y * -500) + sortingOffset 
+                : Mathf.RoundToInt(transform.position.y * -500) + sortingOffset;
+        }
+
+        if (_spriteRenderer != null)
+        {
+            _spriteRenderer.sortingOrder = root != null ? Mathf.RoundToInt(root.position.y * -500) + sortingOffset
+                : Mathf.RoundToInt(transform.position.y * -500) + sortingOffset;
         }
     }
 }

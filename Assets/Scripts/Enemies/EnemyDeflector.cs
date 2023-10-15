@@ -4,7 +4,7 @@ public class EnemyDeflector : Monster
 {
     public override void OnProjectileHit(Projectile p, Vector2 hitpoint)
     {
-        var targetDir = (CurrentPath.waypoints[CurrentWaypoint + 1].transform.position - transform.position).normalized;
+        var targetDir = (CurrentPath.Waypoints[CurrentWaypoint + 1] - transform.position).normalized;
 
         if (targetDir.x > 0 && p.transform.position.x > transform.position.x + 2)
         {

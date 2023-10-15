@@ -19,6 +19,7 @@ public class HealthBar : MonoBehaviour
     public TextMeshProUGUI HealthText { get; set; }
 
     private Image currentHpBar;
+    private Canvas canvas;
 
     private void Start()
     {
@@ -27,6 +28,7 @@ public class HealthBar : MonoBehaviour
         Unit.OnDeath += OnUnitDied;
 
         currentHpBar = HPBar.GetComponent<Image>();
+        canvas = this.GetComponent<Canvas>();
 
         UpdateVisuals();
     }
@@ -43,9 +45,19 @@ public class HealthBar : MonoBehaviour
 
     private void UpdateVisuals()
     {
-        if(Unit == null)
+        if (Unit == null)
         {
             return;
+        }
+
+        if (Unit.CurrentHP >= Unit.MaxHP.Value)
+        {
+            canvas.enabled = false;
+            return;
+        }
+        else if (!canvas.enabled)
+        {
+            canvas.enabled = true;
         }
 
         currentHpBar.fillAmount = Unit.CurrentHP / (Unit.MaxHP.Value + Unit.CurrentShield);

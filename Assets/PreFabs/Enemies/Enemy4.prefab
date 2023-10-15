@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 5284815991476782642}
   - component: {fileID: 5284815991455542956}
   - component: {fileID: 3269991312558016800}
+  - component: {fileID: 8798516562322184397}
   m_Layer: 11
   m_Name: Side
   m_TagString: Untagged
@@ -282,7 +283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5284815991476355588}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.009999894, y: 0.98, z: 0}
+  m_LocalPosition: {x: 0.009999894, y: 1.29, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -369,6 +370,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8798516562322184397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5284815991476355588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 5284815991476731688}
+  sortingOffset: 0
 --- !u!1 &5284815991476361362
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,7 +594,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5284815991476731688}
   - component: {fileID: 3405870321853136442}
-  - component: {fileID: 4873272668420630981}
   - component: {fileID: 5284815991473028136}
   - component: {fileID: 5284815991474168250}
   - component: {fileID: 4279518534982882669}
@@ -657,85 +671,6 @@ MonoBehaviour:
   isAboutToDie: 0
   distanceTravelled: 0
   targetedBy: []
---- !u!114 &4873272668420630981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5284815991476373886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemsToBeSorted:
-  - SpriteRenderer: {fileID: 5284815991455542956}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 0
-  - SpriteRenderer: {fileID: 295712288677458329}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 1
-  - SpriteRenderer: {fileID: 6540876794839786769}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 2
-  - SpriteRenderer: {fileID: 2618476537255588026}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 1
-  - SpriteRenderer: {fileID: 713583082792213192}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 0
-  - SpriteRenderer: {fileID: 5284815991455539104}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 5
-  - SpriteRenderer: {fileID: 5284815991455692826}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -9
-  - SpriteRenderer: {fileID: 5284815991455686196}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -4
-  - SpriteRenderer: {fileID: 5284815991455700906}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -5
-  - SpriteRenderer: {fileID: 5284815991455542568}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -3
-  - SpriteRenderer: {fileID: 5284815991455538622}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -7
-  - SpriteRenderer: {fileID: 5284815991455685768}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -8
-  - SpriteRenderer: {fileID: 5284815991455541936}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -6
-  - SpriteRenderer: {fileID: 5284815991455716220}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -2
-  - SpriteRenderer: {fileID: 5284815991455526694}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -1
-  - SpriteRenderer: {fileID: 5284815991455717826}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 0
-  - SpriteRenderer: {fileID: 5284815991455699498}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -10
-  - SpriteRenderer: {fileID: 5284815991455539616}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -15
-  - SpriteRenderer: {fileID: 5284815991455719450}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -10
-  - SpriteRenderer: {fileID: 5284815991455541128}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: -15
-  - SpriteRenderer: {fileID: 5284815991455545950}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 5
-  - SpriteRenderer: {fileID: 0}
-    Canvas: {fileID: 2283919026204868372}
-    SortingOrderOffset: 0
 --- !u!50 &5284815991473028136
 Rigidbody2D:
   serializedVersion: 4
@@ -2441,6 +2376,10 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11438966, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 7355959
+      objectReference: {fileID: 0}
     - target: {fileID: 22334186, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
       propertyPath: m_SortingOrder
       value: -15536
@@ -2555,7 +2494,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 111300, guid: 04df830e7d63ddf4a9ccc52daf6d2d57,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6787059884173009402}
   m_SourcePrefab: {fileID: 100100000, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
 --- !u!224 &2283919026204817584 stripped
 RectTransform:
@@ -2563,9 +2506,23 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2283919026225067518}
   m_PrefabAsset: {fileID: 0}
---- !u!223 &2283919026204868372 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 22334186, guid: 04df830e7d63ddf4a9ccc52daf6d2d57,
+--- !u!1 &2283919026225088314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 111300, guid: 04df830e7d63ddf4a9ccc52daf6d2d57,
     type: 3}
   m_PrefabInstance: {fileID: 2283919026225067518}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6787059884173009402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2283919026225088314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 5284815991476731688}
+  sortingOffset: 0

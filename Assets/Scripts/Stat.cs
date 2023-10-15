@@ -8,6 +8,9 @@ using System;
 [System.Serializable]
 public class Stat
 {
+    /// <summary>
+    /// Called when the value is modified. (Value Before, Value After)
+    /// </summary>
     public Action<float, float> ValueModified;
 
     private float _baseValue;
@@ -58,7 +61,7 @@ public class Stat
 
     private List<ModifierV2> _modifiers;
 
-    public Stat(Type t, float baseValue, Action<float, float>? onValueModified = null)
+    public Stat(Type t, float baseValue, Action<float, float> onValueModified = null)
     {
         type = t;
         _baseValue = baseValue;

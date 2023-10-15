@@ -50,7 +50,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         if (target.HasPathAssigned)
         {
-            var targetDir = (target.CurrentPath.waypoints[target.CurrentWaypoint + 1].transform.position - target.transform.position).normalized;
+            var targetDir = (target.CurrentPath.Waypoints[target.CurrentWaypoint + 1] - target.transform.position).normalized;
             targetPosition += targetDir * (1f * target.MoveSpeed.Value);
         }
 

@@ -42,7 +42,6 @@ GameObject:
   m_Component:
   - component: {fileID: 417430}
   - component: {fileID: 11404596}
-  - component: {fileID: 4449476920635943648}
   - component: {fileID: 6101822}
   - component: {fileID: 5023198}
   m_Layer: 13
@@ -82,22 +81,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shotNumber: 0
   isAboutToKill: 0
---- !u!114 &4449476920635943648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemsToBeSorted:
-  - SpriteRenderer: {fileID: 4362648228274228419}
-    Canvas: {fileID: 0}
-    SortingOrderOffset: 26617
 --- !u!61 &6101822
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -108,6 +91,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -141,6 +143,12 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -155,6 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 118848525181747157}
   - component: {fileID: 4362648228274228419}
+  - component: {fileID: 4804063571666256495}
   m_Layer: 13
   m_Name: Sprite
   m_TagString: Untagged
@@ -217,7 +226,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 13644
+  m_SortingOrder: -12973
   m_Sprite: {fileID: -7451953295746623981, guid: ef1b1625664d66746afc115a84128a2b,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -230,3 +239,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4804063571666256495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464265775228159802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  sortingOffset: 0

@@ -42,7 +42,6 @@ GameObject:
   m_Component:
   - component: {fileID: 417430}
   - component: {fileID: 11404596}
-  - component: {fileID: 4449476920635943648}
   - component: {fileID: 5023198}
   m_Layer: 10
   m_Name: stone
@@ -81,18 +80,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shotNumber: 0
   isAboutToKill: 0
---- !u!114 &4449476920635943648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &5023198
 Rigidbody2D:
   serializedVersion: 4
@@ -110,6 +97,12 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -124,6 +117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 118848525181747157}
   - component: {fileID: 4362648228274228419}
+  - component: {fileID: 4430332354951323912}
   m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
@@ -186,7 +180,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1145342779
   m_SortingLayer: -1
-  m_SortingOrder: 27288
+  m_SortingOrder: -12973
   m_Sprite: {fileID: 21300000, guid: b63effb58e3d0694ba4277637a607ee4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -198,3 +192,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4430332354951323912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464265775228159802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bae09de82d15234b922106a38721bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 417430}
+  sortingOffset: 0
