@@ -229,6 +229,10 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
+        _outlinable = GetComponentInChildren<Outlinable>();
+
         Enhancements = new List<IEnhancement>();
 
         ExtraData = new Dictionary<string, object>();
@@ -238,7 +242,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // Initalize cooldown timers
         InitializeValues();
 
-
         // Add modifiers that apply from the start
         AddStartingModifiers();
 
@@ -247,12 +250,11 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         // Set values from file, used when upgrading tower
         SetUpgradeValues();
+    }
 
-        anim = GetComponent<Animator>();
-
-        _audioSource = GetComponent<AudioSource>();
-
-        _outlinable = GetComponentInChildren<Outlinable>();
+    private void Start()
+    {
+        AttackCooldownTimer.Resume();
     }
 
     public virtual void InitializeValues()
@@ -260,6 +262,8 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         silverSpent = cost;
 
         AttackCooldownTimer = this.AttachTimer(0, OnAttackTimerElapsed, isDoneWhenElapsed: false);
+        AttackCooldownTimer.Pause();
+
         CombatTimer = this.AttachTimer(2f, OnCombatTimerElapsed, isDoneWhenElapsed: false);
 
         cooldownBarTransform = cooldownBar.transform;
@@ -611,6 +615,8 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         SkillUpgraded?.Invoke();
     }
 
+    #region Upgrades
+
     public virtual void Upgrade()
     {
         Instantiate(upgradeAnimationPrefab, upgradeAnimSpawnPoint.position, Quaternion.identity);
@@ -659,39 +665,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         }
     }
 
-    public void StartPoison(Monster target, Projectile p)
-    {
-        ShopUpgrade poison = SaveData.GetUpgrade(UpgradeType.Poison_Arrows);
-        StartCoroutine(DOT(poison.CurrentValue * p.Damage, target));
-    }
-
-    public IEnumerator ColorFade()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            archerTowerRenderer.color = Color.Lerp(archerTowerRenderer.color, Color.white, 0.1f * (i + 1));
-            yield return new WaitForSeconds(0.05f);
-        }
-    }
-
-    IEnumerator DOT(float dmg, Monster target)
-    {
-        int tickCount = 10;
-
-        for (int i = 0; i < tickCount; i++)
-        {
-            if (target != null)
-            {
-                target.Damage(dmg / 10, AP.Value, DamageSource.Normal, this, null);
-            }
-            else
-            {
-                yield return 0;
-            }
-            yield return new WaitForSeconds(0.2f);
-        }
-    }
-
     public float CurrentValue(UpgradeType upgrade)
     {
         return SaveData.GetUpgrade(upgrade).level * SaveData.GetUpgrade(upgrade).valuePerLevel;
@@ -719,6 +692,8 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
             return false;
         }
     }
+
+    #endregion
 
     public void UpdateTowerVisuals()
     {

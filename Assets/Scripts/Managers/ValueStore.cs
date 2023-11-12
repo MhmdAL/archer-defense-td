@@ -158,13 +158,21 @@ public class ValueStore : MonoBehaviour
     {
         CurrentTime = Time.time;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             LoadLevel((CurrentLevel.LevelId + 1) % (LevelPrefabs.Count + 1));
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             LoadLevel(CurrentLevel.LevelId - 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            WaveSpawner.SetWave(WaveSpawner.CurrentWave + 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            WaveSpawner.SetWave(WaveSpawner.CurrentWave - 1);
         }
     }
 
@@ -341,6 +349,15 @@ public class ValueStore : MonoBehaviour
         DataService.Instance.WriteSaveData();
 
         endGameMenu.SetActive(true);
+    }
+
+    public void OnGameOverProceedButtonClicked()
+    {
+        Time.timeScale = 1;
+
+        endGameMenu.SetActive(false);
+
+        LoadLevel(CurrentLevel.LevelId + 1);
     }
 
     public void ExitGame()

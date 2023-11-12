@@ -66,7 +66,7 @@ public class RapidArcher : Tower {
 	}
 
 	public void DeApplyRapidT4Modifier(IModifiable m){
-		StartCoroutine (ColorFade());
+		// StartCoroutine (ColorFade());
 		anim.SetBool ("PlayT4Animation", false);
 	}
 

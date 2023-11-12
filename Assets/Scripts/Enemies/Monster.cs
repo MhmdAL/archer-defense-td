@@ -29,6 +29,8 @@ public abstract class Monster : Unit, IMoving
         }
     }
 
+    public MovementTracker movementTracker;
+
     [Header("Objects for different directions")]
     public GameObject side;
     public GameObject up;
@@ -80,9 +82,6 @@ public abstract class Monster : Unit, IMoving
 
     private FollowPath _followPathComponent;
 
-    [SerializeField]
-    private MovementTracker movementTracker;
-
     protected override void Awake()
     {
         base.Awake();
@@ -133,9 +132,18 @@ public abstract class Monster : Unit, IMoving
 
     }
 
+    private float timer;
+
     protected virtual void Update()
     {
+        timer+=Time.deltaTime;
 
+        if(timer > 5)
+        {
+            print(transform.root.position);
+            print(movementTracker.CurrentVelocity);
+            timer = -1000;
+        }
     }
 
     private void OnMovementChanged(Vector3 delta, Vector3 currentVelocity)

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class AbilityHorseRaidV2 : Ability
 {
@@ -7,6 +8,7 @@ public class AbilityHorseRaidV2 : Ability
     public GameObject HorseRaidEndIndicatorPrefab;
     public GameObject HorseRaiderPrefab;
     public int HorseRaiderCount = 3;
+    public float HorseRaiderSpawnDelay = 1;
     public Transform HorseRaiderSpawnPosition;
 
     private HorseRaidState _state;
@@ -36,11 +38,11 @@ public class AbilityHorseRaidV2 : Ability
 
             // _raidEndIndicator = Instantiate(HorseRaidEndIndicatorPrefab, _raidEndPosition.Value.ToWorldPosition(Camera.main), Quaternion.identity);
 
-            StartRaid();
+            StartCoroutine(StartRaid());
         }
     }
 
-    private void StartRaid()
+    private IEnumerator StartRaid()
     {
         HorseRaidScreenIndicator.SetActive(false);
 
@@ -58,6 +60,8 @@ public class AbilityHorseRaidV2 : Ability
             _raidEndPosition = null;
 
             horseRaiderComponent.StartPatrol(raidEndPos);
+
+            yield return new WaitForSeconds(HorseRaiderSpawnDelay);
         }
     }
 

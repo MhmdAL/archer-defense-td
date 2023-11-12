@@ -1,9 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
+using Sirenix.Utilities;
 using TMPro;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// UI and Audio controller
+/// </summary>
 public class GameUIController : MonoBehaviour
 {
     public event Action<object> ObjectClicked;
@@ -86,6 +93,20 @@ public class GameUIController : MonoBehaviour
     private Image fadeInOut;
     [SerializeField]
     private float fadeInOutDuration;
+    [SerializeField]
+    private GameObject horseRaidAbility;
+
+    [SerializeField]
+    private GameObject upcomingWaveIndicator;
+
+    [Header("SFX")]
+    [SerializeField]
+    private AudioSource gameAudioSource;
+
+    [SerializeField]
+    private AudioClip upcomingPlatoonSFX;
+    [SerializeField]
+    private AudioClip platoonSpawnedSFX;
 
     private TowerManager _towerManager;
     private ValueStore _vs;
@@ -109,13 +130,62 @@ public class GameUIController : MonoBehaviour
 
         _vs.WaveSpawner.WaveStarted += OnWaveStarted;
         _vs.WaveSpawner.WaveEnded += OnWaveEnded;
+        _vs.WaveSpawner.PlatoonSpawned += OnPlatoonSpawned;
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
 
         _vs.LevelStarted += OnLevelStarted;
+
+        if (_vs.level?.levelID == 1)
+        {
+            horseRaidAbility.SetActive(false);
+        }
+    }
+
+    private List<UpcomingPlatoonIndicator> upcomingPlatoonIndicators = new List<UpcomingPlatoonIndicator>();
+
+    private void Update()
+    {
+        UpdateHUD();
+
+        UpdateUpcomingIndicators();
+    }
+
+    private void UpdateUpcomingIndicators()
+    {
+        if (!_vs.WaveSpawner.IsSpawning)
+            return;
+
+        if (_vs.WaveSpawner.TimeTillNextPlatoon > 5)
+        {
+            foreach (var up in upcomingPlatoonIndicators.ToList())
+            {
+                if (up != null)
+                {
+                    up.gameObject.SetActive(false);
+                }
+            }
+        }
+        else if (upcomingPlatoonIndicators.All(x => !x.gameObject.activeSelf) && _vs.WaveSpawner.NextPlatoon != null)
+        {
+            gameAudioSource.PlayOneShot(upcomingPlatoonSFX);
+
+            var entranceIds = _vs.WaveSpawner.NextPlatoon.Squads.Select(x => x.EntranceId);
+
+            foreach (var entId in entranceIds)
+            {
+                if (upcomingPlatoonIndicators.FirstOrDefault(x => x.entranceId == entId) != null)
+                {
+                    upcomingPlatoonIndicators.First(x => x.entranceId == entId).gameObject.SetActive(true);
+                }
+            }
+        }
     }
 
     private void OnLevelStarted()
     {
+        upcomingPlatoonIndicators.Clear();
+        upcomingPlatoonIndicators = _vs.CurrentLevel.gameObject.GetComponentsInChildren<UpcomingPlatoonIndicator>(true).ToList();
+
         FadeIn();
     }
 
@@ -170,6 +240,11 @@ public class GameUIController : MonoBehaviour
 
     public void UpdateHUD()
     {
+        if (_vs.level.levelID == 1)
+        {
+            horseRaidAbility.SetActive(_vs.WaveSpawner.CurrentWave > 1);
+        }
+
         LivesText.text = string.Concat(_vs.Lives);
 
         WaveText.text = _vs.WaveSpawner.CurrentWave + "/" + _vs.WaveSpawner.TotalWaves;
@@ -454,6 +529,13 @@ public class GameUIController : MonoBehaviour
             SpawnWaveButton.SetActive(true);
             SpawnWavePanel.GetComponent<Animator>().SetTrigger("show");
         }
+    }
+
+    private void OnPlatoonSpawned(Platoon platoon)
+    {
+        Debug.Log("Platoon Spawned");
+
+        gameAudioSource.PlayOneShot(platoonSpawnedSFX);
     }
 
     public void Reset()

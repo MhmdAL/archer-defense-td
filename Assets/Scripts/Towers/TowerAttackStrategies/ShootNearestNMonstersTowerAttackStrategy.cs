@@ -48,11 +48,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         var targetPosition = target.transform.position;
 
-        if (target.HasPathAssigned)
-        {
-            var targetDir = (target.CurrentPath.Waypoints[target.CurrentWaypoint + 1] - target.transform.position).normalized;
-            targetPosition += targetDir * (1f * target.MoveSpeed.Value);
-        }
+        targetPosition += target.movementTracker.CurrentVelocity.normalized * bullet.Duration * 0.5f;
 
         //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
         bullet.Owner = data.Owner;

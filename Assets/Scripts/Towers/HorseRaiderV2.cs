@@ -8,6 +8,8 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 {
     public float Speed;
 
+    public float LoiterDuration; // seconds
+
     private Action RaidEndCallback;
 
     public Stat MoveSpeed { get; set; }
@@ -40,13 +42,14 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         {
             var dir = Destination.Value - transform.root.position;
 
-            if (dir.sqrMagnitude < 5f)
+            if (dir.sqrMagnitude < 25f)
             {
                 Destination = null;
 
                 followPath.enabled = false;
 
-                this.AttachTimer(3f, PatrolFinished);
+                this.AttachTimer(LoiterDuration, PatrolFinished);
+                
             }
         }
 
@@ -88,7 +91,7 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         followPath.SetPath(reversedPath, 0, false);
 
         destination.z = 0;
-        Destination = reversedPath.GetNearestWaypoint(destination).Item1;
+        Destination = reversedPath.GetNearestWaypoint(destination).Item1 + (Vector3)UnityEngine.Random.insideUnitCircle * 5f;
     }
 
     private void PatrolFinished(Timer t)

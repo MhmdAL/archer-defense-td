@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
 
     private bool _reached;
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_reached)
         {

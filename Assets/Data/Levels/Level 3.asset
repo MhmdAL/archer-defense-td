@@ -15,31 +15,157 @@ MonoBehaviour:
   StartingSilver: 800
   StartingLives: 10
   Waves:
-  - WaveComponents:
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 30
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
-  - WaveComponents:
-    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 30
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
-  - WaveComponents:
-    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 30
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 3
-      SpawnDelay: 1
-      DelayTillNextComponent: 0
-      EntranceId: 0
-      ExitId: 0
+  - Platoons:
+    - DelayTillNextPlatoon: 12
+      Squads:
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 3
+        SpawnDelay: 2
+        EntranceId: 2
+        ExitId: 0
+    - DelayTillNextPlatoon: 12
+      Squads:
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 1
+        ExitId: 0
+    - DelayTillNextPlatoon: 0
+      Squads:
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 1
+        ExitId: 0
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 2
+        ExitId: 0
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 3
+        SpawnDelay: 1
+        EntranceId: 2
+        ExitId: 0
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 3
+        SpawnDelay: 1
+        EntranceId: 1
+        ExitId: 0
+    WaveRewards:
+    - FormationPrefab: {fileID: 8641165623319483890, guid: ca8f33592f2930e4c882c47037132eab,
+        type: 3}
+      FormationSpawnIndex: 0
+  - Platoons:
+    - DelayTillNextPlatoon: 15
+      Squads:
+      - Prefab: {fileID: 5284815991476578356, guid: e47867ac436c5d243be6b10877c9c778,
+          type: 3}
+        Count: 1
+        SpawnDelay: 1
+        EntranceId: 1
+        ExitId: 0
+    - DelayTillNextPlatoon: 12
+      Squads:
+      - Prefab: {fileID: 5284815991476578356, guid: e47867ac436c5d243be6b10877c9c778,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 2
+        ExitId: 0
+      - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+        Count: 5
+        SpawnDelay: 1
+        EntranceId: 1
+        ExitId: 0
+    - DelayTillNextPlatoon: 0
+      Squads:
+      - Prefab: {fileID: 5284815991476578356, guid: e47867ac436c5d243be6b10877c9c778,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 1
+        ExitId: 0
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 5
+        SpawnDelay: 1
+        EntranceId: 2
+        ExitId: 0
+    WaveRewards:
+    - FormationPrefab: {fileID: 8641165623319483890, guid: 48c35b801c7e8ad4282abf33d5765605,
+        type: 3}
+      FormationSpawnIndex: 0
+    - FormationPrefab: {fileID: 8641165623319483890, guid: 48c35b801c7e8ad4282abf33d5765605,
+        type: 3}
+      FormationSpawnIndex: 1
+    - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
+        type: 3}
+      FormationSpawnIndex: 0
+    - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
+        type: 3}
+      FormationSpawnIndex: 1
+  - Platoons:
+    - DelayTillNextPlatoon: 10
+      Squads:
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 1
+        ExitId: 0
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 2
+        ExitId: 0
+    - DelayTillNextPlatoon: 10
+      Squads:
+      - Prefab: {fileID: 5284815991476578356, guid: e47867ac436c5d243be6b10877c9c778,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 1
+        ExitId: 0
+      - Prefab: {fileID: 5284815991476578356, guid: e47867ac436c5d243be6b10877c9c778,
+          type: 3}
+        Count: 5
+        SpawnDelay: 2
+        EntranceId: 2
+        ExitId: 0
+    - DelayTillNextPlatoon: 0
+      Squads:
+      - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+        Count: 15
+        SpawnDelay: 1
+        EntranceId: 1
+        ExitId: 0
+      - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+        Count: 15
+        SpawnDelay: 2
+        EntranceId: 2
+        ExitId: 0
+    - DelayTillNextPlatoon: 0
+      Squads:
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 1
+        EntranceId: 1
+        ExitId: 0
+      - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
+          type: 3}
+        Count: 5
+        SpawnDelay: 1
+        EntranceId: 2
+        ExitId: 0
+    WaveRewards: []
   DefaultSpawnDelay: 1
+  StartingFormations:
+  - FormationPrefab: {fileID: 8641165623319483890, guid: ca8f33592f2930e4c882c47037132eab,
+      type: 3}
+    FormationSpawnIndex: 0

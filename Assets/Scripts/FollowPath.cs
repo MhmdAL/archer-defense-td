@@ -33,7 +33,7 @@ public class FollowPath : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (CurrentPath == null) return;
 

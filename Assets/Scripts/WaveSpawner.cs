@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
+    /// <summary>
+    /// Called when a platoon is commencing spawn now
+    /// </summary>
+    public event Action<Platoon> PlatoonSpawned;
     public event Action<int> WaveStarted;
     public event Action<int> WaveEnded;
 
@@ -14,24 +18,49 @@ public class WaveSpawner : MonoBehaviour
     public int TotalWaves => LevelData.Waves.Count;
     public int TotalEnemies => LevelData.Waves.Sum(x => x.Platoons.Sum(y => y.Squads.Sum(z => z.Count)));
 
+    /// <summary>
+    /// 1-based wave index
+    /// </summary>
     public int CurrentWave { get; set; }
     public int EnemiesRemainingInCurrentWave { get; private set; }
 
     public bool IsFinished => EnemiesRemainingInCurrentWave == 0 && CurrentWave == TotalWaves;
 
+    public float WaveTime { get; private set; }
+
+    public bool IsSpawning { get; private set; }
+
+    public Platoon CurrentPlatoon { get; set; }
+    public Platoon NextPlatoon { get; set; }
+
+    public float TimeTillNextPlatoon { get; set; }
+
     private List<IEnumerator> _activeRoutines = new List<IEnumerator>();
+
+    [SerializeField]
+    private AudioSource upcomingWaveAudioSource;
+
+    [SerializeField]
+    private AudioClip upcomingWaveSFX;
+
+    private List<Monster> _spawnedMonsters = new List<Monster>();
+
 
     private void Start()
     {
         CurrentWave = 0;
     }
 
+    private void Update()
+    {
+        WaveTime += Time.deltaTime;
+
+        // print(TimeTillNextPlatoon);
+    }
+
     public void OnEnemyDied(Monster m, DamageSource source)
     {
-        if (!m.IsDead)
-        {
-            EnemiesRemainingInCurrentWave--;
-        }
+        EnemiesRemainingInCurrentWave--;
 
         Debug.Log("WaveSpawner: EnemyDied");
 
@@ -50,6 +79,8 @@ public class WaveSpawner : MonoBehaviour
             return;
         }
 
+        WaveTime = 0;
+
         CurrentWave++;
 
         EnemiesRemainingInCurrentWave += LevelData.Waves[CurrentWave - 1].Platoons.Sum(x => x.Squads.Sum(y => y.Count));
@@ -65,15 +96,32 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator SpawnWave(WaveData wave)
     {
-        foreach (var platoon in wave.Platoons)
+        IsSpawning = true;
+
+        for (int i = 0; i < wave.Platoons.Count; i++)
         {
-            for (int i = 0; i < platoon.Squads.Count; i++)
+            var platoon = wave.Platoons[i];
+
+            CurrentPlatoon = platoon;
+            NextPlatoon = wave.Platoons.Count > i + 1 ? wave.Platoons[i + 1] : null;
+
+            for (int j = 0; j < platoon.Squads.Count; j++)
             {
-                StartCoroutine(SpawnSquad(platoon.Squads[i]));
+                StartCoroutine(SpawnSquad(platoon.Squads[j]));
             }
 
-            yield return new WaitForSeconds(platoon.DelayTillNextComponent);
+            this.TimeTillNextPlatoon = platoon.DelayTillNextPlatoon;
+
+            PlatoonSpawned?.Invoke(platoon);
+
+            while (TimeTillNextPlatoon > 0)
+            {
+                TimeTillNextPlatoon -= Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
         }
+
+        IsSpawning = false;
     }
 
     private IEnumerator SpawnSquad(Squad squad)
@@ -97,7 +145,43 @@ public class WaveSpawner : MonoBehaviour
     {
         var monster = ValueStore.Instance.monsterManagerInstance.SpawnEnemy(prefab, entranceId, exitId);
 
+        _spawnedMonsters.Add(monster);
+
         monster.OnDeath += (unit, ds) => OnEnemyDied(unit as Monster, ds);
+    }
+
+    // For testing
+    public void SetWave(int wave)
+    {
+        if (wave >= LevelData.Waves.Count || wave < 0)
+        {
+            Debug.LogWarning("Invalid wave number");
+            return;
+        }
+
+        if (_activeRoutines.Any())
+        {
+            _activeRoutines.ForEach(x => StopCoroutine(x));
+            _activeRoutines.Clear();
+        }
+
+        if (_spawnedMonsters.Any())
+        {
+            foreach (var mon in _spawnedMonsters.ToList())
+            {
+                if (mon == null) continue;
+
+                Destroy(mon.transform.parent.gameObject);
+            }
+
+            _spawnedMonsters.Clear();
+        }
+
+        WaveTime = 0;
+
+        CurrentWave = wave;
+
+        EnemiesRemainingInCurrentWave = 0;
     }
 
     public void Reset(LevelData levelData)

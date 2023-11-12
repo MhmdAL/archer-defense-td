@@ -337,7 +337,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -15536
+  m_SortingOrder: -30536
   m_Sprite: {fileID: 3941177804478559953, guid: b7ba3a250fc62d6438d9e6534423e1bf,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -594,6 +594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5284815991476731688}
   - component: {fileID: 3405870321853136442}
+  - component: {fileID: 3760038338497772227}
   - component: {fileID: 5284815991473028136}
   - component: {fileID: 5284815991474168250}
   - component: {fileID: 4279518534982882669}
@@ -658,6 +659,7 @@ MonoBehaviour:
   <EnemyData>k__BackingField: {fileID: 11400000, guid: 8b0b3968b02ad2549b2334bf25fa474a,
     type: 2}
   deathSound: {fileID: 8300000, guid: ef1cf1830d819ef4eb4f10f4b022a5a3, type: 3}
+  movementTracker: {fileID: 6715737411058291872}
   side: {fileID: 5284815991476355588}
   up: {fileID: 5284815991476519640}
   down: {fileID: 5284815991476368332}
@@ -671,6 +673,18 @@ MonoBehaviour:
   isAboutToDie: 0
   distanceTravelled: 0
   targetedBy: []
+--- !u!114 &3760038338497772227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5284815991476373886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1576073c26ea9f944979e6fddd74d9c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &5284815991473028136
 Rigidbody2D:
   serializedVersion: 4
@@ -2078,6 +2092,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5284815991476811748}
+  - component: {fileID: 6715737411058291872}
   m_Layer: 0
   m_Name: Enemy4
   m_TagString: Untagged
@@ -2101,6 +2116,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6715737411058291872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5284815991476578356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12627a793b548ef4487bed63e032114d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5284815991476579002
 GameObject:
   m_ObjectHideFlags: 0
@@ -2382,7 +2409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22334186, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
       propertyPath: m_SortingOrder
-      value: -15536
+      value: -30536
       objectReference: {fileID: 0}
     - target: {fileID: 22482254, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
       propertyPath: m_Pivot.x

@@ -36,7 +36,8 @@ public class FormationSpawn
 [Serializable]
 public class Platoon
 {
-    public float DelayTillNextComponent;
+    [FormerlySerializedAs("DelayTillNextComponent")]
+    public float DelayTillNextPlatoon;
 
     public List<Squad> Squads;
 }

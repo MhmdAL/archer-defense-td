@@ -1415,6 +1415,18 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -25536
       objectReference: {fileID: 0}
+    - target: {fileID: 754566041, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 754566041, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 754566041, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.69
+      objectReference: {fileID: 0}
     - target: {fileID: 144801915359337531, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: outlineTargets.Array.size
@@ -2193,7 +2205,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.1276722, y: 1.8048172}
+  m_Offset: {x: -0.03630829, y: 1.3480301}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2204,7 +2216,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.8338318, y: 3.657898}
+  m_Size: {x: 1.9202576, y: 2.7443237}
   m_EdgeRadius: 0
 --- !u!223 &6360821461243609353 stripped
 Canvas:
