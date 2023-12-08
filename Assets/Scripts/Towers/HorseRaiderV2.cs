@@ -10,7 +10,8 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
     public float LoiterDuration; // seconds
 
-    private Action RaidEndCallback;
+    public Action PatrolStarted;
+    public Action RaidEndCallback;
 
     public Stat MoveSpeed { get; set; }
 
@@ -29,8 +30,6 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
         followPath = GetComponent<FollowPath>();
 
-        followPath.OnPathCompleted += RaidEnded;
-
         movementTracker = GetComponent<MovementTracker>();
 
         movementTracker.MovementChanged += OnMovementChanged;
@@ -44,18 +43,13 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
             if (dir.sqrMagnitude < 25f)
             {
-                Destination = null;
-
-                followPath.enabled = false;
-
-                this.AttachTimer(LoiterDuration, PatrolFinished);
-                
+                OnPatrolStarted();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            StartPatrol(Input.mousePosition.ToWorldPosition(Camera.main));
+            StartRaid(Input.mousePosition.ToWorldPosition(Camera.main));
         }
     }
 
@@ -80,21 +74,31 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         }
     }
 
-    public void StartPatrol(Vector3 destination)
+    public void StartRaid(Vector3 destination)
     {
-        var level = FindObjectOfType<LevelTemplate>();
-
-        var path = FindNearestPath(destination, level.Paths);
+        var path = LevelUtils.FindNearestPath(destination);
 
         var reversedPath = path.PathData.ReversePath();
 
         followPath.SetPath(reversedPath, 0, false);
 
         destination.z = 0;
-        Destination = reversedPath.GetNearestWaypoint(destination).Item1 + (Vector3)UnityEngine.Random.insideUnitCircle * 5f;
+        // Destination = reversedPath.GetNearestWaypoint(destination).Item1 + (Vector3)UnityEngine.Random.insideUnitCircle * 5f;
+        Destination = destination;
     }
 
-    private void PatrolFinished(Timer t)
+    private void OnPatrolStarted()
+    {
+        Destination = null;
+
+        followPath.enabled = false;
+
+        PatrolStarted?.Invoke();
+
+        this.AttachTimer(LoiterDuration, OnPatrolFinished);
+    }
+
+    private void OnPatrolFinished(Timer t)
     {
         var reversedPath = followPath.CurrentPath.ReversePath();
 
@@ -108,6 +112,8 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         followPath.SetPath(reversedPath, nextPoint, false);
 
         followPath.enabled = true;
+
+        RaidEndCallback?.Invoke();
     }
 
     public Path FindNearestPath(Vector3 point, List<Path> paths)
@@ -129,17 +135,6 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         }
 
         return nearestPath;
-    }
-
-    public HorseRaiderV2 OnRaidFinished(Action endCallback)
-    {
-        RaidEndCallback = endCallback;
-        return this;
-    }
-
-    private void RaidEnded()
-    {
-        RaidEndCallback?.Invoke();
     }
 
     public void OnMovementStarted()

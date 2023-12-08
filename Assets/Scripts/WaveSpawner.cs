@@ -10,7 +10,13 @@ public class WaveSpawner : MonoBehaviour
     /// Called when a platoon is commencing spawn now
     /// </summary>
     public event Action<Platoon> PlatoonSpawned;
+    /// <summary>
+    /// Called when wave starts. 1-based wave number provided
+    /// </summary>
     public event Action<int> WaveStarted;
+    /// <summary>
+    /// Called when wave ends. 1-based wave number provided
+    /// </summary>
     public event Action<int> WaveEnded;
 
     public LevelData LevelData { get; set; }

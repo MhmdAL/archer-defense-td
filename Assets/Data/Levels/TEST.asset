@@ -16,24 +16,19 @@ MonoBehaviour:
   StartingLives: 10
   Waves:
   - Platoons:
-    - DelayTillNextComponent: 50
+    - DelayTillNextPlatoon: 50
       Squads:
       - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-        Count: 7
+        Count: 1
         SpawnDelay: 3
         EntranceId: 2
-        ExitId: 0
-      - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-        Count: 10
-        SpawnDelay: 3
-        EntranceId: 1
         ExitId: 0
     WaveRewards:
     - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
         type: 3}
       FormationSpawnIndex: 0
   - Platoons:
-    - DelayTillNextComponent: 5
+    - DelayTillNextPlatoon: 5
       Squads:
       - Prefab: {fileID: 1139814965544883629, guid: aae58fa7d3746634290d541ca588d478,
           type: 3}

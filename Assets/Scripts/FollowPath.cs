@@ -55,6 +55,8 @@ public class FollowPath : MonoBehaviour
         if (currentWaypointIndex >= CurrentPath.Waypoints.Count)
         {
             CurrentPath = null;
+
+            OnPathCompleted?.Invoke();
         }
     }
 }

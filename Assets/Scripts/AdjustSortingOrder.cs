@@ -10,6 +10,7 @@ public class AdjustSortingOrder : MonoBehaviour
 {
     public int CurrentSortingOrder => _canvas != null ? _canvas.sortingOrder : _spriteRenderer.sortingOrder;
 
+
     [SerializeField, Header("If not null, the root's y position is used.")]
     private Transform root;
 

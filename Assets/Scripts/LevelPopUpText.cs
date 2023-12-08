@@ -8,7 +8,7 @@ public class LevelPopUpText : MonoBehaviour {
 	public void OnAnimationEnd(){
 		RectTransform t = (RectTransform)transform;
 		t.position = bgImage.transform.position;
-		ValueStore.Instance.AnchorsToCorners (t);
+		// ValueStore.Instance.AnchorsToCorners (t);
 
 	}
 }

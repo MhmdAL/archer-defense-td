@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public enum AbilityType
 {
     Arrow_Artillery,
-    Damage_boost
+    Damage_boost,
+    Cavalry_Raid,
 }
 public abstract class Ability : MonoBehaviour, IAttacking
 {

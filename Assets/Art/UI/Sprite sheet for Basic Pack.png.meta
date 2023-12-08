@@ -3,7 +3,7 @@ guid: ffdd28c69fcb4fb44bcacd3fb7e93e4c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -33,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,6 +64,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -6762,7 +6765,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Sprite sheet for Basic Pack_202: 659319752
+      Sprite sheet for Basic Pack_42: 1526501039
       Sprite sheet for Basic Pack_169: 1521223667
       Sprite sheet for Basic Pack_123: -1000443841
       Sprite sheet for Basic Pack_138: -1333856649
@@ -6910,30 +6913,30 @@ TextureImporter:
       Sprite sheet for Basic Pack_186: 1260974132
       Sprite sheet for Basic Pack_30: -1828830925
       Sprite sheet for Basic Pack_230: -2017987522
+      Sprite sheet for Basic Pack_307: 461253606
       Sprite sheet for Basic Pack_137: 338108197
-      Sprite sheet for Basic Pack_21: 306779857
-      Sprite sheet for Basic Pack_11: 580500133
       Sprite sheet for Basic Pack_43: -2017406137
+      Sprite sheet for Basic Pack_278: -1517205380
       Sprite sheet for Basic Pack_236: -1666348772
-      Sprite sheet for Basic Pack_33: -1348488062
-      Sprite sheet for Basic Pack_154: -1578929352
-      Sprite sheet for Basic Pack_126: 18416303
+      Sprite sheet for Basic Pack_308: 1706295570
+      Sprite sheet for Basic Pack_21: 306779857
+      Sprite sheet for Basic Pack_245: -858708862
       Sprite sheet for Basic Pack_78: 601228152
-      Sprite sheet for Basic Pack_143: -999766022
+      Sprite sheet for Basic Pack_154: -1578929352
       Sprite sheet for Basic Pack_279: 970191740
       Sprite sheet for Basic Pack_289: 795264226
+      Sprite sheet for Basic Pack_126: 18416303
       Sprite sheet for Basic Pack_226: 24250619
-      Sprite sheet for Basic Pack_307: 461253606
+      Sprite sheet for Basic Pack_143: -999766022
+      Sprite sheet for Basic Pack_33: -1348488062
       Sprite sheet for Basic Pack_124: 818701771
       Sprite sheet for Basic Pack_7: -99842204
-      Sprite sheet for Basic Pack_135: -1673806136
       Sprite sheet for Basic Pack_231: 1733684469
-      Sprite sheet for Basic Pack_252: 2038111102
-      Sprite sheet for Basic Pack_245: -858708862
       Sprite sheet for Basic Pack_232: 719132138
-      Sprite sheet for Basic Pack_278: -1517205380
+      Sprite sheet for Basic Pack_135: -1673806136
+      Sprite sheet for Basic Pack_252: 2038111102
+      Sprite sheet for Basic Pack_11: 580500133
       Sprite sheet for Basic Pack_125: 806377718
-      Sprite sheet for Basic Pack_308: 1706295570
       Sprite sheet for Basic Pack_304: 1290258506
       Sprite sheet for Basic Pack_173: -246889370
       Sprite sheet for Basic Pack_180: 752269454
@@ -7077,10 +7080,9 @@ TextureImporter:
       Sprite sheet for Basic Pack_280: 1941358613
       Sprite sheet for Basic Pack_58: 1347179251
       Sprite sheet for Basic Pack_285: 2115441365
-      Sprite sheet for Basic Pack_42: 1526501039
-  spritePackingTag: 
+      Sprite sheet for Basic Pack_202: 659319752
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

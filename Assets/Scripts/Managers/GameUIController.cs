@@ -45,10 +45,22 @@ public class GameUIController : MonoBehaviour
     [field: SerializeField]
     public GameObject TowerDesc { get; set; }
 
+    /// <summary>
+    /// UI Items
+    /// </summary>
+
     [Header("UI items")]
-    public TextMeshProUGUI LivesText;
-    public TextMeshProUGUI WaveText;
-    public TextMeshProUGUI SilverText;
+    public TextMeshProUGUI TXT_livesText;
+    public TextMeshProUGUI TXT_waveText;
+    public TextMeshProUGUI TXT_silverText;
+
+    public Button BTN_spawnWave;
+    public GameObject GO_spawnWavePanel;
+    public GameObject GO_spawnWavePanelParent;
+
+    public GameObject GO_HUD;
+    public GameObject GO_statsPanel;
+    public GameObject GO_timeControlsPanel;
 
     public SkillDisplayUI ADSkillDisplay;
     public SkillDisplayUI ASSkillDisplay;
@@ -80,8 +92,6 @@ public class GameUIController : MonoBehaviour
     public Sprite upgradeSprite;
     public Sprite specialityUpgradeSprite;
 
-    public GameObject SpawnWaveButton;
-    public GameObject SpawnWavePanel;
 
     [field: SerializeField]
     public GameObject ArcherSpecialtyChoiceMenu { get; set; }
@@ -93,11 +103,15 @@ public class GameUIController : MonoBehaviour
     private Image fadeInOut;
     [SerializeField]
     private float fadeInOutDuration;
-    [SerializeField]
-    private GameObject horseRaidAbility;
+
+    public GameObject horseRaidAbility;
 
     [SerializeField]
     private GameObject upcomingWaveIndicator;
+
+    /// <summary>
+    /// Sound Effects
+    /// </summary>
 
     [Header("SFX")]
     [SerializeField]
@@ -108,9 +122,21 @@ public class GameUIController : MonoBehaviour
     [SerializeField]
     private AudioClip platoonSpawnedSFX;
 
+    /// <summary>
+    /// Private stuff
+    /// </summary>
+
     private TowerManager _towerManager;
     private ValueStore _vs;
     private ArcherDeployMenu _adm;
+
+    public TutorialManager tutorialManager;
+
+    public bool StartWaveEnabled { get; set; }
+
+    private List<UpcomingPlatoonIndicator> upcomingPlatoonIndicators = new List<UpcomingPlatoonIndicator>();
+
+    public bool performLevelwiseInit = true;
 
     private void Awake()
     {
@@ -135,13 +161,19 @@ public class GameUIController : MonoBehaviour
 
         _vs.LevelStarted += OnLevelStarted;
 
+        InitializeUI();
+    }
+
+    private void InitializeUI()
+    {
+        if (!performLevelwiseInit)
+            return;
+
         if (_vs.level?.levelID == 1)
         {
             horseRaidAbility.SetActive(false);
         }
     }
-
-    private List<UpcomingPlatoonIndicator> upcomingPlatoonIndicators = new List<UpcomingPlatoonIndicator>();
 
     private void Update()
     {
@@ -240,16 +272,21 @@ public class GameUIController : MonoBehaviour
 
     public void UpdateHUD()
     {
-        if (_vs.level.levelID == 1)
+        UpdateAbilityAvailability();
+
+        TXT_livesText.text = string.Concat(_vs.Lives);
+
+        TXT_waveText.text = _vs.WaveSpawner.CurrentWave + "/" + _vs.WaveSpawner.TotalWaves;
+
+        TXT_silverText.text = string.Concat(_vs.Silver);
+    }
+
+    private void UpdateAbilityAvailability()
+    {
+        if (_vs.level.levelID == 1 && performLevelwiseInit)
         {
             horseRaidAbility.SetActive(_vs.WaveSpawner.CurrentWave > 1);
         }
-
-        LivesText.text = string.Concat(_vs.Lives);
-
-        WaveText.text = _vs.WaveSpawner.CurrentWave + "/" + _vs.WaveSpawner.TotalWaves;
-
-        SilverText.text = string.Concat(_vs.Silver);
     }
 
     public void UpdateDeployMenu()
@@ -514,8 +551,8 @@ public class GameUIController : MonoBehaviour
     private void OnWaveStarted(int wave)
     {
         // SpawnWaveButton.SetActive(false);
-        SpawnWavePanel.GetComponent<Animator>().ResetTrigger("show");
-        SpawnWavePanel.GetComponent<Animator>().SetTrigger("hide");
+        GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("show");
+        GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("hide");
 
         UpdateHUD();
     }
@@ -526,9 +563,20 @@ public class GameUIController : MonoBehaviour
 
         if (!_vs.WaveSpawner.IsFinished)
         {
-            SpawnWaveButton.SetActive(true);
-            SpawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+            BTN_spawnWave.interactable = true;
+            GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
         }
+    }
+
+    public void ShowWaveMenu(bool isEnabled = true)
+    {
+        BTN_spawnWave.interactable = isEnabled;
+        GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+    }
+
+    public void HideWaveMenu()
+    {
+        GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("hide");
     }
 
     private void OnPlatoonSpawned(Platoon platoon)
@@ -542,9 +590,12 @@ public class GameUIController : MonoBehaviour
     {
         Debug.Log("Game Resetting");
 
-        SpawnWaveButton.SetActive(true);
-        SpawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
-        SpawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+        if (StartWaveEnabled)
+        {
+            BTN_spawnWave.interactable = true;
+            GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
+            GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+        }
     }
 
     private void OnDestroy()
