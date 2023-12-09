@@ -101,7 +101,7 @@ public class Level1 : MonoBehaviour
             }
         };
 
-        uIController.StartWaveEnabled = false;
+        // uIController.StartWaveEnabled = false;
     }
 
     private void Start()

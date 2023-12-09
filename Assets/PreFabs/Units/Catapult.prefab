@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 436864, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 436864, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_LocalPosition.x
@@ -105,6 +105,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6114025550800653890}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: towerData
+      value: 
+      objectReference: {fileID: 11400000, guid: d5fac1120f9469e4ba3316664273addb,
+        type: 2}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: bulletSpeed
       value: 1.5
       objectReference: {fileID: 0}
@@ -138,9 +143,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4646693693450673829}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: archerTowerRenderer
+      propertyPath: towerAttackStrategy
       value: 
-      objectReference: {fileID: 5281010838254524660}
+      objectReference: {fileID: 11400000, guid: ed6507729faab064d8a2f0d43b17e39b,
+        type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: upgradeAnimSpawnPoint
       value: 
@@ -199,7 +205,7 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 754566040, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
-      value: 0
+      value: -912
       objectReference: {fileID: 0}
     - target: {fileID: 754566041, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_LocalPosition.y
@@ -245,16 +251,6 @@ PrefabInstance:
       propertyPath: itemsToBeSorted.Array.data[7].Canvas
       value: 
       objectReference: {fileID: 5281010838255627636}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[1].SpriteRenderer
-      value: 
-      objectReference: {fileID: 5281010838254524660}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[2].SpriteRenderer
-      value: 
-      objectReference: {fileID: 5281010838254532198}
     - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: itemsToBeSorted.Array.data[3].SpriteRenderer
@@ -367,21 +363,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5281010838241700084}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &5281010838254524660 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21262336, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!212 &5281010838254528032 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &5281010838254532198 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21257874, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
     type: 3}
   m_PrefabInstance: {fileID: 5281010838241700084}
   m_PrefabAsset: {fileID: 0}

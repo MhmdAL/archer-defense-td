@@ -6,6 +6,8 @@ using Sirenix.Utilities;
 using TMPro;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 /// <summary>
@@ -35,6 +37,8 @@ public class GameUIController : MonoBehaviour
             UpdateTowerEnhancementsMenu(_lastFocusedTower);
         }
     }
+
+    public Volume volume;
 
     private Tower _lastFocusedTower;
 
@@ -166,6 +170,8 @@ public class GameUIController : MonoBehaviour
 
     private void InitializeUI()
     {
+        SetScreenSaturation(0);
+
         if (!performLevelwiseInit)
             return;
 
@@ -270,6 +276,16 @@ public class GameUIController : MonoBehaviour
 
     #endregion
 
+    public void InitHUD()
+    {
+        if (_vs.CurrentLevel.LevelId != 1)
+        {
+            BTN_spawnWave.interactable = true;
+            GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
+            GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+        }
+    }
+
     public void UpdateHUD()
     {
         UpdateAbilityAvailability();
@@ -283,9 +299,14 @@ public class GameUIController : MonoBehaviour
 
     private void UpdateAbilityAvailability()
     {
-        if (_vs.level.levelID == 1 && performLevelwiseInit)
+        horseRaidAbility.SetActive(_vs.CurrentLevel.LevelId != 1 || !performLevelwiseInit || _vs.WaveSpawner.CurrentWave > 1);
+    }
+
+    public void SetScreenSaturation(float saturation)
+    {
+        if (volume.profile.TryGet<ColorAdjustments>(out var ca))
         {
-            horseRaidAbility.SetActive(_vs.WaveSpawner.CurrentWave > 1);
+            ca.saturation.value = saturation;
         }
     }
 
@@ -590,12 +611,7 @@ public class GameUIController : MonoBehaviour
     {
         Debug.Log("Game Resetting");
 
-        if (StartWaveEnabled)
-        {
-            BTN_spawnWave.interactable = true;
-            GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
-            GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
-        }
+        InitHUD();
     }
 
     private void OnDestroy()

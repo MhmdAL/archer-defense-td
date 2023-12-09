@@ -36,7 +36,7 @@ public class ValueStore : MonoBehaviour
 
     public LevelTemplate CurrentLevel { get; set; }
 
-    public GameObject buymenu, endGameMenu, pauseMenu;
+    public GameObject buymenu, victoryMenu, defeatMenu, pauseMenu;
     public GameObject allEnemiesSlainEndMenuGoldDesc;
 
     public TowerManager towerManagerInstance;
@@ -294,8 +294,10 @@ public class ValueStore : MonoBehaviour
 
         if (gs == GameStatus.Win)
         {
-            endGameMenuTitleText.text = "Victory!";
-            endGameMenuWonText.text = "Victory:-";
+            victoryMenu.SetActive(true);
+
+            // endGameMenuTitleText.text = "Victory!";
+            // endGameMenuWonText.text = "Victory:-";
             // If level is won for the first time, set enemy slain count and gold gain accordingly
             if (!level.won)
             {
@@ -331,10 +333,14 @@ public class ValueStore : MonoBehaviour
         }
         else if (gs == GameStatus.Loss)
         {
-            endGameMenuTitleText.text = "Defeat";
-            endGameMenuWonText.text = "Defeat:-";
+            // endGameMenuTitleText.text = "Defeat";
+            // endGameMenuWonText.text = "Defeat:-";
 
-            endGameMenuTitleText.color = Color.red;
+            // endGameMenuTitleText.color = Color.red;
+
+            defeatMenu.SetActive(true);
+            uiControllerInstance.SetScreenSaturation(-100);
+
             winGoldGained = (0.15f * CurrentGoldValue * ((float)WaveSpawner.CurrentWave / (float)WaveSpawner.TotalWaves));
         }
 
@@ -348,14 +354,16 @@ public class ValueStore : MonoBehaviour
 
         DataService.Instance.WriteSaveData();
 
-        endGameMenu.SetActive(true);
+        // endGameMenu.SetActive(true);
     }
 
     public void OnGameOverProceedButtonClicked()
     {
         Time.timeScale = 1;
 
-        endGameMenu.SetActive(false);
+        // endGameMenu.SetActive(false);
+
+        victoryMenu.SetActive(false);
 
         LoadLevel(CurrentLevel.LevelId + 1);
     }
