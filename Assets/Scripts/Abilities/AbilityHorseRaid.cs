@@ -7,8 +7,7 @@ using UnityTimer;
 public enum HorseRaidState
 {
     Idle,
-    SetupPhase,
-    Commencing,
+    Setup,
 }
 
 public class AbilityHorseRaid : Ability
@@ -31,7 +30,7 @@ public class AbilityHorseRaid : Ability
 
     public override void Activate()
     {
-        _state = HorseRaidState.SetupPhase;
+        _state = HorseRaidState.Setup;
         HorseRaidScreenIndicator.SetActive(true);
 
         Debug.Log("Activating horse raid");
@@ -41,7 +40,7 @@ public class AbilityHorseRaid : Ability
     {
         base.Update();
 
-        if (_state == HorseRaidState.SetupPhase && Input.GetMouseButtonDown(0))
+        if (_state == HorseRaidState.Setup && Input.GetMouseButtonDown(0))
         {
             if (_raidStartPosition == null)
             {
@@ -77,7 +76,7 @@ public class AbilityHorseRaid : Ability
         HorseRaidScreenIndicator.SetActive(false);
 
         Debug.Log("raid starting");
-        _state = HorseRaidState.Commencing;
+        _state = HorseRaidState.Idle;
 
         var raidStartPos = _raidStartPosition.Value.ToWorldPosition(Camera.main);
         var raidEndPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);

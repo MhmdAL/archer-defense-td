@@ -13,7 +13,8 @@ public class FollowPath : MonoBehaviour
     public bool HasPath => CurrentPath != null;
     private int currentWaypointIndex = 0;
 
-    private Vector3 currentTargetPosition => CurrentPath.Waypoints[currentWaypointIndex];
+    private Vector3 currentTargetPosition;
+    private Vector3 targetTargetPosition;
 
     private void Awake()
     {
@@ -26,6 +27,8 @@ public class FollowPath : MonoBehaviour
 
         CurrentPath = newPath;
         currentWaypointIndex = currentIndex;
+        currentTargetPosition = GetRandomTargetPosition(currentIndex);
+        targetTargetPosition = currentTargetPosition;
 
         if (resetPosition)
         {
@@ -37,12 +40,14 @@ public class FollowPath : MonoBehaviour
     {
         if (CurrentPath == null) return;
 
+        currentTargetPosition = Vector3.Lerp(currentTargetPosition, targetTargetPosition, Time.deltaTime);
+
         float step = targetMover.MoveSpeed.Value * Time.deltaTime;
         Vector3 newPosition = Vector3.MoveTowards(transform.root.position, currentTargetPosition, step);
 
         transform.root.position = newPosition;
 
-        if ((transform.root.position - currentTargetPosition).sqrMagnitude <= 0.5f)
+        if ((transform.root.position - currentTargetPosition).sqrMagnitude <= 3f)
         {
             HandleWaypointReached();
         }
@@ -51,6 +56,7 @@ public class FollowPath : MonoBehaviour
     private void HandleWaypointReached()
     {
         currentWaypointIndex++;
+        targetTargetPosition = GetRandomTargetPosition(currentWaypointIndex);
 
         if (currentWaypointIndex >= CurrentPath.Waypoints.Count)
         {
@@ -58,5 +64,10 @@ public class FollowPath : MonoBehaviour
 
             OnPathCompleted?.Invoke();
         }
+    }
+
+    private Vector3 GetRandomTargetPosition(int waypointIndex)
+    {
+        return CurrentPath.Waypoints[currentWaypointIndex] + (Vector3)UnityEngine.Random.insideUnitCircle * 1f;
     }
 }

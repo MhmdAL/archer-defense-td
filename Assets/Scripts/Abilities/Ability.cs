@@ -30,6 +30,11 @@ public abstract class Ability : MonoBehaviour, IAttacking
 
     public List<TargetHitEffect> OnHitEffects => throw new NotImplementedException();
 
+    protected virtual void Awake()
+    {
+        
+    }
+
     void Start()
     {
         vs = ValueStore.Instance;

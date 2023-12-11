@@ -132,18 +132,18 @@ public abstract class Monster : Unit, IMoving
 
     }
 
-    private float timer;
+    // private float timer;
 
     protected virtual void Update()
     {
-        timer+=Time.deltaTime;
+        // timer+=Time.deltaTime;
 
-        if(timer > 5)
-        {
-            print(transform.root.position);
-            print(movementTracker.CurrentVelocity);
-            timer = -1000;
-        }
+        // if(timer > 5)
+        // {
+        //     // print(transform.root.position);
+        //     // print(movementTracker.CurrentVelocity);
+        //     timer = -1000;
+        // }
     }
 
     private void OnMovementChanged(Vector3 delta, Vector3 currentVelocity)

@@ -24,10 +24,14 @@ public class AbilityHorseRaidV2 : Ability
     private GameObject _raidStartIndicator = null;
     public GameObject raidEndIndicator;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     public override void Activate()
     {
-        _state = HorseRaidState.SetupPhase;
+        _state = HorseRaidState.Setup;
         HorseRaidScreenIndicator.SetActive(true);
 
         Debug.Log("Activating horse raid");
@@ -37,15 +41,20 @@ public class AbilityHorseRaidV2 : Ability
     {
         base.Update();
 
-        if (_state == HorseRaidState.SetupPhase && Input.GetMouseButtonDown(0))
+        if (_state == HorseRaidState.Setup && Input.GetMouseButtonDown(0))
         {
             _raidEndPosition = Input.mousePosition;
 
-            // _raidEndIndicator = Instantiate(HorseRaidEndIndicatorPrefab, _raidEndPosition.Value.ToWorldPosition(Camera.main), Quaternion.identity);
+            var worldPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);
 
-            RaidStarted?.Invoke();
+            if (vs.pathCollider.OverlapPoint(worldPos))
+            {
+                // _raidEndIndicator = Instantiate(HorseRaidEndIndicatorPrefab, _raidEndPosition.Value.ToWorldPosition(Camera.main), Quaternion.identity);
 
-            StartCoroutine(StartRaid());
+                RaidStarted?.Invoke();
+
+                StartCoroutine(StartRaid());
+            }
         }
     }
 
@@ -58,7 +67,7 @@ public class AbilityHorseRaidV2 : Ability
         raidEndIndicator.SetActive(true);
 
         Debug.Log("raid starting");
-        _state = HorseRaidState.Commencing;
+        _state = HorseRaidState.Idle;
 
         // var raidStartPos = _raidStartPosition.Value.ToWorldPosition(Camera.main);
         // var raidEndPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);

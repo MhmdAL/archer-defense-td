@@ -368,7 +368,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     private void OnAttackTimerElapsed(Timer t)
     {
-        Debug.Log("Attacking");
+        // Debug.Log("Attacking");
         monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
         TargetDetection.CalculateTargets(this, monstersInScene, monstersInRange, targets, AR.Value, AD.Value, AP.Value);
 
@@ -379,7 +379,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         if (!IsDisabled)
         {
-            Debug.Log("not disabled");
+            // Debug.Log("not disabled");
 
             var secondaryTargets = monstersInRange.ToList();
 

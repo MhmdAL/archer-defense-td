@@ -114,6 +114,8 @@ public class ValueStore : MonoBehaviour
     [SerializeField]
     private AudioSource ambientWindAudioSource;
 
+    public PolygonCollider2D pathCollider;
+
     void Awake()
     {
         active = true;
@@ -151,7 +153,7 @@ public class ValueStore : MonoBehaviour
 
     private void Start()
     {
-        LoadLevel(level.levelID);
+        StartCoroutine(LoadLevel(level.levelID));
     }
 
     void Update()
@@ -160,11 +162,11 @@ public class ValueStore : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            LoadLevel((CurrentLevel.LevelId + 1) % (LevelPrefabs.Count + 1));
+            StartCoroutine(LoadLevel((CurrentLevel.LevelId + 1) % (LevelPrefabs.Count + 1)));
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            LoadLevel(CurrentLevel.LevelId - 1);
+            StartCoroutine(LoadLevel(CurrentLevel.LevelId - 1));
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -176,15 +178,19 @@ public class ValueStore : MonoBehaviour
         }
     }
 
-    public void LoadLevel(int levelId)
+    public IEnumerator LoadLevel(int levelId)
     {
         if (CurrentLevel != null)
         {
             Destroy(CurrentLevel.gameObject);
         }
 
+        yield return new WaitForEndOfFrame();
+
         var levelPrefab = LevelPrefabs.First(x => x.LevelId == levelId);
         CurrentLevel = Instantiate(levelPrefab);
+
+        pathCollider = GameObject.FindGameObjectWithTag("Path").GetComponent<PolygonCollider2D>();
 
         WaveSpawner.Reset(CurrentLevel.LevelData);
 
@@ -282,8 +288,9 @@ public class ValueStore : MonoBehaviour
     public void GameOver(GameStatus gs)
     {
         active = false;
-        if (LevelEnded != null)
-            LevelEnded(gs);
+
+        LevelEnded?.Invoke(gs);
+
         Time.timeScale = 0f;
 
         SaveData save = DataService.Instance.SaveData;
@@ -365,7 +372,7 @@ public class ValueStore : MonoBehaviour
 
         victoryMenu.SetActive(false);
 
-        LoadLevel(CurrentLevel.LevelId + 1);
+        StartCoroutine(LoadLevel(CurrentLevel.LevelId + 1));
     }
 
     public void ExitGame()
