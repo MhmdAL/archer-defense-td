@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using static UnityEngine.ParticleSystem;
 using UnityTimer;
+using System;
 
 public class AbilityArtillery : Ability, IShooting
 {
@@ -23,17 +24,12 @@ public class AbilityArtillery : Ability, IShooting
 
     public List<TargetHitEffect> OnHitEffects { get; set; }
 
-    public override void UpdateReadiness()
+    protected override bool IsReady()
     {
-        if (vs.monsterManagerInstance.MonstersInScene.Count <= 0)
-        {
-            SetReady(false);
-        }
-        else if (CooldownTimer.GetTimeRemaining() <= 0)
-        {
-            SetReady(true);
-        }
+        return CooldownFinished() && MonstersExist();
     }
+
+    private bool MonstersExist() => vs.monsterManagerInstance.MonstersInScene.Count > 0;
 
     public void ActivateArtillery()
     {
@@ -61,7 +57,7 @@ public class AbilityArtillery : Ability, IShooting
         int arrowCount = (int)(SaveData.baseUpgradeValues[UpgradeType.ArtilleryArrowCount] +
             SaveData.GetUpgrade(UpgradeType.ArtilleryArrowCount)?.CurrentValue ?? 0);
 
-        var waves = Mathf.Min(Random.Range((int)WaveCount.constantMin, (int)WaveCount.constantMax + 1), ArrowCount);
+        var waves = Mathf.Min(UnityEngine.Random.Range((int)WaveCount.constantMin, (int)WaveCount.constantMax + 1), ArrowCount);
         var arrowPerWave = ArrowCount / waves;
         var remainder = ArrowCount % waves;
 
@@ -76,7 +72,7 @@ public class AbilityArtillery : Ability, IShooting
                 SpawnArtilleryArrow(targetPos);
             }
 
-            yield return new WaitForSeconds(CooldownPerWave + Random.Range(0, 0.2f));
+            yield return new WaitForSeconds(CooldownPerWave + UnityEngine.Random.Range(0, 0.2f));
         }
     }
 
@@ -88,7 +84,7 @@ public class AbilityArtillery : Ability, IShooting
         p.Owner = this;
         p.Damage = DamagePerArrow;
         p.StartPosition = StartPosition.position;
-        p.TargetPosition = target + (Vector3)Random.insideUnitCircle * ArrowSpread;
+        p.TargetPosition = target + (Vector3)UnityEngine.Random.insideUnitCircle * ArrowSpread;
         p.Duration = ArrowTravelDuration;
         p.Gravity = ArrowGravity;
     }

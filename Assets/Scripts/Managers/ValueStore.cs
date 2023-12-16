@@ -289,9 +289,16 @@ public class ValueStore : MonoBehaviour
     {
         active = false;
 
+        var cleanables = FindObjectsOfType<MonoBehaviour>().OfType<ICleanable>();
+        
+        foreach(var cleanable in cleanables)
+        {
+            cleanable.CleanUp();
+        }
+
         LevelEnded?.Invoke(gs);
 
-        Time.timeScale = 0f;
+        // Time.timeScale = 0f;
 
         SaveData save = DataService.Instance.SaveData;
 

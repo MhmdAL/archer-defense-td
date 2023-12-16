@@ -68,6 +68,6 @@ public class FollowPath : MonoBehaviour
 
     private Vector3 GetRandomTargetPosition(int waypointIndex)
     {
-        return CurrentPath.Waypoints[currentWaypointIndex] + (Vector3)UnityEngine.Random.insideUnitCircle * 1f;
+        return CurrentPath.Waypoints[waypointIndex] + (Vector3)UnityEngine.Random.insideUnitCircle * 1f;
     }
 }

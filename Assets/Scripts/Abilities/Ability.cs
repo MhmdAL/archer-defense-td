@@ -11,9 +11,8 @@ public enum AbilityType
     Damage_boost,
     Cavalry_Raid,
 }
-public abstract class Ability : MonoBehaviour, IAttacking
+public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 {
-
     public static event Action<AbilityType> AbilityActivated;
 
     public AbilityType t;
@@ -32,7 +31,7 @@ public abstract class Ability : MonoBehaviour, IAttacking
 
     protected virtual void Awake()
     {
-        
+
     }
 
     void Start()
@@ -55,8 +54,17 @@ public abstract class Ability : MonoBehaviour, IAttacking
         CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
     }
 
-    public abstract void UpdateReadiness();
+    protected abstract bool IsReady();
     public abstract void Activate();
+
+    public virtual void UpdateReadiness(params Func<bool>[] readyConditions)
+    {
+        var isReady = IsReady();
+
+        SetReady(isReady);
+    }
+
+    protected virtual bool CooldownFinished() => CooldownTimer.GetTimeRemaining() <= 0;
 
     public void OnWaveStarted(int waveNumber)
     {
@@ -100,5 +108,10 @@ public abstract class Ability : MonoBehaviour, IAttacking
 
         SetReady(false);
         CooldownTimer.Restart(baseCooldown);
+    }
+
+    public virtual void CleanUp()
+    {
+        CooldownTimer.Restart(0);
     }
 }

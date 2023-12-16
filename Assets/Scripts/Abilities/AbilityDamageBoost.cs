@@ -14,16 +14,9 @@ public class AbilityDamageBoost : Ability
         CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
     }
 
-    public override void UpdateReadiness()
+    protected override bool IsReady()
     {
-        if (vs.towerManagerInstance.TowersInScene.Count <= 0)
-        {
-            SetReady(false);
-        }
-        else if (CooldownTimer.GetTimeRemaining() <= 0)
-        {
-            SetReady(true);
-        }
+        return CooldownFinished() && vs.towerManagerInstance.TowersInScene.Count <= 0;
     }
 
     public void OnTowersInSceneChange()

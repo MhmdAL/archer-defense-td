@@ -119,11 +119,8 @@ public class AbilityHorseRaid : Ability
         }
     }
 
-    public override void UpdateReadiness()
+    protected override bool IsReady()
     {
-        if (CooldownTimer.GetTimeRemaining() <= 0)
-        {
-            SetReady(true);
-        }
+        return CooldownFinished();
     }
 }

@@ -4998,7 +4998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &196296443
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5026,7 +5026,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196296442}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -8843,6 +8843,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905984228}
   m_CullTransparentMesh: 1
+--- !u!1 &914945077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914945078}
+  - component: {fileID: 914945079}
+  m_Layer: 0
+  m_Name: CursorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914945078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914945077}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8301556261260695401}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &914945079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914945077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832594211d6c5474ba86c4a97e078201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultCursor: {fileID: 2800000, guid: 269b7b4e05dd4da4ab7fc28f35236988, type: 3}
+  raidCursor: {fileID: 2800000, guid: 6c6fff35bb83073419b672d4f223d0c5, type: 3}
+  possibleRaidCursor: {fileID: 2800000, guid: d8414e85d08e45748b74b16e6cf8a61c, type: 3}
 --- !u!1 &922309732
 GameObject:
   m_ObjectHideFlags: 0
@@ -9025,7 +9072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &934913217
 Transform:
   m_ObjectHideFlags: 0
@@ -11250,7 +11297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.21960784}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11378,7 +11425,7 @@ RectTransform:
   m_GameObject: {fileID: 1140354719}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0442, y: 1.0442, z: 1.0442}
+  m_LocalScale: {x: 0.76853436, y: 0.76853436, z: 0.76853436}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1800843728}
@@ -13338,7 +13385,7 @@ RectTransform:
   m_GameObject: {fileID: 1402419022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0442432, y: 1.0442432, z: 1.0442432}
+  m_LocalScale: {x: 0.7594195, y: 0.7594195, z: 0.7594195}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1800843728}
@@ -13375,7 +13422,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0
+  m_FillAmount: 0.229
   m_FillClockwise: 0
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -15864,7 +15911,7 @@ GameObject:
   - component: {fileID: 1800843729}
   - component: {fileID: 1800843735}
   m_Layer: 5
-  m_Name: HorseArcherRaidAbility
+  m_Name: BTN_horse-raid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15927,7 +15974,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -15937,8 +15984,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: 21300000, guid: 20ba6cd4ed5b8c4468c3d0fd893693f2,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 6af70193ca118554c80b2edee07092ee, type: 3}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
@@ -15948,7 +15996,7 @@ MonoBehaviour:
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 582464989}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -15987,6 +16035,7 @@ MonoBehaviour:
   HorseRaiderSpawnPosition: {fileID: 828161995}
   horseRaidPositionRandomFactor: 1
   raidEndIndicator: {fileID: 1844911540}
+  inputModule: {fileID: 8454183664859665408}
 --- !u!1 &1801103021
 GameObject:
   m_ObjectHideFlags: 0
@@ -16185,7 +16234,7 @@ RectTransform:
   m_GameObject: {fileID: 1804867593}
   m_LocalRotation: {x: -0, y: -0, z: -0.3138775, w: 0.94946355}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.60006154, y: 0.60006154, z: 1.2001231}
+  m_LocalScale: {x: 0.61891747, y: 0.61891747, z: 1.2378348}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8301556261238772893}
@@ -16193,7 +16242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -36.586}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.6, y: 1.2}
+  m_AnchoredPosition: {x: 1.137502, y: 0.9829202}
   m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1804867595
@@ -18422,7 +18471,7 @@ MonoBehaviour:
   upcomingPlatoonSFX: {fileID: 8300000, guid: a0237332fff1d5348ad2fcd2a901dabc, type: 3}
   platoonSpawnedSFX: {fileID: 0}
   tutorialManager: {fileID: 713193587}
-  performLevelwiseInit: 1
+  performLevelwiseInit: 0
 --- !u!114 &3229288253072906776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22355,7 +22404,7 @@ RectTransform:
   m_GameObject: {fileID: 8301556261260547983}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.084916, y: 1.084916, z: 1.084916}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1804867594}
@@ -22365,7 +22414,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 93, y: 93}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8301556261238773149
 RectTransform:
@@ -24869,6 +24918,7 @@ Transform:
   - {fileID: 11321804726866073}
   - {fileID: 2121296439}
   - {fileID: 290743987}
+  - {fileID: 914945078}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26763,7 +26813,7 @@ MonoBehaviour:
   m_AnimationTriggers:
     m_NormalTrigger: normal
     m_HighlightedTrigger: highlighted
-    m_PressedTrigger: Pressed
+    m_PressedTrigger: pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1

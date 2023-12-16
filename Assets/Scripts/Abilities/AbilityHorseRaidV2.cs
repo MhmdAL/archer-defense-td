@@ -2,6 +2,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AbilityHorseRaidV2 : Ability
 {
@@ -24,15 +25,28 @@ public class AbilityHorseRaidV2 : Ability
     private GameObject _raidStartIndicator = null;
     public GameObject raidEndIndicator;
 
+    public CustomStandaloneInputModule inputModule;
+
+    private CursorManager _cursorManager;
+
     protected override void Awake()
     {
         base.Awake();
+
+        _cursorManager = FindObjectOfType<CursorManager>();
+    }
+
+    protected override bool IsReady()
+    {
+        return CooldownFinished();
     }
 
     public override void Activate()
     {
         _state = HorseRaidState.Setup;
         HorseRaidScreenIndicator.SetActive(true);
+
+        _cursorManager.UseCursor(CursorType.PendingRaid);
 
         Debug.Log("Activating horse raid");
     }
@@ -41,28 +55,48 @@ public class AbilityHorseRaidV2 : Ability
     {
         base.Update();
 
-        if (_state == HorseRaidState.Setup && Input.GetMouseButtonDown(0))
+        if (_state == HorseRaidState.Setup)
         {
-            _raidEndPosition = Input.mousePosition;
-
-            var worldPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);
-
-            if (vs.pathCollider.OverlapPoint(worldPos))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                // _raidEndIndicator = Instantiate(HorseRaidEndIndicatorPrefab, _raidEndPosition.Value.ToWorldPosition(Camera.main), Quaternion.identity);
+                ExitRaidSetup();
 
-                RaidStarted?.Invoke();
+                return;
+            }
 
-                StartCoroutine(StartRaid());
+            _cursorManager.UpdateBasedOnCollider(vs.pathCollider, CursorType.PossibleRaid, CursorType.PendingRaid);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                _raidEndPosition = Input.mousePosition;
+
+                var worldPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);
+
+                if (vs.pathCollider.OverlapPoint(worldPos))
+                {
+                    StartCoroutine(StartRaid());
+
+                    ExitRaidSetup();
+                }
             }
         }
     }
 
-    private IEnumerator StartRaid()
+    private void ExitRaidSetup()
     {
-        var raidEndPos = LevelUtils.GetNearestWaypoint(_raidEndPosition.Value.ToWorldPosition(Camera.main)) + (Vector3)UnityEngine.Random.insideUnitCircle * horseRaidPositionRandomFactor;
+        _state = HorseRaidState.Idle;
 
         HorseRaidScreenIndicator.SetActive(false);
+
+        _cursorManager.UseCursor(CursorType.Default);
+    }
+
+    private IEnumerator StartRaid()
+    {
+        RaidStarted?.Invoke();
+
+        var raidEndPos = LevelUtils.GetNearestWaypoint(_raidEndPosition.Value.ToWorldPosition(Camera.main)) + (Vector3)UnityEngine.Random.insideUnitCircle * horseRaidPositionRandomFactor;
+
         raidEndIndicator.transform.position = _raidEndPosition.Value;
         raidEndIndicator.SetActive(true);
 
@@ -91,11 +125,15 @@ public class AbilityHorseRaidV2 : Ability
         raidEndIndicator.SetActive(false);
     }
 
-    public override void UpdateReadiness()
+    public override void CleanUp()
     {
-        if (CooldownTimer.GetTimeRemaining() <= 0)
-        {
-            SetReady(true);
-        }
+        base.CleanUp();
+        
+        ExitRaidSetup();
     }
+}
+
+public interface ICleanable
+{
+    void CleanUp();
 }
