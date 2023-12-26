@@ -102,6 +102,16 @@ public class TowerBase : MonoBehaviour, IPointerClickHandler, IFocusable
 
         SetState(TowerBaseState.NonClicked);
     }
+
+    public void Highlight()
+    {
+
+    }
+
+    public void UnHighlight()
+    {
+
+    }
 }
 
 public enum TowerBaseState

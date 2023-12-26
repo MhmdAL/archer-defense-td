@@ -64,7 +64,8 @@ public class HealthBar : MonoBehaviour
 
         ShieldBar.transform.localScale = new Vector3(Unit.CurrentShield / (Unit.MaxHP.Value + Unit.CurrentShield), HPBar.transform.localScale.y, HPBar.transform.localScale.z);
 
-        HealthText.text = $"{Unit.CurrentHP} / {Unit.MaxHP.Value}";
+        HealthText.text = $"{Unit.CurrentHP}";
+        // HealthText.text = $"{Unit.CurrentHP} / {Unit.MaxHP.Value}";
     }
 
     private void OnUnitDied(Unit u, DamageSource ds)

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using TMPro;
 using System.Linq;
+using UnityTimer;
+using Unity.VisualScripting;
 
 public enum ClickType
 {
@@ -176,16 +178,25 @@ public class ValueStore : MonoBehaviour
         {
             WaveSpawner.SetWave(WaveSpawner.CurrentWave - 1);
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            GlobalManager.instance.LoadScene("menu", 1f);
+
+            // SceneManager.LoadScene("menu");
+        }
     }
 
     public IEnumerator LoadLevel(int levelId)
-    {
+    {        
         if (CurrentLevel != null)
         {
             Destroy(CurrentLevel.gameObject);
         }
 
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForNextFrameUnit();
+
+        active = true;
 
         var levelPrefab = LevelPrefabs.First(x => x.LevelId == levelId);
         CurrentLevel = Instantiate(levelPrefab);
@@ -218,7 +229,14 @@ public class ValueStore : MonoBehaviour
 
         levelPopUpText.text = $"Level {levelId}";
 
+        OnLevelStarted();
+    }
+
+    private void OnLevelStarted()
+    {
         LevelStarted?.Invoke();
+
+        _audioSource.PlayOneShot(AudioProfile.level_start);
     }
 
     public void OnSilverChange()
@@ -238,9 +256,11 @@ public class ValueStore : MonoBehaviour
 
     private void OnWaveEnded(int wave)
     {
-        _audioSource.PlayOneShot(AudioProfile.wave_end);
-
-        if (WaveSpawner.IsFinished && active && Lives > 0)
+        if (!WaveSpawner.IsFinished)
+        {
+            _audioSource.PlayOneShot(AudioProfile.wave_end);
+        }
+        else if (active && Lives > 0)
         {
             GameOver(GameStatus.Win);
         }
@@ -263,7 +283,7 @@ public class ValueStore : MonoBehaviour
             Lives -= enemy.EnemyData.LivesValue;
         }
 
-        if (Lives <= 0 && ValueStore.Instance.active)
+        if (Lives <= 0 && active)
         {
             Lives = 0;
             GameOver(GameStatus.Loss);
@@ -272,12 +292,12 @@ public class ValueStore : MonoBehaviour
 
     public void LoadLevel(string levelToLoad)
     {
-        SceneManager.LoadScene(levelToLoad);
+        GlobalManager.instance.LoadScene(levelToLoad, 1f);
     }
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GlobalManager.instance.LoadScene(SceneManager.GetActiveScene().name, 1f);
     }
 
     public void addGold()
@@ -290,8 +310,8 @@ public class ValueStore : MonoBehaviour
         active = false;
 
         var cleanables = FindObjectsOfType<MonoBehaviour>().OfType<ICleanable>();
-        
-        foreach(var cleanable in cleanables)
+
+        foreach (var cleanable in cleanables)
         {
             cleanable.CleanUp();
         }
@@ -308,7 +328,7 @@ public class ValueStore : MonoBehaviour
 
         if (gs == GameStatus.Win)
         {
-            victoryMenu.SetActive(true);
+            OnLevelVictory();
 
             // endGameMenuTitleText.text = "Victory!";
             // endGameMenuWonText.text = "Victory:-";
@@ -347,13 +367,12 @@ public class ValueStore : MonoBehaviour
         }
         else if (gs == GameStatus.Loss)
         {
+            OnLevelDefeat();
+
             // endGameMenuTitleText.text = "Defeat";
             // endGameMenuWonText.text = "Defeat:-";
 
             // endGameMenuTitleText.color = Color.red;
-
-            defeatMenu.SetActive(true);
-            uiControllerInstance.SetScreenSaturation(-100);
 
             winGoldGained = (0.15f * CurrentGoldValue * ((float)WaveSpawner.CurrentWave / (float)WaveSpawner.TotalWaves));
         }
@@ -369,6 +388,22 @@ public class ValueStore : MonoBehaviour
         DataService.Instance.WriteSaveData();
 
         // endGameMenu.SetActive(true);
+    }
+
+    private void OnLevelVictory()
+    {
+        _audioSource.PlayOneShot(AudioProfile.level_victory);
+
+        this.AttachTimer(2f, (t) => victoryMenu.SetActive(true));
+    }
+
+    private void OnLevelDefeat()
+    {
+        _audioSource.PlayOneShot(AudioProfile.level_defeat);
+
+        this.AttachTimer(1f, (t) => defeatMenu.SetActive(true));
+
+        uiControllerInstance.SetScreenSaturation(-100);
     }
 
     public void OnGameOverProceedButtonClicked()

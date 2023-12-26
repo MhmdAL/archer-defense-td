@@ -23,11 +23,11 @@ public class CursorManager : MonoBehaviour
         var hit = Physics2D.Raycast(Input.mousePosition.ToWorldPosition(Camera.main), Vector2.one);
         if (hit.collider == collider)
         {
-            UseCursor(onColliderType, new Vector2(64, 64));
+            UseCursor(onColliderType, new Vector2(16, 16));
         }
         else
         {
-            UseCursor(offColliderType, new Vector2(64, 64));
+            UseCursor(offColliderType, new Vector2(16, 16));
         }
     }
 

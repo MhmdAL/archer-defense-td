@@ -329,14 +329,20 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
             walkingAudioSource.DOFade(.25f, .2f);
         }
 
-        dustPs.Play();
+        if (dustPs != null)
+        {
+            dustPs.Play();
+        }
     }
 
     public void OnMovementEnded()
     {
         walkingAudioSource.DOFade(0, .2f);
 
-        dustPs.Stop();
+        if (dustPs != null)
+        {
+            dustPs.Stop();
+        }
     }
 
     private void OnEnemyInRange()
@@ -764,9 +770,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     public void Focus()
     {
-        HasFocus = true;
+        Highlight();
 
-        _outlinable.OutlineParameters.Enabled = true;
+        HasFocus = true;
 
         circle.SetActive(true);
         // cooldownBarParent.SetActive(true);
@@ -776,13 +782,23 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     public void UnFocus()
     {
-        HasFocus = false;
+        UnHighlight();
 
-        _outlinable.OutlineParameters.Enabled = false;
+        HasFocus = false;
 
         circle.SetActive(false);
         // cooldownBarParent.SetActive(false);
 
         FocusIndicatorArrow.SetActive(false);
+    }
+
+    public void Highlight()
+    {
+        _outlinable.OutlineParameters.Enabled = true;
+    }
+
+    public void UnHighlight()
+    {
+        _outlinable.OutlineParameters.Enabled = false;
     }
 }

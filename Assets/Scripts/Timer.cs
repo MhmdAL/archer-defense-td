@@ -428,6 +428,12 @@ namespace UnityTimer
             // buffer adding timers so we don't edit a collection during iteration
             private List<Timer> _timersToAdd = new List<Timer>();
 
+            private void Awake()
+            {
+                // THIS WAS MANUALLY ADDED to ensure it remains alive cross scene
+                DontDestroyOnLoad(this);
+            }
+
             public void RegisterTimer(Timer timer)
             {
                 this._timersToAdd.Add(timer);

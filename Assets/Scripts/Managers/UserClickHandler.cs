@@ -15,7 +15,7 @@ public class UserClickHandler : MonoBehaviour
     private CustomStandaloneInputModule _inputModule;
     private Camera _mainCamera;
     private RectTransform _selectionImageRectTransform;
-    
+
     private CanvasScaler _canvasScaler;
 
     private void Awake()
@@ -38,74 +38,92 @@ public class UserClickHandler : MonoBehaviour
             initialSelectPosition = Input.mousePosition;
             isSelecting = true;
             SelectionImage.gameObject.SetActive(true);
-
-            // Debug.Log("Mouse down");
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            // Debug.Log("Mouse Up");
             finalSelectPosition = Input.mousePosition;
-
             isSelecting = false;
             SelectionImage.gameObject.SetActive(false);
 
-            var start = initialSelectPosition.ToWorldPosition(_mainCamera);
-            var end = finalSelectPosition.ToWorldPosition(_mainCamera);
-
-            var dir = end - start;
-
-            var hits = new List<Collider2D>();
-
-            if (dir.magnitude < 0.2f)
-            {
-                hits = new List<Collider2D> { Physics2D.Raycast(start, Vector2.one).collider };
-            }
-            else
-            {
-                hits = Physics2D.OverlapAreaAll(start, end).ToList();
-            }
-
-            if (!hits.Any() || _inputModule.IsPointerOverGameObject<GraphicRaycaster>()) // is mouse over ui? if so don't process.
-            {
-                return;
-            }
-
-            var filteredList = hits.ToList();
-
-            if (hits.Count > 1)
-            {
-                var background = hits.FirstOrDefault(x => x.GetComponent<BackgroundScaler>() != null);
-                if (background != null)
-                {
-                    filteredList.Remove(background);
-                }
-            }
-
-            var focusables = FindObjectsOfType<UnityEngine.Object>()
-                .Where(x => x is IFocusable)
-                .Select(x => x as IFocusable)
-                .ToList();
-
-            // Debug.Log("Found " + focusables.Count + " focusables");
-            foreach (var item in focusables)
-            {
-                item.UnFocus();
-            }
-
-            foreach (var hit in filteredList)
-            {
-                if (hit.TryGetComponent<IFocusable>(out var component))
-                {
-                    ObjectClicked?.Invoke(component);
-                    component.Focus();
-                }
-            }
+            UpdatedFocusedEntites(false);
         }
 
         if (isSelecting)
         {
             finalSelectPosition = Input.mousePosition;
+
+            UpdatedFocusedEntites(true);
+
             UpdateSelectionBox(_selectionImageRectTransform);
+        }
+    }
+
+    private void UpdatedFocusedEntites(bool onlyHighlight = false)
+    {
+        var start = initialSelectPosition.ToWorldPosition(_mainCamera);
+        var end = finalSelectPosition.ToWorldPosition(_mainCamera);
+
+        var dir = end - start;
+
+        var hits = new List<Collider2D>();
+
+        if (dir.magnitude < 0.2f)
+        {
+            hits = new List<Collider2D> { Physics2D.Raycast(start, Vector2.one).collider };
+        }
+        else
+        {
+            hits = Physics2D.OverlapAreaAll(start, end).ToList();
+        }
+
+        if (!hits.Any() || _inputModule.IsPointerOverGameObject<GraphicRaycaster>()) // is mouse over ui? if so don't process.
+        {
+            return;
+        }
+
+        var filteredList = hits.ToList();
+
+        if (hits.Count > 1)
+        {
+            var background = hits.FirstOrDefault(x => x.GetComponent<BackgroundScaler>() != null);
+            if (background != null)
+            {
+                filteredList.Remove(background);
+            }
+        }
+
+        var focusables = FindObjectsOfType<MonoBehaviour>()
+            .OfType<IFocusable>()
+            .ToList();
+
+        // Debug.Log("Found " + focusables.Count + " focusables");
+        foreach (var item in focusables)
+        {
+            if (onlyHighlight)
+            {
+                item.UnHighlight();
+            }
+            else
+            {
+                item.UnFocus();
+            }
+        }
+
+        foreach (var hit in filteredList)
+        {
+            if (hit.TryGetComponent<IFocusable>(out var component))
+            {
+                ObjectClicked?.Invoke(component);
+
+                if (onlyHighlight)
+                {
+                    component.Highlight();
+                }
+                else
+                {
+                    component.Focus();
+                }
+            }
         }
     }
 

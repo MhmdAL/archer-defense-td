@@ -24,7 +24,7 @@ public class AbilityDamageBoost : Ability
         UpdateReadiness();
     }
 
-    public override void Activate()
+    public override void Execute()
     {
         float damageBoostValue = SaveData.baseUpgradeValues[UpgradeType.DamageBoostValue] +
                                  SaveData.GetUpgrade(UpgradeType.DamageBoostValue)?.CurrentValue ?? 0;

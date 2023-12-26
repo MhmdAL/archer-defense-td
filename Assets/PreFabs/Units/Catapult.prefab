@@ -134,10 +134,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5281010838241834524}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: towerSkillsData
+      value: 
+      objectReference: {fileID: 11400000, guid: f0a63fbc48cd3dd41986e507f5c04d36,
+        type: 2}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: buffIndicatorPanel
       value: 
       objectReference: {fileID: 4178017233102571475, guid: 3e6a69b49370a7c438e5105bc7145a5c,
         type: 3}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: walkingAudioSource
+      value: 
+      objectReference: {fileID: 5106949454775593122}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: FocusIndicatorArrow
       value: 
@@ -152,9 +161,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5281010838241878166}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: onHitEffects.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: <TowerData>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: d5fac1120f9469e4ba3316664273addb,
+        type: 2}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: onHitEffects.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: bf8153ced7a8db848b7a29904a13473f,
+        type: 2}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: onHitEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4,
         type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: <TowerSkillsData>k__BackingField
@@ -330,6 +353,12 @@ SpriteRenderer:
 --- !u!1 &4646693693450673829 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 663634617392084561, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
+    type: 3}
+  m_PrefabInstance: {fileID: 5281010838241700084}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &5106949454775593122 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1123204008310489174, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
     type: 3}
   m_PrefabInstance: {fileID: 5281010838241700084}
   m_PrefabAsset: {fileID: 0}

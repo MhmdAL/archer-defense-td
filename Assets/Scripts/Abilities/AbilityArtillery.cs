@@ -42,10 +42,12 @@ public class AbilityArtillery : Ability, IShooting
         ArtilleryIndicator.transform.position = targetPos;
         ArtilleryIndicator.transform.localScale = new Vector3(2 * ArrowSpread, 2 * ArrowSpread, 1);
 
+        OnAbilityActivated();
+        
         StartCoroutine(FireArtillery(targetPos));
     }
 
-    public override void Activate()
+    public override void Execute()
     {
         ArtilleryPanel.SetActive(true);
 

@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using UnityTimer;
 
 /// <summary>
 /// UI and Audio controller
@@ -569,12 +570,22 @@ public class GameUIController : MonoBehaviour
         UpdateTowerDesc(tower);
     }
 
+    public void OnStartWaveButtonClicked()
+    {
+        _vs.WaveSpawner.SpawnNextWave();
+
+        var animator = GO_spawnWavePanel.GetComponent<Animator>();
+
+        this.AttachTimer(0.5f, (t) =>
+        {
+            animator.ResetTrigger("show");
+            animator.SetTrigger("hide");
+        });
+    }
+
     private void OnWaveStarted(int wave)
     {
         // SpawnWaveButton.SetActive(false);
-        GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("show");
-        GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("hide");
-
         UpdateHUD();
     }
 

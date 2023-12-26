@@ -2,6 +2,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class AbilityHorseRaidV2 : Ability
@@ -25,7 +26,8 @@ public class AbilityHorseRaidV2 : Ability
     private GameObject _raidStartIndicator = null;
     public GameObject raidEndIndicator;
 
-    public CustomStandaloneInputModule inputModule;
+    public AudioSource audioSource;
+    public AudioClip raidStartSFX;
 
     private CursorManager _cursorManager;
 
@@ -41,7 +43,7 @@ public class AbilityHorseRaidV2 : Ability
         return CooldownFinished();
     }
 
-    public override void Activate()
+    public override void Execute()
     {
         _state = HorseRaidState.Setup;
         HorseRaidScreenIndicator.SetActive(true);
@@ -74,6 +76,10 @@ public class AbilityHorseRaidV2 : Ability
 
                 if (vs.pathCollider.OverlapPoint(worldPos))
                 {
+                    OnAbilityActivated();
+
+                    audioSource.PlayOneShot(raidStartSFX);
+
                     StartCoroutine(StartRaid());
 
                     ExitRaidSetup();
@@ -89,6 +95,8 @@ public class AbilityHorseRaidV2 : Ability
         HorseRaidScreenIndicator.SetActive(false);
 
         _cursorManager.UseCursor(CursorType.Default);
+
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     private IEnumerator StartRaid()
@@ -97,7 +105,7 @@ public class AbilityHorseRaidV2 : Ability
 
         var raidEndPos = LevelUtils.GetNearestWaypoint(_raidEndPosition.Value.ToWorldPosition(Camera.main)) + (Vector3)UnityEngine.Random.insideUnitCircle * horseRaidPositionRandomFactor;
 
-        raidEndIndicator.transform.position = _raidEndPosition.Value;
+        raidEndIndicator.transform.position = _raidEndPosition.Value.ToWorldPosition(Camera.main);
         raidEndIndicator.SetActive(true);
 
         Debug.Log("raid starting");
@@ -128,7 +136,7 @@ public class AbilityHorseRaidV2 : Ability
     public override void CleanUp()
     {
         base.CleanUp();
-        
+
         ExitRaidSetup();
     }
 }

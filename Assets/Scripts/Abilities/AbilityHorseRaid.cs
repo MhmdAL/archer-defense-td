@@ -28,7 +28,7 @@ public class AbilityHorseRaid : Ability
     private GameObject _raidEndIndicator = null;
 
 
-    public override void Activate()
+    public override void Execute()
     {
         _state = HorseRaidState.Setup;
         HorseRaidScreenIndicator.SetActive(true);

@@ -24,11 +24,16 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
     private MovementTracker movementTracker;
 
+    private bool _loiterFinished = false;
+
     private void Awake()
     {
         MoveSpeed = new Stat(Type.MOVEMENT_SPEED, Speed);
 
         followPath = GetComponent<FollowPath>();
+
+        followPath.OnPathCompleted += OnPathFinished;
+        followPath.TargetChanged += OnTargetChanged;
 
         movementTracker = GetComponent<MovementTracker>();
 
@@ -60,14 +65,23 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         UpdateDirection(delta);
     }
 
+    private void OnTargetChanged(Vector2 direction)
+    {
+        UpdateDirection(direction);
+    }
+
     private void UpdateDirection(Vector3 diff)
     {
-        if (diff.x < 0)
+        if (diff.x == 0)
+        {
+
+        }
+        else if (diff.x < 0)
         {
             // Moving left
             transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
-        else if (diff.x >= 0)
+        else if (diff.x > 0)
         {
             // Moving right
             transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
@@ -100,6 +114,9 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
     private void OnPatrolFinished(Timer t)
     {
+        _loiterFinished = true;
+        Destination = null;
+
         var reversedPath = followPath.CurrentPath.ReversePath();
 
         var (_, nextPoint) = reversedPath.GetNearestWaypoint(transform.root.position);
@@ -114,6 +131,14 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         followPath.enabled = true;
 
         RaidEndCallback?.Invoke();
+    }
+
+    private void OnPathFinished()
+    {
+        if (_loiterFinished)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public Path FindNearestPath(Vector3 point, List<Path> paths)

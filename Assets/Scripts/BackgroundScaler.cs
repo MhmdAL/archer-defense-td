@@ -51,5 +51,16 @@ public class BackgroundScaler : MonoBehaviour, IFocusable, IPointerClickHandler
     {
         HasFocus = false;
     }
+
+    public void Highlight()
+    {
+        
+    }
+
+    public void UnHighlight()
+    {
+
+    }
+    
     #endregion
 }

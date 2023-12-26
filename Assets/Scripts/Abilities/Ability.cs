@@ -25,7 +25,7 @@ public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 
     protected Timer CooldownTimer;
 
-    private Button _button;
+    protected Button _button;
 
     public List<TargetHitEffect> OnHitEffects => throw new NotImplementedException();
 
@@ -55,7 +55,7 @@ public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
     }
 
     protected abstract bool IsReady();
-    public abstract void Activate();
+    public abstract void Execute();
 
     public virtual void UpdateReadiness(params Func<bool>[] readyConditions)
     {
@@ -102,12 +102,14 @@ public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 
     public virtual void OnClick()
     {
-        Activate();
+        Execute();
+    }
+
+    protected void OnAbilityActivated()
+    {
+        CooldownTimer.Restart(baseCooldown);
 
         AbilityActivated?.Invoke(t);
-
-        SetReady(false);
-        CooldownTimer.Restart(baseCooldown);
     }
 
     public virtual void CleanUp()

@@ -14,6 +14,8 @@ public abstract class Monster : Unit, IMoving
 
     [SerializeField]
     private AudioClip deathSound;
+    [SerializeField]
+    private AudioClip deathSound2;
 
     public Stat MoveSpeed { get; set; }
 
@@ -89,20 +91,13 @@ public abstract class Monster : Unit, IMoving
         _audioSource = GetComponent<AudioSource>();
         _followPathComponent = GetComponent<FollowPath>();
 
-        // _followPathComponent.OnMovementChanged += OnMovementChanged;
-        movementTracker.MovementChanged += OnMovementChanged;
+        _followPathComponent.TargetChanged += OnTargetChanged;
+        movementTracker.MovementChanged += OnMovement;
 
         myTransform = transform;
         m = ValueStore.Instance.monsterManagerInstance;
 
         InitializeValues();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        AdjustDirection();
     }
 
     public virtual void InitializeValues()
@@ -146,21 +141,30 @@ public abstract class Monster : Unit, IMoving
         // }
     }
 
-    private void OnMovementChanged(Vector3 delta, Vector3 currentVelocity)
+    private void OnMovement(Vector3 delta, Vector3 currentVelocity)
     {
         anim.SetFloat("walk_speed", 0.5f + Mathf.Abs(currentVelocity.x) * 0.5f);
 
         UpdateDirection(delta);
     }
 
+    private void OnTargetChanged(Vector2 newDirection)
+    {
+        UpdateDirection(newDirection);
+    }
+
     private void UpdateDirection(Vector3 diff)
     {
-        if (diff.x < 0)
+        if (diff.x == 0)
+        {
+
+        }
+        else if (diff.x < 0)
         {
             // Moving left
             transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
-        else if (diff.x >= 0)
+        else if (diff.x > 0)
         {
             // Moving right
             transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
@@ -220,8 +224,18 @@ public abstract class Monster : Unit, IMoving
             anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
         }
 
-        _audioSource.pitch = UnityEngine.Random.Range(0, 2f);
-        _audioSource.PlayOneShot(deathSound);
+        _audioSource.pitch = UnityEngine.Random.Range(0.75f, 1.5f);
+
+        var rand = UnityEngine.Random.Range(0, 2);
+
+        // if (rand == 1)
+        // {
+            _audioSource.PlayOneShot(deathSound, 0.7f);
+        // }
+        // else
+        // {
+            _audioSource.PlayOneShot(deathSound2, 0.05f);
+        // }
 
         // Add death particle effects
         // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);

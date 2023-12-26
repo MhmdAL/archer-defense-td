@@ -3771,7 +3771,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3560190340909742114}
   - component: {fileID: 230695644352639131}
-  - component: {fileID: 3744458667465778420}
   m_Layer: 0
   m_Name: GameObject (2)
   m_TagString: Path
@@ -3823,7 +3822,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -3885,48 +3884,6 @@ PolygonCollider2D:
       - {x: 112.40949, y: -46.33459}
       - {x: 113.24292, y: -35.0677}
   m_UseDelaunayMesh: 0
---- !u!68 &3744458667465778420
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7780041607815221761}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -1.275054, y: -14.591887}
-  - {x: 4.466647, y: -14.343802}
-  - {x: 4.4659166, y: -18.120512}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
 --- !u!1 &7847701961409097856
 GameObject:
   m_ObjectHideFlags: 0

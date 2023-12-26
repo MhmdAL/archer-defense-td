@@ -11,6 +11,7 @@ public class AudioProfile : ScriptableObject
     public AudioClip archer_upgrade;
     public AudioClip enemy_walk;
     public AudioClip enemy_killed;
+    public AudioClip level_start;
     public AudioClip level_victory;
     public AudioClip level_defeat;
     public AudioClip ambient;

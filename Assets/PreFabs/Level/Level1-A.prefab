@@ -173,6 +173,16 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 4924
       objectReference: {fileID: 0}
+    - target: {fileID: 5787789142656831846, guid: 9176c036e5fd60640813fe21357f2d6f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5787789142656831846, guid: 9176c036e5fd60640813fe21357f2d6f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -20.11
+      objectReference: {fileID: 0}
     - target: {fileID: 6756658234868764066, guid: 9176c036e5fd60640813fe21357f2d6f,
         type: 3}
       propertyPath: m_SortingOrder
@@ -257,7 +267,7 @@ PrefabInstance:
         type: 3}
       propertyPath: LevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 8cc4f3d596dd1334f98170b3ed521913,
+      objectReference: {fileID: 11400000, guid: 610be91db7fa64c48801161da75f320a,
         type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

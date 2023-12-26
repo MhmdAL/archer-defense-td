@@ -64,13 +64,23 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooting, IAttacking
     {
         HasFocus = true;
 
-        _outlinable.OutlineParameters.Enabled = true;
+        Highlight();
     }
 
     public void UnFocus()
     {
         HasFocus = false;
 
+        UnHighlight();
+    }
+
+    public void Highlight()
+    {
+        _outlinable.OutlineParameters.Enabled = true;
+    }
+
+    public void UnHighlight()
+    {
         _outlinable.OutlineParameters.Enabled = false;
     }
 

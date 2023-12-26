@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
 	public AudioManager audioManager;
 	public GameObject mainMenu;
@@ -11,16 +12,21 @@ public class MainMenu : MonoBehaviour {
 
 	private AudioSource source;
 
-	void Awake(){
-		source = GetComponent<AudioSource> ();
+	void Awake()
+	{
+		source = GetComponent<AudioSource>();
 	}
 
-	public void Load(string levelToLoad){
-		SceneManager.LoadScene (levelToLoad);
+	public void Load(string levelToLoad)
+	{
+		GlobalManager.instance.LoadScene(levelToLoad, 1f);
+
+		// SceneManager.LoadScene(levelToLoad);
 	}
 
-	public void PlayBip(){
-		source.PlayOneShot (bip);
+	public void PlayBip()
+	{
+		source.PlayOneShot(bip);
 	}
 
 	public void SwitchMenu(int x)
@@ -34,11 +40,13 @@ public class MainMenu : MonoBehaviour {
 		}*/
 	}
 
-	void OnLevelWasLoaded(int level){
+	void OnLevelWasLoaded(int level)
+	{
 		Time.timeScale = 1;
 	}
 
-	public void QuitGame(){
-		Application.Quit ();
+	public void QuitGame()
+	{
+		Application.Quit();
 	}
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 public class FollowPath : MonoBehaviour
 {
     public event Action OnPathCompleted;
+    public event Action<Vector2> TargetChanged;
 
     private IMoving targetMover;
     public PathData CurrentPath { get; private set; }
@@ -14,7 +15,6 @@ public class FollowPath : MonoBehaviour
     private int currentWaypointIndex = 0;
 
     private Vector3 currentTargetPosition;
-    private Vector3 targetTargetPosition;
 
     private void Awake()
     {
@@ -27,8 +27,8 @@ public class FollowPath : MonoBehaviour
 
         CurrentPath = newPath;
         currentWaypointIndex = currentIndex;
-        currentTargetPosition = GetRandomTargetPosition(currentIndex);
-        targetTargetPosition = currentTargetPosition;
+        
+        UpdateTarget(currentWaypointIndex);
 
         if (resetPosition)
         {
@@ -39,8 +39,6 @@ public class FollowPath : MonoBehaviour
     private void FixedUpdate()
     {
         if (CurrentPath == null) return;
-
-        currentTargetPosition = Vector3.Lerp(currentTargetPosition, targetTargetPosition, Time.deltaTime);
 
         float step = targetMover.MoveSpeed.Value * Time.deltaTime;
         Vector3 newPosition = Vector3.MoveTowards(transform.root.position, currentTargetPosition, step);
@@ -56,7 +54,6 @@ public class FollowPath : MonoBehaviour
     private void HandleWaypointReached()
     {
         currentWaypointIndex++;
-        targetTargetPosition = GetRandomTargetPosition(currentWaypointIndex);
 
         if (currentWaypointIndex >= CurrentPath.Waypoints.Count)
         {
@@ -64,6 +61,17 @@ public class FollowPath : MonoBehaviour
 
             OnPathCompleted?.Invoke();
         }
+        else
+        {
+            UpdateTarget(currentWaypointIndex);
+        }
+    }
+
+    private void UpdateTarget(int currentIndex)
+    {
+        currentTargetPosition = GetRandomTargetPosition(currentIndex);
+
+        TargetChanged?.Invoke(currentTargetPosition - transform.root.position);
     }
 
     private Vector3 GetRandomTargetPosition(int waypointIndex)

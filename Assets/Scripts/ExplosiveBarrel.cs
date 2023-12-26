@@ -87,6 +87,16 @@ public class ExplosiveBarrel : MonoBehaviour, IAttacking, IFocusable, IProjectil
 
     }
 
+    public void Highlight()
+    {
+        
+    }
+
+    public void UnHighlight()
+    {
+
+    }
+
     public void OnProjectileHit(Projectile p, Vector2 hitpoint)
     {
         if (p.Owner is CrossBow)

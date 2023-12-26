@@ -7,10 +7,10 @@ using UnityTimer;
 using static UnityEngine.ParticleSystem;
 
 
-public abstract class Unit : MonoBehaviour, IProjectileTarget
+public abstract class Unit : MonoBehaviour, IProjectileTarget, IHealthy
 {
-    public event Action HealthChanged;
-    
+    public Action HealthChanged { get; set; }
+
     public event Action<Unit, DamageSource> OnDeath;
     public event Action<Unit, float, IAttacking> Damaged;
 
