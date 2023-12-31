@@ -61,7 +61,7 @@ public class ExplosiveBarrel : MonoBehaviour, IAttacking, IFocusable, IProjectil
         var explosion = Instantiate(ExplosionVFX, DetonationPoint.position, Quaternion.identity);
         explosion.transform.localScale = new Vector3(ExplosionRadius, ExplosionRadius, 1);
 
-        audioSource.PlayOneShot(ExplosionSFX);
+        audioSource.PlayOneShot(ExplosionSFX, GlobalManager.GlobalVolumeScale);
 
         foreach (var barrel in barrelsHit)
         {

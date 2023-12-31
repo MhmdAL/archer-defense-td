@@ -230,11 +230,11 @@ public abstract class Monster : Unit, IMoving
 
         // if (rand == 1)
         // {
-            _audioSource.PlayOneShot(deathSound, 0.7f);
+            _audioSource.PlayOneShot(deathSound, 0.7f * GlobalManager.GlobalVolumeScale);
         // }
         // else
         // {
-            _audioSource.PlayOneShot(deathSound2, 0.05f);
+            _audioSource.PlayOneShot(deathSound2, 0.05f * GlobalManager.GlobalVolumeScale);
         // }
 
         // Add death particle effects

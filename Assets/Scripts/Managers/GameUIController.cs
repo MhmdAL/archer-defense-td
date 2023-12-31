@@ -206,7 +206,7 @@ public class GameUIController : MonoBehaviour
         }
         else if (upcomingPlatoonIndicators.All(x => !x.gameObject.activeSelf) && _vs.WaveSpawner.NextPlatoon != null)
         {
-            gameAudioSource.PlayOneShot(upcomingPlatoonSFX);
+            gameAudioSource.PlayOneShot(upcomingPlatoonSFX, GlobalManager.GlobalVolumeScale);
 
             var entranceIds = _vs.WaveSpawner.NextPlatoon.Squads.Select(x => x.EntranceId);
 
@@ -615,7 +615,7 @@ public class GameUIController : MonoBehaviour
     {
         Debug.Log("Platoon Spawned");
 
-        gameAudioSource.PlayOneShot(platoonSpawnedSFX);
+        gameAudioSource.PlayOneShot(platoonSpawnedSFX, GlobalManager.GlobalVolumeScale);
     }
 
     public void Reset()

@@ -6,6 +6,8 @@ using UnityTimer;
 
 public class GlobalManager : MonoBehaviour
 {
+    public static float GlobalVolumeScale = 1.0f;
+    
     public LoadingScreen loadingScreen;
 
     private static GlobalManager _instance;

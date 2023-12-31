@@ -417,7 +417,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         if (clip != null)
         {
-            _audioSource.PlayOneShot(clip);
+            _audioSource.PlayOneShot(clip, GlobalManager.GlobalVolumeScale);
         }
     }
 

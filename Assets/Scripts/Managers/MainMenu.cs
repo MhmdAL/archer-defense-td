@@ -26,7 +26,7 @@ public class MainMenu : MonoBehaviour
 
 	public void PlayBip()
 	{
-		source.PlayOneShot(bip);
+		source.PlayOneShot(bip, GlobalManager.GlobalVolumeScale);
 	}
 
 	public void SwitchMenu(int x)

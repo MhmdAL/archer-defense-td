@@ -78,7 +78,7 @@ public class AbilityHorseRaidV2 : Ability
                 {
                     OnAbilityActivated();
 
-                    audioSource.PlayOneShot(raidStartSFX);
+                    audioSource.PlayOneShot(raidStartSFX, GlobalManager.GlobalVolumeScale);
 
                     StartCoroutine(StartRaid());
 
