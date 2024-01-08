@@ -26,7 +26,7 @@ public class AdjustSortingOrder : MonoBehaviour
         TryGetComponent<SpriteRenderer>(out _spriteRenderer);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         Adjust();
     }

@@ -530,6 +530,8 @@ public class GameUIController : MonoBehaviour
 
     public void OnStartWaveButtonClicked()
     {
+        BTN_spawnWave.interactable = false;
+
         _vs.WaveSpawner.SpawnNextWave();
 
         var animator = GO_spawnWavePanel.GetComponent<Animator>();
