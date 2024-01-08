@@ -44,12 +44,12 @@ public class MonsterManager : MonoBehaviour
 
     private void Start()
     {
-        monstersInScene = FindObjectsOfType<Monster>().ToList();
+        // monstersInScene = FindObjectsOfType<Monster>().ToList();
     }
 
     public void Reset()
     {
-        MonstersInScene.ForEach(x => Destroy(x.transform.root.gameObject));
+        MonstersInScene.Where(x => x != null).ToList().ForEach(x => Destroy(x.transform.root.gameObject));
         MonstersInScene.Clear();
     }
 

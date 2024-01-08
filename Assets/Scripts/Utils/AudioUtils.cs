@@ -7,7 +7,7 @@ public class AudioUtils : MonoBehaviour
 {
     private static Dictionary<AudioSource, float> volumeDict = new Dictionary<AudioSource, float>();
 
-    public static void FadeOutAllSounds()
+    public static void FadeOutAllSounds(float duration = 1f)
     {
         var audioSources = FindObjectsOfType<AudioSource>();
 
@@ -16,21 +16,26 @@ public class AudioUtils : MonoBehaviour
             volumeDict[audioSource] = audioSource.volume;
 
             audioSource
-                .DOFade(0, 1f)
+                .DOFade(0, duration)
                 .SetUpdate(true);
         }
     }
 
-    public static void FadeInAllSounds()
+    public static void FadeInAllSounds(bool useManagedVolume = true, float duration = 1f)
     {
         var audioSources = FindObjectsOfType<AudioSource>();
 
         foreach (var audioSource in audioSources)
         {
-            volumeDict.TryGetValue(audioSource, out var targetVolume);
+            var targetVolume = audioSource.volume;
+
+            if (useManagedVolume)
+                volumeDict.TryGetValue(audioSource, out targetVolume);
+
+            audioSource.volume = 0;
 
             audioSource
-                .DOFade(targetVolume, 1f)
+                .DOFade(targetVolume, duration)
                 .SetUpdate(true);
         }
     }

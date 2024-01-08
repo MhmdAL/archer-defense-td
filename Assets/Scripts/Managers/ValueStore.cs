@@ -8,6 +8,7 @@ using TMPro;
 using System.Linq;
 using UnityTimer;
 using Unity.VisualScripting;
+using UnityEngine.AI;
 
 public enum ClickType
 {
@@ -155,7 +156,9 @@ public class ValueStore : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(LoadLevel(level.levelID));
+        StartCoroutine(LoadLevelAsync(level.levelID));
+
+        AudioUtils.FadeInAllSounds(false, 5f);
     }
 
     void Update()
@@ -164,11 +167,11 @@ public class ValueStore : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            StartCoroutine(LoadLevel((CurrentLevel.LevelId + 1) % (LevelPrefabs.Count + 1)));
+            StartCoroutine(LoadLevelAsync((CurrentLevel.LevelId + 1) % (LevelPrefabs.Count + 1)));
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            StartCoroutine(LoadLevel(CurrentLevel.LevelId - 1));
+            StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId - 1));
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -187,8 +190,21 @@ public class ValueStore : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadLevel(int levelId)
-    {        
+    public void LoadLevel(int levelId)
+    {
+        StartCoroutine(LoadLevelAsync(levelId));
+    }
+
+    public void RestartLevel()
+    {
+        StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId));
+    }
+
+    private IEnumerator LoadLevelAsync(int levelId)
+    {
+        if (!LevelPrefabs.Select(x => x.LevelId).Contains(levelId))
+            yield break;
+
         if (CurrentLevel != null)
         {
             Destroy(CurrentLevel.gameObject);
@@ -256,7 +272,7 @@ public class ValueStore : MonoBehaviour
 
     private void OnWaveEnded(int wave)
     {
-        if (!WaveSpawner.IsFinished)
+        if (!WaveSpawner.LevelFinished)
         {
             _audioSource.PlayOneShot(AudioProfile.wave_end, GlobalManager.GlobalVolumeScale);
         }
@@ -293,11 +309,6 @@ public class ValueStore : MonoBehaviour
     public void LoadLevel(string levelToLoad)
     {
         GlobalManager.instance.LoadScene(levelToLoad, 1f);
-    }
-
-    public void RestartLevel()
-    {
-        GlobalManager.instance.LoadScene(SceneManager.GetActiveScene().name, 1f);
     }
 
     public void addGold()
@@ -414,7 +425,7 @@ public class ValueStore : MonoBehaviour
 
         victoryMenu.SetActive(false);
 
-        StartCoroutine(LoadLevel(CurrentLevel.LevelId + 1));
+        StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId + 1));
     }
 
     public void ExitGame()
@@ -437,4 +448,22 @@ public class ValueStore : MonoBehaviour
         t.anchorMax = newAnchorsMax;
         t.offsetMin = t.offsetMax = new Vector2(0, 0);
     }
+}
+
+public enum LevelPhaseState
+{
+    Setup,
+    Defending
+}
+
+public enum TimeState
+{
+    Playing,
+    Paused
+}
+
+public enum ResultState
+{
+    Victory,
+    Defeat
 }

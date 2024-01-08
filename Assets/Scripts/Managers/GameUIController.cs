@@ -123,8 +123,6 @@ public class GameUIController : MonoBehaviour
     private AudioSource gameAudioSource;
 
     [SerializeField]
-    private AudioClip upcomingPlatoonSFX;
-    [SerializeField]
     private AudioClip platoonSpawnedSFX;
 
     /// <summary>
@@ -138,8 +136,6 @@ public class GameUIController : MonoBehaviour
     public TutorialManager tutorialManager;
 
     public bool StartWaveEnabled { get; set; }
-
-    private List<UpcomingPlatoonIndicator> upcomingPlatoonIndicators = new List<UpcomingPlatoonIndicator>();
 
     public bool performLevelwiseInit = true;
 
@@ -161,6 +157,7 @@ public class GameUIController : MonoBehaviour
 
         _vs.WaveSpawner.WaveStarted += OnWaveStarted;
         _vs.WaveSpawner.WaveEnded += OnWaveEnded;
+        _vs.WaveSpawner.WaveReset += OnWaveReset;
         _vs.WaveSpawner.PlatoonSpawned += OnPlatoonSpawned;
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
 
@@ -185,46 +182,10 @@ public class GameUIController : MonoBehaviour
     private void Update()
     {
         UpdateHUD();
-
-        UpdateUpcomingIndicators();
-    }
-
-    private void UpdateUpcomingIndicators()
-    {
-        if (!_vs.WaveSpawner.IsSpawning)
-            return;
-
-        if (_vs.WaveSpawner.TimeTillNextPlatoon > 5)
-        {
-            foreach (var up in upcomingPlatoonIndicators.ToList())
-            {
-                if (up != null)
-                {
-                    up.gameObject.SetActive(false);
-                }
-            }
-        }
-        else if (upcomingPlatoonIndicators.All(x => !x.gameObject.activeSelf) && _vs.WaveSpawner.NextPlatoon != null)
-        {
-            gameAudioSource.PlayOneShot(upcomingPlatoonSFX, GlobalManager.GlobalVolumeScale);
-
-            var entranceIds = _vs.WaveSpawner.NextPlatoon.Squads.Select(x => x.EntranceId);
-
-            foreach (var entId in entranceIds)
-            {
-                if (upcomingPlatoonIndicators.FirstOrDefault(x => x.entranceId == entId) != null)
-                {
-                    upcomingPlatoonIndicators.First(x => x.entranceId == entId).gameObject.SetActive(true);
-                }
-            }
-        }
     }
 
     private void OnLevelStarted()
     {
-        upcomingPlatoonIndicators.Clear();
-        upcomingPlatoonIndicators = _vs.CurrentLevel.gameObject.GetComponentsInChildren<UpcomingPlatoonIndicator>(true).ToList();
-
         FadeIn();
     }
 
@@ -279,12 +240,9 @@ public class GameUIController : MonoBehaviour
 
     public void InitHUD()
     {
-        if (_vs.CurrentLevel.LevelId != 1)
-        {
-            BTN_spawnWave.interactable = true;
-            GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
-            GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
-        }
+        BTN_spawnWave.interactable = true;
+        GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
+        GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
     }
 
     public void UpdateHUD()
@@ -593,7 +551,16 @@ public class GameUIController : MonoBehaviour
     {
         Debug.Log("Wave Ended");
 
-        if (!_vs.WaveSpawner.IsFinished)
+        if (!_vs.WaveSpawner.LevelFinished)
+        {
+            BTN_spawnWave.interactable = true;
+            GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+        }
+    }
+
+    private void OnWaveReset(int wave)
+    {
+        if (!_vs.WaveSpawner.LevelFinished)
         {
             BTN_spawnWave.interactable = true;
             GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");

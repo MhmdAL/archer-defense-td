@@ -27,6 +27,7 @@ public class TargetDetection
                 targetsInRange.Remove(x);
             }
         }
+
         // Remove monsters who leave range from list of targets
         foreach (Monster t in currentTargets.ToList())
         {
@@ -40,6 +41,7 @@ public class TargetDetection
                 currentTargets[currentTargets.IndexOf(t)] = null;
             }
         }
+        
         // Set currentTargets
         SetTargets(source, targetsInRange, currentTargets);
 

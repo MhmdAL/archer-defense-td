@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class Projectile : MonoBehaviour
 {
@@ -145,28 +146,34 @@ public class Projectile : MonoBehaviour
         _curTime += Time.deltaTime;
         _curTime = Mathf.Clamp(_curTime, 0, Duration);
 
-        var pos = transform.position;
-
         var dir = TargetPosition - StartPosition;
 
-        var xSpeed = dir.x / Duration;
-        var ySpeed = (dir.y - 0.5f * Gravity * Duration * Duration) / Duration;
+        var iAngle = Mathf.Atan2(dir.y, dir.x);
 
-        pos.x = StartPosition.x + xSpeed * _curTime;
-        pos.y = StartPosition.y + ySpeed * _curTime + 0.5f * Gravity * _curTime * _curTime;
+        var gravityFactorX = 0;
+        var gravityFactorZ = Mathf.Abs(Mathf.Cos(iAngle));
+        
+        var pos = transform.position;
+
+
+        var xSpeed = (dir.x - (0.5f * Gravity * Duration * Duration) * gravityFactorX) / Duration;
+        var ySpeed = (dir.y - (0.5f * Gravity * Duration * Duration) * gravityFactorZ) / Duration;
+
+        pos.x = StartPosition.x + xSpeed * _curTime + (0.5f * Gravity * _curTime * _curTime) * gravityFactorX;
+        pos.y = StartPosition.y + ySpeed * _curTime + (0.5f * Gravity * _curTime * _curTime) * gravityFactorZ;
 
         transform.position = pos;
 
-        var targetDir = (Vector2)StartPosition + GetDeltaPos(xSpeed, ySpeed, _curTime + 0.1f * Duration) - (Vector2)pos;
+        var targetDir = (Vector2)StartPosition + GetDeltaPos(xSpeed, ySpeed, _curTime + 0.1f * Duration, gravityFactorX, gravityFactorZ) - (Vector2)pos;
 
         float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    private Vector2 GetDeltaPos(float iXSpeed, float iYSpeed, float t)
+    private Vector2 GetDeltaPos(float iXSpeed, float iYSpeed, float t, float xFactor, float zFactor)
     {
-        var x = iXSpeed * t;
-        var y = iYSpeed * t + 0.5f * Gravity * t * t;
+        var x = iXSpeed * t + (0.5f * Gravity * t * t) * xFactor;
+        var y = iYSpeed * t + (0.5f * Gravity * t * t) * zFactor;
 
         return new Vector2(x, y);
     }

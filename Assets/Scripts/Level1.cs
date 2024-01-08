@@ -5,13 +5,6 @@ using Shapes2D;
 using UnityEngine;
 using UnityTimer;
 
-public enum LevelState
-{
-    Wave1,
-    Wave2,
-    Wave3
-}
-
 public class Level1 : MonoBehaviour
 {
     public GameUIController uIController;

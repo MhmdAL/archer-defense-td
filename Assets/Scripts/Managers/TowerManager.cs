@@ -38,6 +38,8 @@ public class TowerManager : MonoBehaviour
 
     private ValueStore _vs;
 
+    private List<Tower> _spawnedFormations = new List<Tower>();
+
     private void Awake()
     {
         _vs = FindObjectOfType<ValueStore>();
@@ -47,6 +49,7 @@ public class TowerManager : MonoBehaviour
 
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
         _vs.WaveSpawner.WaveEnded += OnWaveEnded;
+        _vs.WaveSpawner.WaveReset += OnWaveReset;
         _vs.LevelStarted += OnLevelStarted;
     }
 
@@ -60,10 +63,12 @@ public class TowerManager : MonoBehaviour
 
     public void Reset()
     {
-        TowersInScene.ForEach(x => Destroy(x.gameObject));
+        TowersInScene.Where(x => x != null).ToList().ForEach(x => Destroy(x.gameObject));
 
         TowerBasesInScene.Clear();
         TowersInScene.Clear();
+
+        _spawnedFormations.Clear();
     }
 
     public void CreateTowerIfEnoughMoney(TowerBase tb)
@@ -94,14 +99,18 @@ public class TowerManager : MonoBehaviour
         }
     }
 
-    private void SpawnUnitFormation(GameObject formation, int spawnIndex)
+    private List<Tower> SpawnUnitFormation(GameObject formation, int spawnIndex)
     {
         var spawnPos = _vs.CurrentLevel.FormationSpawns.GetSpawnPlatform(spawnIndex);
 
+        var spawnedTowers = new List<Tower>();
+
         foreach (var tower in formation.GetComponentsInChildren<Tower>())
         {
-            CreateTower(tower, spawnPos.transform.position + tower.transform.localPosition);
+            spawnedTowers.Add(CreateTower(tower, spawnPos.transform.position + tower.transform.localPosition));
         }
+
+        return spawnedTowers;
     }
 
     private void OnWaveEnded(int wave)
@@ -110,7 +119,28 @@ public class TowerManager : MonoBehaviour
         {
             if (item != null)
             {
-                SpawnUnitFormation(item.FormationPrefab, item.FormationSpawnIndex);
+                _spawnedFormations.AddRange(SpawnUnitFormation(item.FormationPrefab, item.FormationSpawnIndex));
+            }
+        }
+    }
+
+    private void OnWaveReset(int wave)
+    {
+        foreach (var item in _spawnedFormations.ToList())
+        {
+            Destroy(item.gameObject);
+        }
+
+        _spawnedFormations.Clear();
+
+        for (int i = 0; i < wave - 1; i++)
+        {
+            foreach (var item in _vs.WaveSpawner.LevelData.Waves[i].WaveRewards)
+            {
+                if (item != null)
+                {
+                    _spawnedFormations.AddRange(SpawnUnitFormation(item.FormationPrefab, item.FormationSpawnIndex));
+                }
             }
         }
     }

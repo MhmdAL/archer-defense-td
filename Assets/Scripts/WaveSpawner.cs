@@ -19,6 +19,11 @@ public class WaveSpawner : MonoBehaviour
     /// </summary>
     public event Action<int> WaveEnded;
 
+    /// <summary>
+    /// [for testing] Called when the current wave rolls back to a previously finished wave
+    /// </summary>
+    public event Action<int> WaveReset;
+
     public LevelData LevelData { get; set; }
 
     public int TotalWaves => LevelData.Waves.Count;
@@ -27,15 +32,17 @@ public class WaveSpawner : MonoBehaviour
     /// <summary>
     /// 1-based wave index
     /// </summary>
-    public int CurrentWave { get; set; }
+    public int CurrentWave { get; set; } = 1;
+    public int MaxWave => LevelData.Waves.Count;
     public int EnemiesRemainingInCurrentWave { get; private set; }
 
-    public bool IsFinished => EnemiesRemainingInCurrentWave == 0 && CurrentWave == TotalWaves;
+    public bool LevelFinished => EnemiesRemainingInCurrentWave == 0 && CurrentWave == TotalWaves;
 
     public float WaveTime { get; private set; }
 
     public bool IsSpawning { get; private set; }
 
+    public int CurrentPlatoonIndex { get; set; }
     public Platoon CurrentPlatoon { get; set; }
     public Platoon NextPlatoon { get; set; }
 
@@ -54,7 +61,7 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
-        CurrentWave = 0;
+        CurrentWave = 1;
     }
 
     private void Update()
@@ -73,21 +80,20 @@ public class WaveSpawner : MonoBehaviour
         if (EnemiesRemainingInCurrentWave == 0)
         {
             WaveEnded?.Invoke(CurrentWave);
+
+            CurrentWave = Mathf.Clamp(CurrentWave + 1, 1, MaxWave);
         }
     }
 
-
     public void SpawnNextWave()
     {
-        if (CurrentWave >= LevelData.Waves.Count)
+        if (CurrentWave > LevelData.Waves.Count)
         {
             Debug.LogWarning("Max wave reached, can't start next wave");
             return;
         }
 
         WaveTime = 0;
-
-        CurrentWave++;
 
         EnemiesRemainingInCurrentWave += LevelData.Waves[CurrentWave - 1].Platoons.Sum(x => x.Squads.Sum(y => y.Count));
 
@@ -109,6 +115,7 @@ public class WaveSpawner : MonoBehaviour
             var platoon = wave.Platoons[i];
 
             CurrentPlatoon = platoon;
+            CurrentPlatoonIndex = i;
             NextPlatoon = wave.Platoons.Count > i + 1 ? wave.Platoons[i + 1] : null;
 
             for (int j = 0; j < platoon.Squads.Count; j++)
@@ -116,7 +123,7 @@ public class WaveSpawner : MonoBehaviour
                 StartCoroutine(SpawnSquad(platoon.Squads[j]));
             }
 
-            this.TimeTillNextPlatoon = platoon.DelayTillNextPlatoon;
+            TimeTillNextPlatoon = platoon.DelayTillNextPlatoon;
 
             PlatoonSpawned?.Invoke(platoon);
 
@@ -159,7 +166,7 @@ public class WaveSpawner : MonoBehaviour
     // For testing
     public void SetWave(int wave)
     {
-        if (wave >= LevelData.Waves.Count || wave < 0)
+        if (wave > LevelData.Waves.Count || wave < 1)
         {
             Debug.LogWarning("Invalid wave number");
             return;
@@ -170,6 +177,8 @@ public class WaveSpawner : MonoBehaviour
             _activeRoutines.ForEach(x => StopCoroutine(x));
             _activeRoutines.Clear();
         }
+
+        StopAllCoroutines();
 
         if (_spawnedMonsters.Any())
         {
@@ -183,11 +192,22 @@ public class WaveSpawner : MonoBehaviour
             _spawnedMonsters.Clear();
         }
 
+        if (CurrentWave < wave)
+        {
+            WaveEnded?.Invoke(CurrentWave);
+        }
+        else
+        {
+            WaveReset?.Invoke(wave);
+        }
+
         WaveTime = 0;
 
         CurrentWave = wave;
 
         EnemiesRemainingInCurrentWave = 0;
+
+        IsSpawning = false;
     }
 
     public void Reset(LevelData levelData)
@@ -198,9 +218,11 @@ public class WaveSpawner : MonoBehaviour
             _activeRoutines.Clear();
         }
 
+        StopAllCoroutines();
+
         this.LevelData = levelData;
 
-        CurrentWave = 0;
+        CurrentWave = 1;
         EnemiesRemainingInCurrentWave = 0;
     }
 }

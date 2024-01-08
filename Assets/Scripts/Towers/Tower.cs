@@ -375,8 +375,11 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     private void OnAttackTimerElapsed(Timer t)
     {
         // Debug.Log("Attacking");
+
+        var monsters = Physics2D.OverlapCircleAll(transform.position, AR.Value).Select(x => x.GetComponent<Monster>()).Where(x => x != null).ToList();
+
         monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
-        TargetDetection.CalculateTargets(this, monstersInScene, monstersInRange, targets, AR.Value, AD.Value, AP.Value);
+        TargetDetection.CalculateTargets(this, monsters, monstersInRange, targets, AR.Value, AD.Value, AP.Value);
 
         Attack();
     }

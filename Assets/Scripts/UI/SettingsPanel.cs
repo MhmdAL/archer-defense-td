@@ -4,10 +4,10 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayButtonsMenu : MonoBehaviour
+public class SettingsPanel : MonoBehaviour
 {
-    private bool isFastForwarded = false;
-    private bool isPaused = false;
+    private bool _isFastForwarded = false;
+    private bool _isPaused = false;
 
     [SerializeField]
     private GameObject pauseMenu;
@@ -21,6 +21,12 @@ public class PlayButtonsMenu : MonoBehaviour
     private float fastForwardTimeScale = 5f;
 
     private float _currentTimeScale;
+    private ValueStore _gameManager;
+
+    private void Awake()
+    {
+        _gameManager = FindObjectOfType<ValueStore>();
+    }
 
     private void LateUpdate()
     {
@@ -32,15 +38,15 @@ public class PlayButtonsMenu : MonoBehaviour
 
     private void OnTimescaleChanged()
     {
-        isFastForwarded = Time.timeScale > 1;
-        isPaused = Time.timeScale == 0;
+        _isFastForwarded = Time.timeScale > 1;
+        _isPaused = Time.timeScale == 0;
 
-        fastforwardButton.image.sprite = isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
+        fastforwardButton.image.sprite = _isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
     }
 
     public void OnPauseButtonClicked()
     {
-        isPaused = true;
+        _isPaused = true;
 
         AudioUtils.FadeOutAllSounds();
 
@@ -51,7 +57,7 @@ public class PlayButtonsMenu : MonoBehaviour
 
     public void OnResumeButtonClicked()
     {
-        isPaused = false;
+        _isPaused = false;
 
         AudioUtils.FadeInAllSounds();
 
@@ -60,18 +66,36 @@ public class PlayButtonsMenu : MonoBehaviour
         UpdateTimeScale();
     }
 
+    public void OnRestartButtonClicked()
+    {
+        _isPaused = false;
+
+        AudioUtils.FadeInAllSounds();
+
+        pauseMenu.SetActive(false);
+
+        _gameManager.RestartLevel();
+
+        UpdateTimeScale();
+    }
+
+    public void OnHomeButtonClicked()
+    {
+        GlobalManager.instance.LoadScene("menu", 1f);
+    }
+
     public void OnFastForwardButtonClicked()
     {
-        isFastForwarded = !isFastForwarded;
+        _isFastForwarded = !_isFastForwarded;
 
         UpdateTimeScale();
 
-        fastforwardButton.image.sprite = isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
+        fastforwardButton.image.sprite = _isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
     }
 
-    public void UpdateTimeScale()
+    private void UpdateTimeScale()
     {
-        Time.timeScale = isPaused ? 0f : isFastForwarded ? fastForwardTimeScale : 1f;
+        Time.timeScale = _isPaused ? 0f : _isFastForwarded ? fastForwardTimeScale : 1f;
         _currentTimeScale = Time.timeScale;
     }
 }

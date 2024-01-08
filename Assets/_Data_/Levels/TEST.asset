@@ -19,9 +19,9 @@ MonoBehaviour:
     - DelayTillNextPlatoon: 50
       Squads:
       - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-        Count: 1
-        SpawnDelay: 3
-        EntranceId: 0
+        Count: 228
+        SpawnDelay: 0.5
+        EntranceId: 1
         ExitId: 0
     WaveRewards:
     - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
