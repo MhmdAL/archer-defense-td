@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -9,8 +11,11 @@ public class DebugManager : MonoBehaviour
 
     private ValueStore _gameManager;
 
+    private GameObject _selected;
+
     private void Awake()
     {
+        _selected = GameObject.Find("DBG_SELECTED");
         _gameManager = FindObjectOfType<ValueStore>();
     }
 
@@ -31,6 +36,35 @@ public class DebugManager : MonoBehaviour
             GameObject.Find("DBG_TTNP").GetComponent<TextMeshProUGUI>().text = $"TTNP: {_gameManager.WaveSpawner.TimeTillNextPlatoon}";
             GameObject.Find("DBG_TOTAL_ENEMIES").GetComponent<TextMeshProUGUI>().text = $"TE: {_gameManager.WaveSpawner.TotalEnemies}";
             GameObject.Find("DBG_IS_SPAWNING").GetComponent<TextMeshProUGUI>().text = $"IS: {_gameManager.WaveSpawner.IsSpawning}";
+
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var hits = Physics2D.RaycastAll(ray.origin, ray.direction);
+
+            if (hits.Any())
+            {
+                var hit = hits[0];
+
+                var text = new StringBuilder();
+                text.AppendLine("Entity: " + hit.collider.name);
+
+                var monster = hit.collider.gameObject.GetComponentInChildren<Monster>();
+                if (monster != null)
+                {
+                    text.AppendLine("Speed: " + monster.movementTracker.CurrentVelocity);
+                }
+
+                var horseArcher = hit.collider.gameObject.GetComponentInChildren<HorseRaiderV2>();
+                if (horseArcher != null)
+                {
+                    text.AppendLine("Speed: " + horseArcher.movementTracker.CurrentVelocity);
+                }
+
+                _selected.GetComponent<TextMeshProUGUI>().text = text.ToString();
+            }
+            else
+            {
+                _selected.GetComponent<TextMeshProUGUI>().text = "";
+            }
         }
     }
 }

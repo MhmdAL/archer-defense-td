@@ -22,7 +22,7 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
     [SerializeField]
     private Animator horseAnimator;
 
-    private MovementTracker movementTracker;
+    public MovementTracker movementTracker;
 
     private bool _loiterFinished = false;
 
@@ -60,7 +60,7 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
     private void OnMovementChanged(Vector3 delta, Vector3 currentVelocity)
     {
-        horseAnimator.SetFloat("walk_speed", Mathf.Abs(currentVelocity.x) * 0.1f);
+        horseAnimator.SetFloat("walk_speed", currentVelocity.magnitude);
 
         UpdateDirection(delta);
     }

@@ -197,7 +197,8 @@ public class ValueStore : MonoBehaviour
 
     public void RestartLevel()
     {
-        StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId));
+        GlobalManager.instance.LoadScene("Test");
+        // StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId));
     }
 
     private IEnumerator LoadLevelAsync(int levelId)

@@ -143,7 +143,7 @@ public abstract class Monster : Unit, IMoving
 
     private void OnMovement(Vector3 delta, Vector3 currentVelocity)
     {
-        anim.SetFloat("walk_speed", 0.5f + Mathf.Abs(currentVelocity.x) * 0.5f);
+        anim.SetFloat("walk_speed", currentVelocity.magnitude);
 
         UpdateDirection(delta);
     }

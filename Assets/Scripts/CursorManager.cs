@@ -12,7 +12,7 @@ public class CursorManager : MonoBehaviour
 
     private void Awake()
     {
-        UseCursor(CursorType.Default);
+        // UseCursor(CursorType.Default);
     }
 
     /// <summary>

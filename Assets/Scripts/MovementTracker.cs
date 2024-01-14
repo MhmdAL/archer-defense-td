@@ -8,21 +8,17 @@ public class MovementTracker : MonoBehaviour
     public Vector3 LastPosition { get; private set; }
     public Vector3 CurrentVelocity { get; private set; }
 
-    private float interval = 0.25f;
-    private float timer;
     private Vector3 prevPos;
 
     private Vector3 lastVelocity;
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        if (Time.timeScale == 0 || Time.deltaTime == 0)
+            return;
 
-        if (timer >= interval)
-        {
-            CurrentVelocity = (transform.position - prevPos) / interval;
-            prevPos = transform.position;
-        }
+        CurrentVelocity = (transform.position - prevPos) / Time.deltaTime;
+        prevPos = transform.position;
 
         if (lastVelocity != CurrentVelocity)
         {

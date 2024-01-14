@@ -28,6 +28,17 @@ public class SettingsPanel : MonoBehaviour
         _gameManager = FindObjectOfType<ValueStore>();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if(!_isPaused)
+                OnPauseButtonClicked();
+            else
+                OnResumeButtonClicked();
+        }
+    }
+
     private void LateUpdate()
     {
         if (_currentTimeScale != Time.timeScale)
@@ -81,6 +92,7 @@ public class SettingsPanel : MonoBehaviour
 
     public void OnHomeButtonClicked()
     {
+        Time.timeScale = 1;
         GlobalManager.instance.LoadScene("menu", 1f);
     }
 
