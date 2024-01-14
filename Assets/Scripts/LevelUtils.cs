@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LevelUtils : MonoBehaviour
 {
+    public static Vector2 FarAway = new Vector2(1000, 1000);
+
     public static Vector3 GetNearestWaypoint(Vector3 point)
     {
         var level = FindObjectOfType<LevelTemplate>();

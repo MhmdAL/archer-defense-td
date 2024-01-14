@@ -197,8 +197,8 @@ public class ValueStore : MonoBehaviour
 
     public void RestartLevel()
     {
-        GlobalManager.instance.LoadScene("Test");
-        // StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId));
+        // GlobalManager.instance.LoadScene("Test");
+        StartCoroutine(LoadLevelAsync(CurrentLevel.LevelId));
     }
 
     private IEnumerator LoadLevelAsync(int levelId)
@@ -241,6 +241,10 @@ public class ValueStore : MonoBehaviour
 
         monsterManagerInstance.Reset();
         monsterManagerInstance.paths = CurrentLevel.Paths.ToArray();
+        
+        pauseMenu.SetActive(false);
+        victoryMenu.SetActive(false);
+        defeatMenu.SetActive(false);
 
         uiControllerInstance.Reset();
 

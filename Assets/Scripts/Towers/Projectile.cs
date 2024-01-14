@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     public float Duration { get; set; } = 2f;
     public Vector3 StartPosition { get; set; }
     public Vector3 TargetPosition { get; set; }
-    public float Gravity { get; set; } = -175f;
+    public float Gravity = -200;
     public float LingerTime { get; set; } = 2f;
 
     private float _curTime;
@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
 
         MoveParabola();
 
-        if (Vector3.Magnitude(transform.position - TargetPosition) < .5f)
+        if (Vector3.Magnitude(transform.parent.position - TargetPosition) < .5f)
         {
             OnTargetHit(null, TargetPosition);
         }
@@ -56,7 +56,7 @@ public class Projectile : MonoBehaviour
 
         if (other.TryGetComponent<IProjectileTarget>(out var target))
         {
-            target.OnProjectileHit(this, other.ClosestPoint(transform.position));
+            target.OnProjectileHit(this, other.ClosestPoint(transform.parent.position));
         }
     }
 
@@ -69,7 +69,7 @@ public class Projectile : MonoBehaviour
 
         if (other.collider.TryGetComponent<IProjectileTarget>(out var target))
         {
-            target.OnProjectileHit(this, other.collider.ClosestPoint(transform.position));
+            target.OnProjectileHit(this, other.collider.ClosestPoint(transform.parent.position));
         }
     }
 
@@ -153,7 +153,7 @@ public class Projectile : MonoBehaviour
         var gravityFactorX = 0;
         var gravityFactorZ = Mathf.Abs(Mathf.Cos(iAngle));
         
-        var pos = transform.position;
+        var pos = transform.parent.position;
 
 
         var xSpeed = (dir.x - (0.5f * Gravity * Duration * Duration) * gravityFactorX) / Duration;
@@ -162,12 +162,12 @@ public class Projectile : MonoBehaviour
         pos.x = StartPosition.x + xSpeed * _curTime + (0.5f * Gravity * _curTime * _curTime) * gravityFactorX;
         pos.y = StartPosition.y + ySpeed * _curTime + (0.5f * Gravity * _curTime * _curTime) * gravityFactorZ;
 
-        transform.position = pos;
+        transform.parent.position = pos;
 
         var targetDir = (Vector2)StartPosition + GetDeltaPos(xSpeed, ySpeed, _curTime + 0.1f * Duration, gravityFactorX, gravityFactorZ) - (Vector2)pos;
 
         float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.parent.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     private Vector2 GetDeltaPos(float iXSpeed, float iYSpeed, float t, float xFactor, float zFactor)

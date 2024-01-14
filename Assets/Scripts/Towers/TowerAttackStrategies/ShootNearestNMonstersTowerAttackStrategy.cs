@@ -18,7 +18,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         if (data.PrimaryTarget is not null)
         {
-            Shoot(data, data.PrimaryTarget, (GameObject)Instantiate(data.Owner.bullet, data.Owner.arrowSpawnPoint.position, Quaternion.identity), data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
+            Shoot(data, data.PrimaryTarget, (GameObject)Instantiate(data.Owner.bullet, LevelUtils.FarAway, Quaternion.identity), data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
             targetCount++;
         }
 
@@ -26,7 +26,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         {
             if (target is not null)
             {
-                Shoot(data, target, (GameObject)Instantiate(data.Owner.bullet, data.Owner.arrowSpawnPoint.position, Quaternion.identity), data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
+                Shoot(data, target, (GameObject)Instantiate(data.Owner.bullet, LevelUtils.FarAway, Quaternion.identity), data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
                 targetCount++;
             }
         }
@@ -39,7 +39,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
     public void Shoot(TowerAttackData data, Monster target, GameObject projectile, float bulletDamage, float armorpen, float radius)
     {
-        Vector3 dir = target.transform.position - projectile.transform.position;
+        Vector3 dir = target.transform.position - data.Owner.arrowSpawnPoint.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         projectile.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
 
@@ -49,8 +49,9 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         var targetPosition = target.transform.position;
 
         var normalizedDir = dir.normalized;
+        bullet.Duration = 1 / (data.Owner.bulletSpeed / dir.magnitude);
 
-        var dot = Vector3.Dot(target.movementTracker.CurrentVelocity.normalized, normalizedDir);
+        var dot = Mathf.Abs(Vector3.Dot(target.movementTracker.CurrentVelocity.normalized, normalizedDir));
 
         if (dot > 0)
         {
@@ -63,9 +64,8 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         bullet.ArmorPen = armorpen;
         bullet.Radius = radius;
         bullet.shotNumber = data.Owner.shotNumber;
-        bullet.StartPosition = data.Owner.transform.position;
+        bullet.StartPosition = data.Owner.arrowSpawnPoint.position;
         bullet.TargetPosition = targetPosition;
-        bullet.Duration = data.Owner.bulletSpeed;
         bullet.LingerTime = data.Owner.bulletLinger;
 
         data.Owner.isInCombat = true;

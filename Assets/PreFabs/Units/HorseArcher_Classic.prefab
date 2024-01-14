@@ -373,6 +373,7 @@ MonoBehaviour:
     type: 2}
   onHitEffects:
   - {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4, type: 2}
+  <SecondaryTargetCount>k__BackingField: 0
   upgradeAnimationPrefab: {fileID: 120230, guid: bd1d4bf1b8595a146814cfafa007f638,
     type: 3}
   archerShotParticle: {fileID: 117056, guid: dc463a3f2c8479548a32d5c73769c430, type: 3}
@@ -385,7 +386,7 @@ MonoBehaviour:
   arrowSpawnPoint: {fileID: 401128}
   <CombatCooldown>k__BackingField: 2
   baseUpgradeCost: 60
-  bulletSpeed: 0.5
+  bulletSpeed: 35
   bulletLinger: 1.5
   bulletRadius: 0
   icon: {fileID: 21300000, guid: c7d4dc6c4818fd0469031fa851f1b197, type: 3}

@@ -11,11 +11,10 @@ public class DebugManager : MonoBehaviour
 
     private ValueStore _gameManager;
 
-    private GameObject _selected;
+    public GameObject TXT_selected;
 
     private void Awake()
     {
-        _selected = GameObject.Find("DBG_SELECTED");
         _gameManager = FindObjectOfType<ValueStore>();
     }
 
@@ -59,11 +58,11 @@ public class DebugManager : MonoBehaviour
                     text.AppendLine("Speed: " + horseArcher.movementTracker.CurrentVelocity);
                 }
 
-                _selected.GetComponent<TextMeshProUGUI>().text = text.ToString();
+                TXT_selected.GetComponent<TextMeshProUGUI>().text = text.ToString();
             }
             else
             {
-                _selected.GetComponent<TextMeshProUGUI>().text = "";
+                TXT_selected.GetComponent<TextMeshProUGUI>().text = "";
             }
         }
     }
