@@ -141,7 +141,8 @@ public class AbilityHorseRaidV2 : Ability
     }
 }
 
-public interface ICleanable
+public enum HorseRaidState
 {
-    void CleanUp();
+    Idle,
+    Setup,
 }
