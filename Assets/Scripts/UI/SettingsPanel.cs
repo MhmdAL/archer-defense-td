@@ -30,9 +30,9 @@ public class SettingsPanel : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            if(!_isPaused)
+            if (!_isPaused)
                 OnPauseButtonClicked();
             else
                 OnResumeButtonClicked();
@@ -51,6 +51,7 @@ public class SettingsPanel : MonoBehaviour
     {
         _isFastForwarded = Time.timeScale > 1;
         _isPaused = Time.timeScale == 0;
+        _gameManager.timeState = _isPaused ? TimeState.Paused : TimeState.Playing;
 
         fastforwardButton.image.sprite = _isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
     }
@@ -58,6 +59,7 @@ public class SettingsPanel : MonoBehaviour
     public void OnPauseButtonClicked()
     {
         _isPaused = true;
+        _gameManager.timeState = TimeState.Paused;
 
         AudioUtils.FadeOutAllSounds();
 
@@ -69,6 +71,7 @@ public class SettingsPanel : MonoBehaviour
     public void OnResumeButtonClicked()
     {
         _isPaused = false;
+        _gameManager.timeState = TimeState.Playing;
 
         AudioUtils.FadeInAllSounds();
 
@@ -80,6 +83,7 @@ public class SettingsPanel : MonoBehaviour
     public void OnRestartButtonClicked()
     {
         _isPaused = false;
+        _gameManager.timeState = TimeState.Playing;
 
         AudioUtils.FadeInAllSounds();
 

@@ -27,6 +27,8 @@ public class ValueStore : MonoBehaviour
 {
     public static ValueStore Instance;
 
+    public TimeState timeState;
+
     public event Action SilverChanged;
     public event Action LivesChanged;
     public event Action<GameStatus> LevelEnded;

@@ -17,9 +17,12 @@ public class UserClickHandler : MonoBehaviour
     private RectTransform _selectionImageRectTransform;
 
     private CanvasScaler _canvasScaler;
+    private ValueStore _gameManager;
 
     private void Awake()
     {
+        _gameManager = FindObjectOfType<ValueStore>();
+
         _inputModule = FindObjectOfType<CustomStandaloneInputModule>();
         _mainCamera = Camera.main;
         _selectionImageRectTransform = SelectionImage.GetComponent<RectTransform>();
@@ -33,13 +36,19 @@ public class UserClickHandler : MonoBehaviour
 
     private void Update()
     {
+        if (_gameManager.timeState == TimeState.Paused)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
+            if (_inputModule.IsPointerOverGameObject<GraphicRaycaster>()) // is mouse over ui? if so don't process.
+                return;
+
             initialSelectPosition = Input.mousePosition;
             isSelecting = true;
             SelectionImage.gameObject.SetActive(true);
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (isSelecting && Input.GetMouseButtonUp(0))
         {
             finalSelectPosition = Input.mousePosition;
             isSelecting = false;
@@ -76,7 +85,7 @@ public class UserClickHandler : MonoBehaviour
             hits = Physics2D.OverlapAreaAll(start, end).ToList();
         }
 
-        if (!hits.Any() || _inputModule.IsPointerOverGameObject<GraphicRaycaster>()) // is mouse over ui? if so don't process.
+        if (!hits.Any())
         {
             return;
         }

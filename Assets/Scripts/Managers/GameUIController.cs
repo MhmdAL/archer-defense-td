@@ -44,6 +44,7 @@ public class GameUIController : MonoBehaviour
     private Tower _lastFocusedTower;
 
     public GameObject towerLock;
+    public ParticleSystem waveStartParticles;
 
     [field: SerializeField]
     public TowerEnhancementMenu SpecialtyMenu { get; set; }
@@ -531,6 +532,8 @@ public class GameUIController : MonoBehaviour
     public void OnStartWaveButtonClicked()
     {
         BTN_spawnWave.interactable = false;
+
+        Instantiate(waveStartParticles, BTN_spawnWave.transform.position.ToWorldPosition(Camera.main), waveStartParticles.transform.rotation);
 
         _vs.WaveSpawner.SpawnNextWave();
 

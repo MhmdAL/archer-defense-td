@@ -337,7 +337,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -30536
+  m_SortingOrder: -15536
   m_Sprite: {fileID: 3941177804478559953, guid: b7ba3a250fc62d6438d9e6534423e1bf,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -638,7 +638,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 763c45c2d308d37409d06c0bdef60f56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HitParticles: {fileID: 6396953465742684978, guid: 0d998b07b9165a143ab1035c876981a1,
+  HitParticles: {fileID: 4553287630450876385, guid: 15483e51212e3d74886ea57291f4639a,
+    type: 3}
+  deathParticles: {fileID: 5566973534206861085, guid: b07e11e39da38934d929a0f04d6eadad,
     type: 3}
   DeathTime:
     m_Mode: 0
@@ -660,6 +662,7 @@ MonoBehaviour:
   <EnemyData>k__BackingField: {fileID: 11400000, guid: 8b0b3968b02ad2549b2334bf25fa474a,
     type: 2}
   deathSound: {fileID: 8300000, guid: ef1cf1830d819ef4eb4f10f4b022a5a3, type: 3}
+  deathSound2: {fileID: 0}
   movementTracker: {fileID: 6715737411058291872}
   side: {fileID: 5284815991476355588}
   up: {fileID: 5284815991476519640}
@@ -2115,7 +2118,7 @@ Transform:
   m_Children:
   - {fileID: 5284815991476731688}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6715737411058291872
 MonoBehaviour:
@@ -2400,6 +2403,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 111300, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 11436188, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -2410,7 +2417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22334186, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
       propertyPath: m_SortingOrder
-      value: -30536
+      value: -15536
       objectReference: {fileID: 0}
     - target: {fileID: 22482254, guid: 04df830e7d63ddf4a9ccc52daf6d2d57, type: 3}
       propertyPath: m_Pivot.x

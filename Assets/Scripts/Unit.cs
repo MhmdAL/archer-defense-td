@@ -15,6 +15,7 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget, IHealthy
     public event Action<Unit, float, IAttacking> Damaged;
 
     public GameObject HitParticles;
+    public GameObject deathParticles;
     public MinMaxCurve DeathTime = 1.5f;
 
     public Stat MaxHP { get; set; }
@@ -140,7 +141,10 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget, IHealthy
 
             OnDeath?.Invoke(this, source);
 
-            // var pool = Instantiate(HitParticles, transform.position, Quaternion.identity);
+            if (deathParticles != null)
+            {
+                Instantiate(deathParticles, transform.position, Quaternion.identity);
+            }
 
             // var rand = UnityEngine.Random.Range(1, 1.25f);
             // pool.transform.localScale = pool.transform.localScale * rand;
@@ -158,7 +162,10 @@ public abstract class Unit : MonoBehaviour, IProjectileTarget, IHealthy
     {
         p.OnTargetHit(this, hitpoint);
 
-        // Instantiate(HitParticles, transform.position, Quaternion.identity);
+        if (HitParticles != null)
+        {
+            Instantiate(HitParticles, hitpoint, Quaternion.identity);
+        }
     }
 }
 

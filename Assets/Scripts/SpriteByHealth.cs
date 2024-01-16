@@ -43,12 +43,12 @@ public class SpriteByHealth : MonoBehaviour
 
                 if (transformChange.changeRotation)
                 {
-                    config.spriteRenderer.transform.localRotation = Quaternion.AngleAxis(transformChange.rotation, Vector3.forward);
+                    config.transform.localRotation = Quaternion.AngleAxis(transformChange.rotation, Vector3.forward);
                 }
 
                 if (transformChange.changePosition)
                 {
-                    config.spriteRenderer.transform.localPosition = transformChange.position;
+                    config.transform.localPosition = transformChange.position;
                 }
             }
         }
@@ -59,6 +59,7 @@ public class SpriteByHealth : MonoBehaviour
 public class SpriteByHealthConfig
 {
     public SpriteRenderer spriteRenderer;
+    public Transform transform;
     public List<Sprite> sprites;
     public List<TransformChange> transforms;
 }
