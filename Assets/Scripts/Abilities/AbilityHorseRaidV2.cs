@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,7 +18,6 @@ public class AbilityHorseRaidV2 : Ability
     public int HorseRaiderCount = 3;
     public float HorseRaiderSpawnDelay = 1;
     public Transform HorseRaiderSpawnPosition;
-    public float horseRaidPositionRandomFactor = 1f;
 
     private HorseRaidState _state;
 
@@ -103,29 +104,42 @@ public class AbilityHorseRaidV2 : Ability
     {
         RaidStarted?.Invoke();
 
-        var raidEndPos = LevelUtils.GetNearestWaypoint(_raidEndPosition.Value.ToWorldPosition(Camera.main)) + (Vector3)UnityEngine.Random.insideUnitCircle * horseRaidPositionRandomFactor;
+        var raidEndWorldPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);
 
-        raidEndIndicator.transform.position = _raidEndPosition.Value.ToWorldPosition(Camera.main);
+        raidEndIndicator.transform.position = raidEndWorldPos;
         raidEndIndicator.SetActive(true);
 
         Debug.Log("raid starting");
         _state = HorseRaidState.Idle;
+        
+        _raidEndPosition = null;
 
-        // var raidStartPos = _raidStartPosition.Value.ToWorldPosition(Camera.main);
-        // var raidEndPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);
+        var paths = GenerateRaiderPaths(raidEndWorldPos).Shuffle().ToList();
 
-        for (int i = 0; i < HorseRaiderCount; i++)
+        var currentPathIdx = 0;
+        for (int i = 0; i < HorseRaiderCount; i++, currentPathIdx = (currentPathIdx + 1) % paths.Count)
         {
-            var horseRaiderObj = Instantiate(HorseRaiderPrefab, HorseRaiderSpawnPosition.position, Quaternion.identity);
-            var horseRaiderComponent = horseRaiderObj.GetComponent<HorseRaiderV2>();
+            var horseRaider = Instantiate(HorseRaiderPrefab, HorseRaiderSpawnPosition.position, Quaternion.identity).GetComponent<HorseRaiderV2>();
 
-            _raidEndPosition = null;
+            var randomPath = paths[currentPathIdx];
 
-            horseRaiderComponent.StartRaid(raidEndPos);
-            horseRaiderComponent.PatrolStarted += OnPatrolStarted;
+            horseRaider.StartRaid(randomPath);
+            horseRaider.PatrolStarted += OnPatrolStarted;
 
             yield return new WaitForSeconds(HorseRaiderSpawnDelay);
         }
+    }
+
+    private List<PathData> GenerateRaiderPaths(Vector2 targetPosition)
+    {
+        var paths = LevelUtils
+            .GetNearestPaths(targetPosition, 7.5f)
+            .Select(x => x.Item1.PathData.SubPath(x.Item2).ReversePath())
+            .ToList();
+
+        paths.ForEach(p => p.Waypoints.Add(targetPosition + UnityEngine.Random.insideUnitCircle * 4));
+
+        return paths;
     }
 
     private void OnPatrolStarted()

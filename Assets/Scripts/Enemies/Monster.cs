@@ -91,7 +91,7 @@ public abstract class Monster : Unit, IMoving
         _audioSource = GetComponent<AudioSource>();
         _followPathComponent = GetComponent<FollowPath>();
 
-        _followPathComponent.TargetChanged += OnTargetChanged;
+        _followPathComponent.TargetWaypointChanged += OnTargetChanged;
         movementTracker.MovementChanged += OnMovement;
 
         myTransform = transform;

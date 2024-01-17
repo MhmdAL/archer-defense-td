@@ -6,11 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(IMoving))]
 public class FollowPath : MonoBehaviour
 {
-    public event Action OnPathCompleted;
-    public event Action<Vector2> TargetChanged;
+    public event Action DestinationReached;
+    public event Action<Vector2> TargetWaypointChanged;
 
     private IMoving targetMover;
     public PathData CurrentPath { get; private set; }
+    public bool IsDone { get; private set; }
     public bool HasPath => CurrentPath != null;
     private int currentWaypointIndex = 0;
 
@@ -27,8 +28,9 @@ public class FollowPath : MonoBehaviour
 
         CurrentPath = newPath;
         currentWaypointIndex = currentIndex;
-        
-        UpdateTarget(currentWaypointIndex);
+        IsDone = false;
+
+        UpdateTargetWaypoint(currentWaypointIndex);
 
         if (resetPosition)
         {
@@ -57,25 +59,46 @@ public class FollowPath : MonoBehaviour
 
         if (currentWaypointIndex >= CurrentPath.Waypoints.Count)
         {
-            CurrentPath = null;
+            IsDone = true;
 
-            OnPathCompleted?.Invoke();
+            DestinationReached?.Invoke();
         }
         else
         {
-            UpdateTarget(currentWaypointIndex);
+            UpdateTargetWaypoint(currentWaypointIndex);
         }
     }
 
-    private void UpdateTarget(int currentIndex)
+    private void UpdateTargetWaypoint(int currentIndex)
     {
         currentTargetPosition = GetRandomTargetPosition(currentIndex);
 
-        TargetChanged?.Invoke(currentTargetPosition - transform.root.position);
+        TargetWaypointChanged?.Invoke(currentTargetPosition - transform.root.position);
     }
 
     private Vector3 GetRandomTargetPosition(int waypointIndex)
     {
         return CurrentPath.Waypoints[waypointIndex] + (Vector3)UnityEngine.Random.insideUnitCircle * 1f;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!HasPath)
+            return;
+
+        for (int i = 0; i < CurrentPath.Waypoints.Count; i++)
+        {
+            var curWp = CurrentPath.Waypoints[i];
+            if (i != 0)
+            {
+                var prevWp = CurrentPath.Waypoints[i - 1];
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(prevWp, curWp);
+            }
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(curWp, 1);
+        }
+        Gizmos.color = Color.white;
     }
 }

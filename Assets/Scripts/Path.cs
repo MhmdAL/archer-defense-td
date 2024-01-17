@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,21 @@ public class PathData
 		return new PathData
 		{
 			Waypoints = newWaypoints
+		};
+	}
+
+	public PathData SubPath(int startingIndex, int? endingIndex = null)
+	{
+		var newWaypoints = Waypoints.Skip(startingIndex);
+
+		if(endingIndex != null)
+		{
+			newWaypoints = newWaypoints.Take(endingIndex.Value - startingIndex + 1);
+		}
+
+		return new PathData
+		{
+			Waypoints = newWaypoints.ToList()
 		};
 	}
 

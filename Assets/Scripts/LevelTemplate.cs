@@ -49,7 +49,7 @@ public class LevelTemplate : MonoBehaviour
                 }
 
                 Gizmos.color = Color.blue;
-                Gizmos.DrawSphere(path.transform.GetChild(i).position, 1);
+                // Gizmos.DrawSphere(path.transform.GetChild(i).position, 1);
             }
         }
         Gizmos.color = Color.white;

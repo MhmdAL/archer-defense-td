@@ -17,8 +17,6 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
     private FollowPath followPath;
 
-    private Vector3? Destination;
-
     [SerializeField]
     private Animator horseAnimator;
 
@@ -32,8 +30,8 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
         followPath = GetComponent<FollowPath>();
 
-        followPath.OnPathCompleted += OnPathFinished;
-        followPath.TargetChanged += OnTargetChanged;
+        followPath.DestinationReached += OnPathFinished;
+        followPath.TargetWaypointChanged += OnTargetChanged;
 
         movementTracker = GetComponent<MovementTracker>();
 
@@ -42,19 +40,9 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
 
     private void Update()
     {
-        if (Destination != null)
-        {
-            var dir = Destination.Value - transform.root.position;
-
-            if (dir.sqrMagnitude < 25f)
-            {
-                OnPatrolStarted();
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.V))
         {
-            StartRaid(Input.mousePosition.ToWorldPosition(Camera.main));
+            // StartRaid(Input.mousePosition.ToWorldPosition(Camera.main));
         }
     }
 
@@ -88,23 +76,13 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         }
     }
 
-    public void StartRaid(Vector3 destination)
+    public void StartRaid(PathData path)
     {
-        var path = LevelUtils.FindNearestPath(destination);
-
-        var reversedPath = path.PathData.ReversePath();
-
-        followPath.SetPath(reversedPath, 0, false);
-
-        destination.z = 0;
-        // Destination = reversedPath.GetNearestWaypoint(destination).Item1 + (Vector3)UnityEngine.Random.insideUnitCircle * 5f;
-        Destination = destination;
+        followPath.SetPath(path, 0, false);
     }
 
     private void OnPatrolStarted()
     {
-        Destination = null;
-
         followPath.enabled = false;
 
         PatrolStarted?.Invoke();
@@ -115,18 +93,17 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
     private void OnPatrolFinished(Timer t)
     {
         _loiterFinished = true;
-        Destination = null;
 
         var reversedPath = followPath.CurrentPath.ReversePath();
 
-        var (_, nextPoint) = reversedPath.GetNearestWaypoint(transform.root.position);
+        // var (_, nextPoint) = reversedPath.GetNearestWaypoint(transform.root.position);
 
-        if (reversedPath.Waypoints.Count > nextPoint + 1)
-        {
-            nextPoint++;
-        }
+        // if (reversedPath.Waypoints.Count > nextPoint + 1)
+        // {
+        //     nextPoint++;
+        // }
 
-        followPath.SetPath(reversedPath, nextPoint, false);
+        followPath.SetPath(reversedPath, 0, false);
 
         followPath.enabled = true;
 
@@ -138,6 +115,10 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
         if (_loiterFinished)
         {
             Destroy(gameObject);
+        }
+        else
+        {
+            OnPatrolStarted();
         }
     }
 
