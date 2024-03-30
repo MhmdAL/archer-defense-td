@@ -11,7 +11,7 @@ public class Path : MonoBehaviour
 
 	public PathData PathData { get; private set; }
 
-	private void Start()
+	private void Awake()
 	{
 		var waypoints = new List<GameObject>();
 		for (int i = 0; i < transform.childCount; i++)

@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="align-items: stretch; -unity-text-align: upper-center; color: rgb(255, 255, 255); -unity-font: resource(&apos;&apos;);" />
+    <ui:ProgressBar title="my-progress" />
+    <ui:Box>
+        <ui:Toggle name="boots" label="Boots" value="false" />
+        <ui:Toggle name="helmet" label="Helmet" value="false" />
+        <ui:Toggle name="cloak" label="Cloak of invisibility" value="false"/>
+    </ui:Box>
+</ui:UXML>

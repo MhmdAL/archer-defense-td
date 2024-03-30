@@ -52,7 +52,7 @@ public abstract class Monster : Unit, IMoving
 
     [HideInInspector] public bool isAboutToDie;
 
-    [HideInInspector] public float distanceTravelled;
+    public float DistanceTravelled => _followPathComponent.DistanceTravelled;
 
     [HideInInspector] public List<Tower> targetedBy = new List<Tower>();
 
@@ -65,20 +65,11 @@ public abstract class Monster : Unit, IMoving
 
     protected Transform myTransform;
 
-    protected Vector3 endPosition;
-    protected Vector3 startPosition;
-
     // Private Fields
 
     public PathData CurrentPath => _followPathComponent?.CurrentPath;
     public int CurrentWaypoint { get; set; }
     public bool HasPathAssigned => CurrentPath != null;
-
-    private float progress = 0;
-    private float deltaX = 0;
-    private float deltaY = 0;
-    private float pathLength;
-    private float step = 0;
 
     private Timer _directionSwitchTimer;
 
@@ -95,7 +86,7 @@ public abstract class Monster : Unit, IMoving
         movementTracker.MovementChanged += OnMovement;
 
         myTransform = transform;
-        m = ValueStore.Instance.monsterManagerInstance;
+        // m = ValueStore.Instance.monsterManagerInstance;
 
         InitializeValues();
     }
@@ -148,6 +139,15 @@ public abstract class Monster : Unit, IMoving
         UpdateDirection(delta);
     }
 
+    public override void OnProjectileHit(Projectile p, Vector2 hitpoint)
+    {
+        base.OnProjectileHit(p, hitpoint);
+
+        MoveSpeed.Modify(-0.1f, BonusType.Percentage, "MAAA", 0.2f, 1);
+
+        anim.SetTrigger("hit");
+    }
+
     private void OnTargetChanged(Vector2 newDirection)
     {
         UpdateDirection(newDirection);
@@ -180,11 +180,11 @@ public abstract class Monster : Unit, IMoving
                     //t = targetedBy.FirstOrDefault (x => x.monstersInRange.Count == 1);
             if (targetedBy.All(x => x.monstersInRange.Count > 1))
             {
-                t = targetedBy.FirstOrDefault(x => ValueStore.Instance.monsterManagerInstance.DoesKill(this, x.AD.Value, x.AP.Value));
+                t = targetedBy.FirstOrDefault(x => MonsterManager.DoesKill(this, x.AD.Value, x.AP.Value));
             }
             else
             {
-                t = targetedBy.FirstOrDefault(x => x.monstersInRange.Count == 1 && ValueStore.Instance.monsterManagerInstance.DoesKill(this, x.AD.Value, x.AP.Value));
+                t = targetedBy.FirstOrDefault(x => x.monstersInRange.Count == 1 && MonsterManager.DoesKill(this, x.AD.Value, x.AP.Value));
             }
             //}
             if (t != null)
@@ -209,7 +209,7 @@ public abstract class Monster : Unit, IMoving
             return;
         }
 
-        m.OnEnemyDied(this, source);
+        // m.OnEnemyDied(this, source);
 
         anim.SetTrigger("death");
 
@@ -262,80 +262,5 @@ public abstract class Monster : Unit, IMoving
         {
             // _followPathComponent.OnMovementChanged -= OnMovementChanged;
         }
-    }
-
-    [Obsolete]
-    public void FollowPath()
-    {
-        if (CurrentWaypoint < CurrentPath.Waypoints.Count - 1)
-        {
-            float speed = MoveSpeed.Value * Time.deltaTime;
-            step = speed / pathLength;
-            distanceTravelled += speed;
-            progress += step;
-        }
-
-        var prevPos = myTransform.root.position;
-
-        myTransform.root.position = Vector3.Lerp(startPosition, endPosition, Mathf.Clamp(progress, progress, 1));
-
-        var xDiff = Mathf.Abs(myTransform.root.position.x - prevPos.x);
-
-        anim.SetFloat("walk_speed", 0.5f + xDiff * 20);
-
-        deltaX = Mathf.Abs(endPosition.x - startPosition.x);
-        deltaY = Mathf.Abs(endPosition.y - startPosition.y);
-
-        if (_directionSwitchTimer.GetTimeRemaining() <= 0)
-        {
-            AdjustDirection();
-            _directionSwitchTimer.Restart(0.4f);
-        }
-
-        if (myTransform.root.position == endPosition)
-        {
-            progress = 0;
-            CurrentWaypoint++;
-            AdjustDirection();
-            startPosition = endPosition;
-            endPosition = CurrentPath.Waypoints[CurrentWaypoint + 1];
-            pathLength = Mathf.Abs(Vector3.Distance(startPosition, endPosition));
-        }
-    }
-
-    [Obsolete]
-    public void AdjustDirection()
-    {
-        return;
-        float wdeltaX = endPosition.x - startPosition.x;
-        float wdeltaY = endPosition.y - startPosition.y;
-
-        transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
-
-        if (endPosition.x >= startPosition.x && (deltaX >= deltaY * 0.8f))
-        {
-            side.SetActive(true);
-            down.SetActive(false);
-            up.SetActive(false);
-        }
-        else if (endPosition.x < startPosition.x && (deltaX > deltaY * 0.8f))
-        {
-            side.SetActive(true);
-            down.SetActive(false);
-            up.SetActive(false);
-            transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
-        }
-        // else if (endPosition.y >= startPosition.y && (deltaY >= deltaX))
-        // {
-        //     up.SetActive(true);
-        //     side.SetActive(false);
-        //     down.SetActive(false);
-        // }
-        // else
-        // {
-        //     down.SetActive(true);
-        //     side.SetActive(false);
-        //     up.SetActive(false);
-        // }
     }
 }

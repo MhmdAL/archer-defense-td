@@ -18,7 +18,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         if (data.PrimaryTarget is not null)
         {
-            Shoot(data, data.PrimaryTarget, (GameObject)Instantiate(data.Owner.bullet, LevelUtils.FarAway, Quaternion.identity), data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
+            Shoot(data, data.PrimaryTarget, null, data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
             targetCount++;
         }
 
@@ -26,10 +26,12 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         {
             if (target is not null)
             {
-                Shoot(data, target, (GameObject)Instantiate(data.Owner.bullet, LevelUtils.FarAway, Quaternion.identity), data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
+                Shoot(data, target, null, data.Owner.AD.Value, data.Owner.AP.Value, data.Owner.bulletRadius);
                 targetCount++;
             }
         }
+
+        data.Owner.AttackCooldownTimer.Restart(data.Owner.FullCooldown);
 
         if (targetCount > 0)
         {
@@ -39,45 +41,33 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
     public void Shoot(TowerAttackData data, Monster target, GameObject projectile, float bulletDamage, float armorpen, float radius)
     {
-        Vector3 dir = target.transform.position - data.Owner.arrowSpawnPoint.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        projectile.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+        var targetCollider = target.GetComponentInChildren<Collider2D>();
 
-        Projectile bullet = projectile.GetComponentInChildren<Projectile>();
-
-
-        var targetPosition = target.transform.position;
-
-        var normalizedDir = dir.normalized;
-        bullet.Duration = 1 / (data.Owner.bulletSpeed / dir.magnitude);
-
-        var dot = Mathf.Abs(Vector3.Dot(target.movementTracker.CurrentVelocity.normalized, normalizedDir));
-
-        if (dot > 0)
+        var (bullet, dir) = Projectile.Fire(new ProjectileSpawnData(data.Owner, data.Owner.bullet, data.Owner.arrowSpawnPoint.position, targetCollider.bounds.center)
         {
-            targetPosition += target.movementTracker.CurrentVelocity.normalized * dot * bullet.Duration;
-        }
+            Owner = data.Owner,
+            Damage = bulletDamage,
+            ArmorPen = armorpen,
+            Radius = radius,
+            SpawnPosition = data.Owner.arrowSpawnPoint.position,
+            LingerTime = data.Owner.bulletLinger
+        });
 
-        //Instantiate (archerShotParticle, arrowSpawnPoint.position, Quaternion.identity);
-        bullet.Owner = data.Owner;
-        bullet.Damage = bulletDamage;
-        bullet.ArmorPen = armorpen;
-        bullet.Radius = radius;
-        bullet.shotNumber = data.Owner.shotNumber;
-        bullet.StartPosition = data.Owner.arrowSpawnPoint.position;
+        Vector2 targetPosition = targetCollider.bounds.center;
+
+        bullet.Duration = ArcherUtils.CalculateProjectileDuration(dir, data.Owner.bulletSpeed);
+
+        targetPosition += ArcherUtils.CalculateProjectilePrediction(dir, target.movementTracker.CurrentVelocity, bullet.Duration);
+
         bullet.TargetPosition = targetPosition;
-        bullet.LingerTime = data.Owner.bulletLinger;
+        bullet.shotNumber = data.Owner.shotNumber;
 
         data.Owner.isInCombat = true;
-        data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown);
-        // set cooldown back to full duration
-        data.Owner.AttackCooldownTimer.Restart(data.Owner.FullCooldown);
-
-        data.Owner.PlayShotSFX();
-
+        data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown); // set cooldown back to full duration
+        
         if (target != null)
         {
-            if (ValueStore.Instance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
+            if (MonsterManager.DoesKill(target, bulletDamage, armorpen))
             {
                 bullet.isAboutToKill = true;
             }

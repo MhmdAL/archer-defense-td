@@ -13,7 +13,7 @@ public class PinchZoom : MonoBehaviour
 
     void Start()
     {
-		mainC = ValueStore.Instance.mainCamera;
+		mainC = Camera.main;
     }
 
     void Update()

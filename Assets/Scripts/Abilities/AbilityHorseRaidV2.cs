@@ -111,7 +111,7 @@ public class AbilityHorseRaidV2 : Ability
 
         Debug.Log("raid starting");
         _state = HorseRaidState.Idle;
-        
+
         _raidEndPosition = null;
 
         var paths = GenerateRaiderPaths(raidEndWorldPos).Shuffle().ToList();
@@ -132,12 +132,38 @@ public class AbilityHorseRaidV2 : Ability
 
     private List<PathData> GenerateRaiderPaths(Vector2 targetPosition)
     {
+        const float acceptableDistance = 7.5f;
+
         var paths = LevelUtils
-            .GetNearestPaths(targetPosition, 7.5f)
-            .Select(x => x.Item1.PathData.SubPath(x.Item2).ReversePath())
+            .GetNearestPaths(targetPosition, acceptableDistance)
+            .Select(x => x.path.PathData.SubPath(x.waypointIdx).ReversePath())
             .ToList();
 
-        paths.ForEach(p => p.Waypoints.Add(targetPosition + UnityEngine.Random.insideUnitCircle * 4));
+        foreach (var path in paths)
+        {
+            var avgDirection = LevelUtils.CalculateAveragePathDirection(path, targetPosition);
+
+            var leftRayDir = new Vector2(avgDirection.y, -avgDirection.x);
+            var rightRayDir = new Vector2(-avgDirection.y, avgDirection.x);
+
+            var leftHit = Physics2D.RaycastAll(path.Waypoints.Last(), leftRayDir).Where(x => x.collider.tag == "PathEdge").FirstOrDefault();
+            var rightHit = Physics2D.RaycastAll(path.Waypoints.Last(), rightRayDir).Where(x => x.collider.tag == "PathEdge").FirstOrDefault();
+
+            if (leftHit == default && rightHit == default)
+            {
+                Debug.LogWarning("Somehow, no path edge was found!");
+                continue;
+            }
+
+            var nearestHit = leftHit.distance < rightHit.distance ? leftHit : rightHit;
+            var nearestRay = leftHit.distance < rightHit.distance ? leftRayDir : rightRayDir;
+
+            path.Waypoints.Add(nearestHit.point + nearestRay * UnityEngine.Random.Range(0.5f, 2f));
+        }
+
+        // find points on edges of path and add that to the path
+
+        // paths.ForEach(p => p.Waypoints.Add(targetPosition + UnityEngine.Random.insideUnitCircle * 4));
 
         return paths;
     }

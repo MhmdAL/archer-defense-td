@@ -12,7 +12,7 @@ public class MovementTracker : MonoBehaviour
 
     private Vector3 lastVelocity;
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Time.timeScale == 0 || Time.deltaTime == 0)
             return;

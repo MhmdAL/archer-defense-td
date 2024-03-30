@@ -35,6 +35,7 @@ public class DebugManager : MonoBehaviour
             GameObject.Find("DBG_TTNP").GetComponent<TextMeshProUGUI>().text = $"TTNP: {_gameManager.WaveSpawner.TimeTillNextPlatoon}";
             GameObject.Find("DBG_TOTAL_ENEMIES").GetComponent<TextMeshProUGUI>().text = $"TE: {_gameManager.WaveSpawner.TotalEnemies}";
             GameObject.Find("DBG_IS_SPAWNING").GetComponent<TextMeshProUGUI>().text = $"IS: {_gameManager.WaveSpawner.IsSpawning}";
+            GameObject.Find("DBG_WST").GetComponent<TextMeshProUGUI>().text = $"WST: {_gameManager.WaveStartTime}";
 
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hits = Physics2D.RaycastAll(ray.origin, ray.direction);

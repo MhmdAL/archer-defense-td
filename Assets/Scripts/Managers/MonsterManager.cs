@@ -102,10 +102,12 @@ public class MonsterManager : MonoBehaviour
         // Raise enemyspawned event
         OnEnemySpawned(mon);
 
+        mon.OnDeath += (unit, ds) => OnEnemyDied(unit as Monster, ds);
+
         return mon;
     }
 
-    public bool DoesKill(Monster m, float damage, float armorPen)
+    public static bool DoesKill(Monster m, float damage, float armorPen)
     {
         float modifiedDamage = damage * m.DamageModifier.Value;
         if (m != null)

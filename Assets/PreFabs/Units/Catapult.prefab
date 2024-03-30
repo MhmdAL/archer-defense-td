@@ -111,7 +111,7 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: bulletSpeed
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: cooldownBar
@@ -141,12 +141,7 @@ PrefabInstance:
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: buffIndicatorPanel
       value: 
-      objectReference: {fileID: 4178017233102571475, guid: 3e6a69b49370a7c438e5105bc7145a5c,
-        type: 3}
-    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: walkingAudioSource
-      value: 
-      objectReference: {fileID: 5106949454775593122}
+      objectReference: {fileID: 0}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: FocusIndicatorArrow
       value: 
@@ -201,18 +196,6 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1000
       objectReference: {fileID: 0}
-    - target: {fileID: 21257874, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: m_SortingOrder
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 21262336, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: m_SortingOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 21265388, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: m_SortingOrder
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 22316416, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_SortingOrder
       value: 2050
@@ -246,7 +229,7 @@ PrefabInstance:
     - target: {fileID: 144801915359337531, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: outlineTargets.Array.data[0].IsVisible
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2130355150169106102, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
@@ -256,81 +239,6 @@ PrefabInstance:
     - target: {fileID: 5060972671750894972, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2050
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[6].Canvas
-      value: 
-      objectReference: {fileID: 5281010838255628312}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[7].Canvas
-      value: 
-      objectReference: {fileID: 5281010838255627636}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[3].SpriteRenderer
-      value: 
-      objectReference: {fileID: 5281010838254528032}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[4].SpriteRenderer
-      value: 
-      objectReference: {fileID: 5281010838580996972}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[5].SpriteRenderer
-      value: 
-      objectReference: {fileID: 1114012761052519816}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[0].SortingOrderOffset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[1].SortingOrderOffset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[2].SortingOrderOffset
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[3].SortingOrderOffset
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[4].SortingOrderOffset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[5].SortingOrderOffset
-      value: 2050
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[6].SortingOrderOffset
-      value: 2050
-      objectReference: {fileID: 0}
-    - target: {fileID: 5184944960580754996, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-        type: 3}
-      propertyPath: itemsToBeSorted.Array.data[7].SortingOrderOffset
       value: 2050
       objectReference: {fileID: 0}
     - target: {fileID: 8271563489529365557, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
@@ -348,21 +256,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1404521302864718624}
   m_SourcePrefab: {fileID: 100100000, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
---- !u!212 &1114012761052519816 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5060972671750894972, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4646693693450673829 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 663634617392084561, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &5106949454775593122 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 1123204008310489174, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
     type: 3}
   m_PrefabInstance: {fileID: 5281010838241700084}
   m_PrefabAsset: {fileID: 0}
@@ -396,24 +292,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5281010838241700084}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &5281010838254528032 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 21253844, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &5281010838255627636 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 22316416, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &5281010838255628312 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 22321388, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5281010838580996963 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 754566039, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
@@ -434,12 +312,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 5281010838241854068}
   sortingOffset: 0
---- !u!212 &5281010838580996972 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 754566040, guid: 93080e4d4b2aa954cb26cbac0d4bda91,
-    type: 3}
-  m_PrefabInstance: {fileID: 5281010838241700084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6114025550800653890 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2130355150169106102, guid: 93080e4d4b2aa954cb26cbac0d4bda91,

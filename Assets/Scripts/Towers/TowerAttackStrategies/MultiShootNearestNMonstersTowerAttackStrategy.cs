@@ -76,7 +76,7 @@ public class MultiShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
         Projectile bullet = projectile.GetComponentInChildren<Projectile>();
         if (target != null)
         {
-            if (ValueStore.Instance.monsterManagerInstance.DoesKill(target, bulletDamage, armorpen))
+            if (MonsterManager.DoesKill(target, bulletDamage, armorpen))
             {
                 bullet.isAboutToKill = true;
             }
@@ -109,6 +109,8 @@ public class TowerAttackData
     public Tower Owner { get; set; }
     public Monster PrimaryTarget { get; set; }
     public List<Monster> SecondaryTargets { get; set; }
-    public List<Monster> MonstersInRange { get; set; }
+
+    public Vector2 TargetPosition { get; set; }
+    public float MaxRange { get; set; }
 
 }

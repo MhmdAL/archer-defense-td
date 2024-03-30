@@ -1390,7 +1390,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: fb8ba4d00e836574ab7d29fbb5f915a4, type: 3}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: bulletSpeed
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: arrowSpawnPoint
@@ -1415,6 +1415,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: ed6507729faab064d8a2f0d43b17e39b,
         type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: manualAttackStrategy
+      value: 
+      objectReference: {fileID: 11400000, guid: 061172a252dbf254291cd2561b12c527,
+        type: 2}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: onHitEffects.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1422,6 +1427,11 @@ PrefabInstance:
       propertyPath: onHitEffects.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4,
+        type: 2}
+    - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
+      propertyPath: onHitEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: bf8153ced7a8db848b7a29904a13473f,
         type: 2}
     - target: {fileID: 11482314, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: m_BlockingMask.m_Bits

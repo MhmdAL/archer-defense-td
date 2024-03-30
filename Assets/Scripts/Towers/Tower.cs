@@ -31,7 +31,12 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     private TowerAttackStrategy towerAttackStrategy;
 
     [SerializeField]
+    private TowerAttackStrategy manualAttackStrategy;
+
+    [SerializeField]
     private List<TargetHitEffect> onHitEffects;
+
+    private TowerAttackStrategy currentAttackStrategy;
 
     public Dictionary<string, object> ExtraData { get; set; }
 
@@ -147,7 +152,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     public GameObject FocusIndicatorArrow;
 
-    private List<Monster> monstersInScene;
     private List<Monster> targets;
 
     public List<Modifier> towerUpgrades = new List<Modifier>();
@@ -227,6 +231,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     public bool HasFocus { get; set; }
 
+    [SerializeField]
+    private ParticleSystem dustPs;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -263,11 +270,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         Debug.Log("Initing values");
 
-        AttackCooldownTimer = this.AttachTimer(0, OnAttackTimerElapsed, isDoneWhenElapsed: false);
-        AttackCooldownTimer.Pause();
-
-        CombatTimer = this.AttachTimer(2f, OnCombatTimerElapsed, isDoneWhenElapsed: false);
-
         cooldownBarTransform = cooldownBar.transform;
         rangeCircleTransform = circle.transform;
 
@@ -287,6 +289,13 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         ADSkill = new TowerSkill { SkillType = TowerSkillType.AttackDamage };
         ARSkill = new TowerSkill { SkillType = TowerSkillType.AttackRange };
         ASSkill = new TowerSkill { SkillType = TowerSkillType.AttackSpeed };
+
+        currentAttackStrategy = towerAttackStrategy;
+
+        AttackCooldownTimer = this.AttachTimer(FullCooldown, OnAttackTimerElapsed, isDoneWhenElapsed: false);
+        AttackCooldownTimer.Pause();
+
+        CombatTimer = this.AttachTimer(2f, OnCombatTimerElapsed, isDoneWhenElapsed: false);
 
         UpdateTowerVisuals();
     }
@@ -312,21 +321,38 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
                 break;
             }
         }
-    }
 
-    [SerializeField]
-    private ParticleSystem dustPs;
+        if (HasFocus)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                CombatTimer.Restart(CombatCooldown);
+
+                AttackCooldownTimer.Resume();
+                animator.SetBool("isAttacking", true);
+            }
+            else if (Input.GetMouseButtonUp(1))
+            {
+                AttackCooldownTimer.Restart(FullCooldown);
+                AttackCooldownTimer.Pause();
+                animator.SetBool("isAttacking", false);
+            }
+        }
+    }
 
     public void OnMovementStarted()
     {
-        if (!walkingAudioSource.isPlaying)
+        if (walkingAudioSource != null)
         {
-            walkingAudioSource.clip = WalkingSFX;
-            walkingAudioSource.Play();
-        }
-        else
-        {
-            walkingAudioSource.DOFade(.25f, .2f);
+            if (!walkingAudioSource.isPlaying)
+            {
+                walkingAudioSource.clip = WalkingSFX;
+                walkingAudioSource.Play();
+            }
+            else
+            {
+                walkingAudioSource.DOFade(.25f, .2f);
+            }
         }
 
         if (dustPs != null)
@@ -337,7 +363,10 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     public void OnMovementEnded()
     {
-        walkingAudioSource.DOFade(0, .2f);
+        if (walkingAudioSource != null)
+        {
+            walkingAudioSource.DOFade(0, .2f);
+        }
 
         if (dustPs != null)
         {
@@ -348,12 +377,16 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     private void OnEnemyInRange()
     {
         CombatTimer.Restart(CombatCooldown);
-        AttackCooldownTimer.Resume();
+
+        if (!HasFocus)
+        {
+            AttackCooldownTimer.Resume();
+            animator.SetBool("isAttacking", true);
+        }
 
         // print("combat restarted");
 
         // animator.SetBool("idle", false);
-        animator.SetBool("isAttacking", true);
     }
 
     private void OnCombatTimerElapsed(Timer t)
@@ -364,10 +397,14 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // print("combat elapsed");
 
         // animator.SetBool("idle", true);
-        animator.SetBool("isAttacking", false);
 
+        // if (!manualMode)
+        // {
+        animator.SetBool("isAttacking", false);
         AttackCooldownTimer.Restart(FullCooldown);
         AttackCooldownTimer.Pause();
+        // }
+
 
         CombatEnded?.Invoke();
     }
@@ -378,33 +415,55 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         var monsters = Physics2D.OverlapCircleAll(transform.position, AR.Value).Select(x => x.GetComponent<Monster>()).Where(x => x != null).ToList();
 
-        monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
-        TargetDetection.CalculateTargets(this, monsters, monstersInRange, targets, AR.Value, AD.Value, AP.Value);
+        targets = TargetDetection.CalculateTargets(this, monsters, AD.Value, AP.Value);
 
         Attack();
+    }
+
+    private void AttackManual()
+    {
+        if (!IsDisabled)
+        {
+            var target = Input.mousePosition.ToWorldPosition(Camera.main);
+            target.z = 0;
+
+            currentAttackStrategy.Attack(new TowerAttackData
+            {
+                Owner = this,
+                OnAfterAttack = OnAfterAttack,
+                TargetPosition = target
+            });
+
+            PlayShotSFX();
+        }
     }
 
     private void Attack()
     {
         if (!IsDisabled)
         {
+            if (!HasFocus && !targets.Any())
+                return;
+
             // Debug.Log("not disabled");
+            var mouseTarget = Input.mousePosition.ToWorldPosition(Camera.main);
+            mouseTarget.z = 0;
 
-            var secondaryTargets = monstersInRange.ToList();
+            var secondaryTargets = targets.Skip(1).Take(SecondaryTargetCount).ToList();
 
-            if (targets.Count > 0)
-                secondaryTargets.Remove(targets.FirstOrDefault());
-
-            secondaryTargets = secondaryTargets.Take(SecondaryTargetCount).ToList();
-
-            towerAttackStrategy.Attack(new TowerAttackData
+            currentAttackStrategy.Attack(new TowerAttackData
             {
                 Owner = this,
                 PrimaryTarget = targets.FirstOrDefault(),
                 SecondaryTargets = secondaryTargets,
-                MonstersInRange = monstersInRange,
+                TargetPosition = mouseTarget,
+                MaxRange = AR.Value * towerData.ManualAttackRangeMultiplier,
                 OnAfterAttack = OnAfterAttack
             });
+
+            PlayShotSFX();
+
+            Debug.Log("attacking");
         }
         else
         {
@@ -473,19 +532,19 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     private void CalculateTargets()
     {
         // Detect monsters in range
-        monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
+        // monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
         monstersInRange.Clear();
-        foreach (Monster x in monstersInScene)
-        {
-            if (IsInRange(x) && !monstersInRange.Contains(x))
-            {
-                monstersInRange.Add(x);
-            }
-            else if (!IsInRange(x) && monstersInRange.Contains(x))
-            {
-                monstersInRange.Remove(x);
-            }
-        }
+        // foreach (Monster x in monstersInScene)
+        // {
+        //     if (IsInRange(x) && !monstersInRange.Contains(x))
+        //     {
+        //         monstersInRange.Add(x);
+        //     }
+        //     else if (!IsInRange(x) && monstersInRange.Contains(x))
+        //     {
+        //         monstersInRange.Remove(x);
+        //     }
+        // }
         // Remove monsters who leave range from list of targets
         foreach (Monster t in targets.ToList())
         {
@@ -504,7 +563,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         if (targets[0] != null)
         {
-            if (ValueStore.Instance.monsterManagerInstance.DoesKill(targets[0], AD.Value, AP.Value))
+            if (MonsterManager.DoesKill(targets[0], AD.Value, AP.Value))
             {
                 targets[0].isAboutToDie = true;
             }
@@ -515,7 +574,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         if (monstersInRange.Count > 0)
         { // If there is atleast 1 enemy in range
-            monstersInRange.Sort((x, y) => y.distanceTravelled.CompareTo(x.distanceTravelled)); // Sort enemies in range by how far they travelled
+            monstersInRange.Sort((x, y) => y.DistanceTravelled.CompareTo(x.DistanceTravelled)); // Sort enemies in range by how far they travelled
 
             if (targets[0] == null && monstersInRange[0] != targets[1])
             { // If primary and secondary targets are null
@@ -554,7 +613,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     public void RecheckTarget()
     {
         targets[0] = null;
-        TargetDetection.SetTargets(this, monstersInRange, targets);
+        targets = TargetDetection.GetValidTargets(this, monstersInRange);
     }
 
     public bool IsInRange(Monster m)
@@ -781,6 +840,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // cooldownBarParent.SetActive(true);
 
         FocusIndicatorArrow.SetActive(true);
+
+        currentAttackStrategy = manualAttackStrategy;
+        AttackCooldownTimer.Pause();
     }
 
     public void UnFocus()
@@ -793,6 +855,8 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // cooldownBarParent.SetActive(false);
 
         FocusIndicatorArrow.SetActive(false);
+
+        currentAttackStrategy = towerAttackStrategy;
     }
 
     public void Highlight()

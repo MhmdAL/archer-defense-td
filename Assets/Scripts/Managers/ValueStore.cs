@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using TMPro;
 using System.Linq;
 using UnityTimer;
-using Unity.VisualScripting;
 using UnityEngine.AI;
 
 public enum ClickType
@@ -121,11 +120,23 @@ public class ValueStore : MonoBehaviour
 
     public PolygonCollider2D pathCollider;
 
+    public float WaveStartTime => WaveCountdownTimer.GetTimeRemaining();
+
     void Awake()
     {
         active = true;
         Instance = this;
         _audioSource = GetComponent<AudioSource>();
+
+        WaveCountdownTimer = this.AttachTimer(WaveCountdownDuration, (t) =>
+        {
+            WaveSpawner.SpawnNextWave();
+            t.Restart(WaveCountdownDuration);
+            t.Pause();
+
+        }, isDoneWhenElapsed: false);
+
+        WaveCountdownTimer.Pause();
 
         if (Application.isPlaying)
         {
@@ -158,7 +169,14 @@ public class ValueStore : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(LoadLevelAsync(level.levelID));
+        var levelToStart = 1;
+
+        if (GlobalManager.GlobalState.TryGetValue("InitialLevel", out var levelId))
+        {
+            levelToStart = (int)levelId;
+        }
+
+        StartCoroutine(LoadLevelAsync(levelToStart));
 
         AudioUtils.FadeInAllSounds(false, 5f);
     }
@@ -243,17 +261,27 @@ public class ValueStore : MonoBehaviour
 
         monsterManagerInstance.Reset();
         monsterManagerInstance.paths = CurrentLevel.Paths.ToArray();
-        
+
         pauseMenu.SetActive(false);
         victoryMenu.SetActive(false);
         defeatMenu.SetActive(false);
 
         uiControllerInstance.Reset();
 
-        levelPopUpText.text = $"Level {levelId}";
+        levelPopUpText.text = $"Level {GetLevelDisplay(levelId)}";
 
         OnLevelStarted();
     }
+
+    private string GetLevelDisplay(int level) => level switch
+    {
+        1 => "One",
+        2 => "Two",
+        3 => "Three",
+        4 => "Four",
+        5 => "Five",
+        _ => "One"
+    };
 
     private void OnLevelStarted()
     {
@@ -275,13 +303,22 @@ public class ValueStore : MonoBehaviour
     private void OnWaveStarted(int wave)
     {
         _audioSource.PlayOneShot(AudioProfile.wave_start, GlobalManager.GlobalVolumeScale);
+
+        WaveCountdownTimer.Restart(WaveCountdownDuration);
+        WaveCountdownTimer.Pause();
     }
+
+    public Timer WaveCountdownTimer;
+    public float WaveCountdownDuration;
 
     private void OnWaveEnded(int wave)
     {
         if (!WaveSpawner.LevelFinished)
         {
             _audioSource.PlayOneShot(AudioProfile.wave_end, GlobalManager.GlobalVolumeScale);
+
+            WaveCountdownTimer.Restart(WaveCountdownDuration);
+            WaveCountdownTimer.Resume();
         }
         else if (active && Lives > 0)
         {
@@ -377,7 +414,7 @@ public class ValueStore : MonoBehaviour
             if (!level.maxed && level.totalEnemiesSlain == level.totalEnemies)
             {
                 allEnemiesSlainGoldGained = 0.4f * CurrentGoldValue;
-                allEnemiesSlainEndMenuGoldDesc.SetActive(true);
+                // allEnemiesSlainEndMenuGoldDesc.SetActive(true);
                 level.maxed = true;
             }
 
@@ -413,6 +450,8 @@ public class ValueStore : MonoBehaviour
         _audioSource.PlayOneShot(AudioProfile.level_victory, GlobalManager.GlobalVolumeScale);
 
         this.AttachTimer(2f, (t) => victoryMenu.SetActive(true));
+
+        PlayerPrefs.SetInt("LastCompletedLevel", CurrentLevel.LevelId);
     }
 
     private void OnLevelDefeat()

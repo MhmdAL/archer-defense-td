@@ -8,4 +8,4 @@ To create a strategic game involving army command.
 <h3>How to open:<h3>
 
 - Clone this repo
-- Open in Unity 2021.3.1f1
+- Open in Unity 2022.2.0b10

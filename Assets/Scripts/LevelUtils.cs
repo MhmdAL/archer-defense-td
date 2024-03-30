@@ -9,7 +9,7 @@ public class LevelUtils : MonoBehaviour
 {
     public static Vector2 FarAway = new Vector2(1000, 1000);
 
-    public static List<(Path, int)> GetNearestPaths(Vector3 point, float acceptableDistance = 5f)
+    public static List<(Path path, int waypointIdx)> GetNearestPaths(Vector3 point, float acceptableDistance = 5f)
     {
         var level = FindObjectOfType<LevelTemplate>();
 
@@ -18,7 +18,8 @@ public class LevelUtils : MonoBehaviour
             {
                 var (distance, pt) = GetNearestDistanceToPath(point, path);
 
-                return new {
+                return new
+                {
                     Path = path,
                     Distance = distance,
                     Point = pt
@@ -53,6 +54,24 @@ public class LevelUtils : MonoBehaviour
         }
 
         return nearestPointIdx == null ? (float.MaxValue, null) : (Mathf.Sqrt(shortestDistance), nearestPointIdx);
+    }
+
+    public static Vector2 CalculateAveragePathDirection(PathData p, Vector2 point)
+    {
+        var (curWp, index) = p.GetNearestWaypoint(point);
+
+        Vector2? prevWp = index != 0 ? p.Waypoints[index - 1] : null;
+        Vector2? nextWp = index != p.Waypoints.Count - 1 ? p.Waypoints[index + 1] : null;
+
+        if (prevWp == null)
+            Debug.LogWarning("Prev WP not found!");
+        if (nextWp == null)
+            Debug.LogWarning(nextWp - curWp);
+
+        var prevToCurDir = (curWp - prevWp) ?? Vector2.zero;
+        var curToNextDir = (nextWp - curWp) ?? Vector2.zero;
+
+        return (prevToCurDir + curToNextDir).normalized;
     }
 
     public static Vector3 GetNearestWaypoint(Vector3 point)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CursorManager : MonoBehaviour
@@ -20,8 +21,10 @@ public class CursorManager : MonoBehaviour
     /// </summary>
     public void UpdateBasedOnCollider(Collider2D collider, CursorType onColliderType, CursorType offColliderType)
     {
-        var hit = Physics2D.Raycast(Input.mousePosition.ToWorldPosition(Camera.main), Vector2.one);
-        if (hit.collider == collider)
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hits = Physics2D.RaycastAll(ray.origin, ray.direction);
+        
+        if (hits.Select(x => x.collider).Contains(collider))
         {
             UseCursor(onColliderType, new Vector2(16, 16));
         }

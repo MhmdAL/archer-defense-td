@@ -11,6 +11,7 @@ public class FollowPath : MonoBehaviour
 
     private IMoving targetMover;
     public PathData CurrentPath { get; private set; }
+    public float DistanceTravelled { get; private set; }
     public bool IsDone { get; private set; }
     public bool HasPath => CurrentPath != null;
     private int currentWaypointIndex = 0;
@@ -29,6 +30,7 @@ public class FollowPath : MonoBehaviour
         CurrentPath = newPath;
         currentWaypointIndex = currentIndex;
         IsDone = false;
+        DistanceTravelled = 0;
 
         UpdateTargetWaypoint(currentWaypointIndex);
 
@@ -43,11 +45,13 @@ public class FollowPath : MonoBehaviour
         if (CurrentPath == null) return;
 
         float step = targetMover.MoveSpeed.Value * Time.deltaTime;
-        Vector3 newPosition = Vector3.MoveTowards(transform.root.position, currentTargetPosition, step);
+        var newPosition = Vector3.MoveTowards(transform.root.position, currentTargetPosition, step);
 
+        DistanceTravelled += step;
+        
         transform.root.position = newPosition;
 
-        if ((transform.root.position - currentTargetPosition).sqrMagnitude <= 3f)
+        if ((transform.root.position - currentTargetPosition).sqrMagnitude <= 1f)
         {
             HandleWaypointReached();
         }

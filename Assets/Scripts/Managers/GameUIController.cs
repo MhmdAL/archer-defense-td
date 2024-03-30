@@ -60,6 +60,8 @@ public class GameUIController : MonoBehaviour
     public TextMeshProUGUI TXT_waveText;
     public TextMeshProUGUI TXT_silverText;
 
+    public TextMeshProUGUI TXT_waveCountdown;
+
     public Button BTN_spawnWave;
     public GameObject GO_spawnWavePanel;
     public GameObject GO_spawnWavePanelParent;
@@ -163,6 +165,15 @@ public class GameUIController : MonoBehaviour
         _vs.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
 
         _vs.LevelStarted += OnLevelStarted;
+
+        _vs.WaveCountdownTimer.OnUpdate((f) =>
+        {
+            if (_vs.WaveSpawner.CurrentWave > 1)
+            {
+                TXT_waveCountdown.transform.parent.gameObject.SetActive(true);
+                TXT_waveCountdown.text = $"00:{_vs.WaveCountdownDuration - f:00}";
+            }
+        });
 
         InitializeUI();
     }
@@ -531,12 +542,17 @@ public class GameUIController : MonoBehaviour
 
     public void OnStartWaveButtonClicked()
     {
-        BTN_spawnWave.interactable = false;
-
         Instantiate(waveStartParticles, BTN_spawnWave.transform.position.ToWorldPosition(Camera.main), waveStartParticles.transform.rotation);
 
-        _vs.WaveSpawner.SpawnNextWave();
+        BTN_spawnWave.interactable = false;
 
+        TXT_waveCountdown.transform.parent.gameObject.SetActive(false);
+
+        _vs.WaveSpawner.SpawnNextWave();
+    }
+
+    private void OnWaveStarted(int wave)
+    {
         var animator = GO_spawnWavePanel.GetComponent<Animator>();
 
         this.AttachTimer(0.5f, (t) =>
@@ -544,11 +560,7 @@ public class GameUIController : MonoBehaviour
             animator.ResetTrigger("show");
             animator.SetTrigger("hide");
         });
-    }
 
-    private void OnWaveStarted(int wave)
-    {
-        // SpawnWaveButton.SetActive(false);
         UpdateHUD();
     }
 

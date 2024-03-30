@@ -51,7 +51,7 @@ public class CrossBow : MonoBehaviour, IFocusable, IShooting, IAttacking
         var targetPosition = Input.mousePosition.ToWorldPosition(Camera.main);
         targetPosition.z = 0;
 
-        Projectile.Fire(new ProjectileSpawnData(this, BoltPrefab, transform.position, targetPosition)
+        Projectile.Fire(new ProjectileSpawnData(this, BoltPrefab.gameObject, transform.position, targetPosition)
         {
             Radius = 0,
             Duration = ProjectileDuration,

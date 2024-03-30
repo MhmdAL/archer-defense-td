@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (_reached)
+        if (_reached || !CanHitTarget)
         {
             return;
         }
@@ -62,7 +62,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (_reached)
+        if (_reached || !CanHitTarget)
         {
             return;
         }
@@ -72,6 +72,8 @@ public class Projectile : MonoBehaviour
             target.OnProjectileHit(this, other.collider.ClosestPoint(transform.parent.position));
         }
     }
+
+    private bool CanHitTarget => _curTime / Duration >= 0.65f;
 
     public void OnTargetHit(IProjectileTarget target, Vector3 hitPosition)
     {
@@ -117,14 +119,15 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public static Projectile Fire(ProjectileSpawnData data)
+    public static (Projectile, Vector2 dir) Fire(ProjectileSpawnData data)
     {
-        var projectile = Instantiate(data.Prefab, data.SpawnPosition, Quaternion.identity);
+        var projectileObj = Instantiate(data.Prefab, data.SpawnPosition, Quaternion.identity);
+        var projectile = projectileObj.GetComponentInChildren<Projectile>();
 
         var dir = data.TargetPosition - projectile.transform.position;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        projectile.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+        projectileObj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
 
         projectile.Owner = data.Owner;
         projectile.StartPosition = data.SpawnPosition;
@@ -138,7 +141,14 @@ public class Projectile : MonoBehaviour
         projectile.Damage = data.Damage;
         projectile.ArmorPen = data.ArmorPen;
 
-        return projectile;
+        return (projectile, dir);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawSphere(TargetPosition, .25f);
+        Gizmos.color = Color.white;
     }
 
     private void MoveParabola()
@@ -152,7 +162,7 @@ public class Projectile : MonoBehaviour
 
         var gravityFactorX = 0;
         var gravityFactorZ = Mathf.Abs(Mathf.Cos(iAngle));
-        
+
         var pos = transform.parent.position;
 
 
@@ -181,7 +191,7 @@ public class Projectile : MonoBehaviour
 
 public class ProjectileSpawnData
 {
-    public ProjectileSpawnData(IShooting owner, Projectile prefab, Vector3 spawnPosition, Vector3 targetPosition)
+    public ProjectileSpawnData(IShooting owner, GameObject prefab, Vector3 spawnPosition, Vector3 targetPosition)
     {
         Owner = owner;
         Prefab = prefab;
@@ -190,7 +200,7 @@ public class ProjectileSpawnData
     }
 
     public IShooting Owner { get; set; }
-    public Projectile Prefab { get; set; }
+    public GameObject Prefab { get; set; }
     public Vector3 SpawnPosition { get; set; }
     public Vector3 TargetPosition { get; set; }
 

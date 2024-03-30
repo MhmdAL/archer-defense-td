@@ -206,6 +206,11 @@ namespace UnityTimer
             this._timeElapsedBeforePause = null;
         }
 
+        public void OnUpdate(Action<float> onUpdate)
+        {
+            this._onUpdate += onUpdate;
+        }
+
         /// <summary>
         /// Pause a running timer. A paused timer can be resumed from the same point it was paused.
         /// </summary>
@@ -312,8 +317,8 @@ namespace UnityTimer
             get { return this._hasAutoDestroyOwner && this._autoDestroyOwner == null; }
         }
 
-        private readonly Action<Timer> _onComplete;
-        private readonly Action<float> _onUpdate;
+        private Action<Timer> _onComplete;
+        private Action<float> _onUpdate;
         private float _startTime;
         private float _lastUpdateTime;
 
