@@ -13,6 +13,7 @@ public enum AbilityType
 }
 public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 {
+    public static event Action<AbilityType> AbilityUsed;
     public static event Action<AbilityType> AbilityActivated;
 
     public AbilityType t;
@@ -102,6 +103,8 @@ public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 
     public virtual void OnClick()
     {
+        AbilityUsed?.Invoke(t);
+
         Execute();
     }
 

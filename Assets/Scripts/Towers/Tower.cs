@@ -261,7 +261,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     private void Start()
     {
-        AttackCooldownTimer.Resume();
     }
 
     public virtual void InitializeValues()
@@ -295,7 +294,10 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         AttackCooldownTimer = this.AttachTimer(FullCooldown, OnAttackTimerElapsed, isDoneWhenElapsed: false);
         AttackCooldownTimer.Pause();
 
+        print(FullCooldown);
+
         CombatTimer = this.AttachTimer(2f, OnCombatTimerElapsed, isDoneWhenElapsed: false);
+        CombatTimer.Pause();
 
         UpdateTowerVisuals();
     }
@@ -311,6 +313,29 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
             PlayBowDrawSFX();
         }
 
+        // attack mode switching
+        if (HasFocus)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                SetAttackMode(TowerAttackMode.Manual);
+
+                AttackCooldownTimer.Resume();
+            }
+            else if (Input.GetMouseButtonUp(1))
+            {
+                SetAttackMode(TowerAttackMode.Auto);
+
+                AttackCooldownTimer.Pause();
+            }
+
+            if (Input.GetMouseButton(1))
+            {
+                SetCombatMode(CombatMode.InCombat);
+            }
+        }
+
+        // enemy detection
         var res = Physics2D.OverlapCircleAll(transform.position, AR.Value);
         foreach (var obj in res)
         {
@@ -321,22 +346,42 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
                 break;
             }
         }
+    }
 
-        if (HasFocus)
+    public void SetAttackMode(TowerAttackMode mode)
+    {
+        if (mode == TowerAttackMode.Manual)
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                CombatTimer.Restart(CombatCooldown);
+            currentAttackStrategy = manualAttackStrategy;
+        }
+        else if (mode == TowerAttackMode.Auto)
+        {
+            currentAttackStrategy = towerAttackStrategy;
+        }
+    }
 
-                AttackCooldownTimer.Resume();
-                animator.SetBool("isAttacking", true);
-            }
-            else if (Input.GetMouseButtonUp(1))
-            {
-                AttackCooldownTimer.Restart(FullCooldown);
-                AttackCooldownTimer.Pause();
-                animator.SetBool("isAttacking", false);
-            }
+    public void SetCombatMode(CombatMode combatMode)
+    {
+        if (combatMode == CombatMode.InCombat)
+        {
+            isInCombat = true;
+
+            CombatTimer.Restart(CombatCooldown);
+            CombatTimer.Resume();
+
+            animator.SetBool("isAttacking", true);
+        }
+        else if (combatMode == CombatMode.Idle)
+        {
+            isInCombat = false;
+            consecutiveShots = 0;
+
+            animator.SetBool("isAttacking", false);
+            AttackCooldownTimer.Restart(FullCooldown);
+            AttackCooldownTimer.Pause();
+
+            CombatTimer.Restart(0);
+            CombatTimer.Pause();
         }
     }
 
@@ -376,13 +421,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     private void OnEnemyInRange()
     {
-        CombatTimer.Restart(CombatCooldown);
+        SetCombatMode(CombatMode.InCombat);
 
-        if (!HasFocus)
-        {
-            AttackCooldownTimer.Resume();
-            animator.SetBool("isAttacking", true);
-        }
+        AttackCooldownTimer.Resume();
 
         // print("combat restarted");
 
@@ -391,27 +432,18 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     private void OnCombatTimerElapsed(Timer t)
     {
-        isInCombat = false;
-        consecutiveShots = 0;
+        SetCombatMode(CombatMode.Idle);
 
-        // print("combat elapsed");
+        print("combat elapsed");
 
         // animator.SetBool("idle", true);
-
-        // if (!manualMode)
-        // {
-        animator.SetBool("isAttacking", false);
-        AttackCooldownTimer.Restart(FullCooldown);
-        AttackCooldownTimer.Pause();
-        // }
-
 
         CombatEnded?.Invoke();
     }
 
     private void OnAttackTimerElapsed(Timer t)
     {
-        // Debug.Log("Attacking");
+        Debug.Log("Attacking");
 
         var monsters = Physics2D.OverlapCircleAll(transform.position, AR.Value).Select(x => x.GetComponent<Monster>()).Where(x => x != null).ToList();
 
@@ -442,7 +474,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         if (!IsDisabled)
         {
-            if (!HasFocus && !targets.Any())
+            if (!IsManualMode() && !targets.Any())
                 return;
 
             // Debug.Log("not disabled");
@@ -470,6 +502,8 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
             AttackCooldownTimer.Restart(FullCooldown);
         }
     }
+
+    public bool IsManualMode() => currentAttackStrategy == manualAttackStrategy;
 
     public void PlayShotSFX() => PlayClip(ShootSFX);
     public void PlayBowDrawSFX() => PlayClip(DrawSFX);
@@ -840,9 +874,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // cooldownBarParent.SetActive(true);
 
         FocusIndicatorArrow.SetActive(true);
-
-        currentAttackStrategy = manualAttackStrategy;
-        AttackCooldownTimer.Pause();
     }
 
     public void UnFocus()
@@ -855,8 +886,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // cooldownBarParent.SetActive(false);
 
         FocusIndicatorArrow.SetActive(false);
-
-        currentAttackStrategy = towerAttackStrategy;
     }
 
     public void Highlight()
@@ -868,4 +897,16 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         _outlinable.OutlineParameters.Enabled = false;
     }
+}
+
+public enum TowerAttackMode
+{
+    Manual,
+    Auto
+}
+
+public enum CombatMode
+{
+    InCombat,
+    Idle
 }

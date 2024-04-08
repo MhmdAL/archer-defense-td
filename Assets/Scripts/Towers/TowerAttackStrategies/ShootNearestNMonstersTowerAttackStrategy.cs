@@ -64,6 +64,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         data.Owner.isInCombat = true;
         data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown); // set cooldown back to full duration
+        data.Owner.AttackCooldownTimer.Restart(data.Owner.FullCooldown); // set cooldown back to full duration
         
         if (target != null)
         {

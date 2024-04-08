@@ -23,33 +23,53 @@ public class Level1 : MonoBehaviour
 
         uIController = FindObjectOfType<GameUIController>();
 
+        uIController.horseRaidAbility.SetActive(false);
+        uIController.GO_spawnWavePanel.SetActive(false);
+
         stages = new List<TutorialStage>
         {
             new TutorialStage
             {
                 Begin = () => {
+                    uIController.EnableBlur();
+
                     uIController.tutorialManager.SetActiveStage(1);
+                },
+                End = () => {
+                    uIController.DisableBlur();
                 }
             },
             new TutorialStage
             {
                 Begin = () => {
+                    uIController.EnableBlur();
+
                     uIController.tutorialManager.SetActiveStage(2);
                     uIController.GO_statsPanel.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
                     uIController.GO_statsPanel.transform.SetAsLastSibling();
 
-                    uIController.GO_timeControlsPanel.transform.parent = uIController.GO_timeControlsPanel.transform.parent.parent;
-                    uIController.GO_timeControlsPanel.transform.SetAsLastSibling();
+                    // uIController.GO_timeControlsPanel.transform.parent = uIController.GO_timeControlsPanel.transform.parent.parent;
+                    // uIController.GO_timeControlsPanel.transform.SetAsLastSibling();
+                    uIController.GO_timeControlsPanel.SetActive(false);
                 },
                 End = () => {
+                    uIController.DisableBlur();
+
                     uIController.GO_statsPanel.transform.parent = uIController.GO_HUD.transform;
-                    uIController.GO_timeControlsPanel.transform.parent = uIController.GO_HUD.transform;
+                    // uIController.GO_timeControlsPanel.transform.parent = uIController.GO_HUD.transform;
+
+                    uIController.GO_timeControlsPanel.SetActive(true);
                 }
             },
             new TutorialStage
             {
                 Begin = () => {
+                    uIController.tutorialManager.DisableBackdrop();
+
                     uIController.tutorialManager.SetActiveStage(3);
+                },
+                End = () => {
+                    uIController.tutorialManager.EnableBackdrop();
                 }
             },
             new TutorialStage
@@ -63,6 +83,8 @@ public class Level1 : MonoBehaviour
                 Begin = () => {
                     uIController.tutorialManager.SetActiveStage(5);
 
+                    uIController.GO_spawnWavePanel.SetActive(true);
+
                     uIController.GO_spawnWavePanelParent.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
                     uIController.GO_spawnWavePanelParent.transform.SetAsLastSibling();
                 },
@@ -73,6 +95,8 @@ public class Level1 : MonoBehaviour
             new TutorialStage
             {
                 Begin = () => {
+                    uIController.horseRaidAbility.SetActive(true);
+
                     uIController.tutorialManager.SetActiveStage(6);
 
                     uIController.horseRaidAbility.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
@@ -80,11 +104,15 @@ public class Level1 : MonoBehaviour
                 },
                 End = () => {
                     uIController.horseRaidAbility.transform.parent = uIController.GO_HUD.transform;
+
+                    print("ended stage 6");
                 }
             },
             new TutorialStage
             {
                 Begin = () => {
+                    print("started stage 7");
+
                     _pathMask.transform.GetChild(0).gameObject.SetActive(true);
                     uIController.tutorialManager.SetActiveStage(7, 0);
                 },
@@ -105,7 +133,7 @@ public class Level1 : MonoBehaviour
         gameController.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
         gameController.WaveSpawner.WaveStarted += OnWaveStarted;
 
-        Ability.AbilityActivated += OnAbilityActivated;
+        Ability.AbilityUsed += OnAbilityUsed;
 
         uIController.horseRaidAbility.GetComponentInChildren<AbilityHorseRaidV2>().RaidStarted += OnRaidStarted;
 
@@ -134,14 +162,17 @@ public class Level1 : MonoBehaviour
 
         if (currentStage == 4 && CurrentStage.StageFinished && wave == 2)
         {
-            NextStage();
+            this.AttachTimer(5f, (f) => NextStage());
         }
     }
 
-    private void OnAbilityActivated(AbilityType abilityType)
+    private void OnAbilityUsed(AbilityType abilityType)
     {
+        print("ability activated");
+
         if (currentStage == 5 && abilityType == AbilityType.Cavalry_Raid)
         {
+            print("ending stg 5");
             EndStage();
 
             NextStage();

@@ -7,6 +7,8 @@ public class TutorialManager : MonoBehaviour
     public GameObject dialogMenu;
     public TextMeshProUGUI dialogText;
 
+    public Image backdropImage;
+
     public int currentStage;
 
     private void Start()
@@ -31,6 +33,16 @@ public class TutorialManager : MonoBehaviour
         // print("Setting stage " + n + " to active");
 
         dialogMenu.transform.Find($"Stage{n}").gameObject.SetActive(true);
+    }
+
+    public void EnableBackdrop()
+    {
+        backdropImage.enabled = true;
+    }
+
+    public void DisableBackdrop()
+    {
+        backdropImage.enabled = false;
     }
 
 

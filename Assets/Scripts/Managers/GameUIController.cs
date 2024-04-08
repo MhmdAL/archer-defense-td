@@ -142,6 +142,8 @@ public class GameUIController : MonoBehaviour
 
     public bool performLevelwiseInit = true;
 
+    public GameObject blueVolume;
+
     private void Awake()
     {
         _towerManager = FindObjectOfType<TowerManager>();
@@ -268,9 +270,19 @@ public class GameUIController : MonoBehaviour
         TXT_silverText.text = string.Concat(_vs.Silver);
     }
 
+    public void EnableBlur()
+    {
+        blueVolume.SetActive(true);
+    }
+
+    public void DisableBlur()
+    {
+        blueVolume.SetActive(false);
+    }
+
     private void UpdateAbilityAvailability()
     {
-        horseRaidAbility.SetActive(_vs.CurrentLevel.LevelId != 1 || !performLevelwiseInit || _vs.WaveSpawner.CurrentWave > 1);
+        // horseRaidAbility.SetActive(_vs.CurrentLevel.LevelId != 1 || !performLevelwiseInit || _vs.WaveSpawner.CurrentWave > 1);
     }
 
     public void SetScreenSaturation(float saturation)
