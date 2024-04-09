@@ -13,9 +13,7 @@ public abstract class Monster : Unit, IMoving
     public EnemyData EnemyData { get; set; }
 
     [SerializeField]
-    private AudioClip deathSound;
-    [SerializeField]
-    private AudioClip deathSound2;
+    private AudioComposition deathSound;
 
     public Stat MoveSpeed { get; set; }
 
@@ -224,17 +222,13 @@ public abstract class Monster : Unit, IMoving
             anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
         }
 
-        _audioSource.pitch = UnityEngine.Random.Range(0.75f, 1.5f);
-
-        var rand = UnityEngine.Random.Range(0, 2);
-
         // if (rand == 1)
         // {
-            _audioSource.PlayOneShot(deathSound, 0.7f * GlobalManager.GlobalVolumeScale);
+        print("Died");
+        _audioSource.PlayOneShot(deathSound);
         // }
         // else
         // {
-            _audioSource.PlayOneShot(deathSound2, 0.05f * GlobalManager.GlobalVolumeScale);
         // }
 
         // Add death particle effects

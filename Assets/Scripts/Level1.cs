@@ -23,9 +23,6 @@ public class Level1 : MonoBehaviour
 
         uIController = FindObjectOfType<GameUIController>();
 
-        uIController.horseRaidAbility.SetActive(false);
-        uIController.GO_spawnWavePanel.SetActive(false);
-
         stages = new List<TutorialStage>
         {
             new TutorialStage
@@ -127,6 +124,8 @@ public class Level1 : MonoBehaviour
 
     private void Start()
     {
+        uIController.horseRaidAbility.SetActive(false);
+        uIController.GO_spawnWavePanel.SetActive(false);
 
         gameController = FindObjectOfType<ValueStore>();
 

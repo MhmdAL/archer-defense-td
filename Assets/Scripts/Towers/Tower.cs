@@ -346,6 +346,11 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
                 break;
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.V)) // DEB"UG PURPOSES
+        {
+            AD.Modify(10, BonusType.Percentage, "Hello");
+        }
     }
 
     public void SetAttackMode(TowerAttackMode mode)
