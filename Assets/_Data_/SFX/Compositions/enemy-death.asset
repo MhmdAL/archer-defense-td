@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e87583c189a514cb784e88cf9df878, type: 3}
   m_Name: enemy-death
   m_EditorClassIdentifier: 
-  ExtendedAudioClips:
-  - AudioClip: {fileID: 8300000, guid: 3e4aeeb5613577a47bd3e1ae377907ce, type: 3}
-    VolumeScale: {x: 0.1073593, y: 0.2072594}
-    Pitch: {x: 1, y: 3}
-  VolumeScale: {x: 1, y: 1}
-  Pitch: {x: 1, y: 1}
+  Parts:
+  - Type: 0
+    Clips:
+    - AudioClip: {fileID: 8300000, guid: 3e4aeeb5613577a47bd3e1ae377907ce, type: 3}
+      VolumeScale: {x: 0.075, y: 0.15}
+      Pitch: {x: 0.9, y: 1.1}

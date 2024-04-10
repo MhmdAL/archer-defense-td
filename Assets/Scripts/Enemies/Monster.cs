@@ -222,15 +222,8 @@ public abstract class Monster : Unit, IMoving
             anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
         }
 
-        // if (rand == 1)
-        // {
-        print("Died");
         _audioSource.PlayOneShot(deathSound);
-        // }
-        // else
-        // {
-        // }
-
+        
         // Add death particle effects
         // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
         // Destroy(deathParticle, 2f);

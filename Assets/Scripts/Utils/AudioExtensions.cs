@@ -8,24 +8,32 @@ public static class AudioExtensions
 {
     public static void PlayOneShot(this AudioSource source, AudioComposition audio)
     {
-        var oldPitch = source.pitch;
-
-        var overallPitch = audio.Pitch.RandomConstant();
-        var overallVolume = audio.VolumeScale.RandomConstant();
-
-        foreach (var item in audio.ExtendedAudioClips)
+        foreach (var item in audio.Parts)
         {
-            var itemPitch = item.Pitch.RandomConstant();
-            var finalPitch = itemPitch * overallPitch;
-
-            var itemVolume = item.VolumeScale.RandomConstant();
-            var finalVolume = itemVolume * overallVolume * GlobalManager.GlobalVolumeScale;
-
-            source.pitch = finalPitch;
-            source.PlayOneShot(item.AudioClip, finalVolume);
+            if (item.Type == AudioCompositionPartType.PlayAll)
+            {
+                foreach (var clip in item.Clips)
+                {
+                    source.Play(clip);
+                }
+            }
+            else if (item.Type == AudioCompositionPartType.SelectRandom)
+            {
+                var rand = UnityEngine.Random.Range(0, item.Clips.Count);
+                
+                source.Play(item.Clips[rand]);
+            }
         }
+    }
 
-        source.pitch = oldPitch;
+    public static void Play(this AudioSource source, ExtendedAudioClip clip)
+    {
+        var pitch = clip.Pitch.RandomConstant();
+
+        var volume = clip.VolumeScale.RandomConstant() * GlobalManager.GlobalVolumeScale;
+
+        source.pitch = pitch;
+        source.PlayOneShot(clip.AudioClip, volume);
     }
 
     public static float RandomConstant(this Vector2 minMaxCurve)

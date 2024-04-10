@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityTimer;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "HitEffect/Headshot")]
 public class HeadshotTargetHitEffect : TargetHitEffect
 {
     public override void OnTargetHit(AttackData data)

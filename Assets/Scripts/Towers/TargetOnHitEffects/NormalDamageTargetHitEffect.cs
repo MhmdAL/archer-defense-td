@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "HitEffect/Normal")]
 public class NormalDamageTargetHitEffect : TargetHitEffect
 {
     public override void OnTargetHit(AttackData data)

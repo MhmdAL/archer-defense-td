@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityTimer;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "HitEffect/AOEBlast")]
 public class AoeBlastHitEffect : TargetHitEffect
 {
     [SerializeField]

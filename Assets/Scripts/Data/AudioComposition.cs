@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "audio-comp", menuName = "SFX/AudioComposition")]
 public class AudioComposition : ScriptableObject
 {
-    public List<ExtendedAudioClip> ExtendedAudioClips;
+    public List<AudioCompositionPart> Parts;
+}
 
-    [MinMaxSlider(0, 1, true)]
-    public Vector2 VolumeScale;
-    [MinMaxSlider(0, 10, true)]
-    public Vector2 Pitch;
+[Serializable]
+public class AudioCompositionPart
+{
+    public AudioCompositionPartType Type;
+    public List<ExtendedAudioClip> Clips;
 }
 
 [Serializable]
@@ -20,7 +22,13 @@ public class ExtendedAudioClip
 {
     public AudioClip AudioClip;
     [MinMaxSlider(0, 1, true)]
-    public Vector2 VolumeScale;
-    [MinMaxSlider(0, 10, true)]
-    public Vector2 Pitch;
+    public Vector2 VolumeScale = new Vector2(1, 1);
+    [MinMaxSlider(-10, 10, true)]
+    public Vector2 Pitch  = new Vector2(1, 1);
+}
+
+public enum AudioCompositionPartType
+{
+    PlayAll,
+    SelectRandom
 }

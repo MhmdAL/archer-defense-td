@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "TowerAttackStrategy/ShootAtPosition")]
 public class ShootAtPositionTowerAttackStrategy : TowerAttackStrategy
 {
     public override void Attack(TowerAttackData data)

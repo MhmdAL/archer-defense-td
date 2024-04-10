@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityTimer;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "TowerAttackStrategy/MultiShootNearestN")]
 public class MultiShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 {
     [field: SerializeField]

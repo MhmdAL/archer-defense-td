@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "HitEffect/Execute")]
 public class ExecuteTargetHitEffect : TargetHitEffect
 {
     public override void OnTargetHit(AttackData data)
