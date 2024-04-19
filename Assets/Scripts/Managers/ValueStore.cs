@@ -160,8 +160,8 @@ public class ValueStore : MonoBehaviour
 
             mainCamera = Camera.main;
 
-            ambientAudioSource.PlayOneShot(AudioProfile.ambient, GlobalManager.GlobalVolumeScale);
-            ambientWindAudioSource.PlayOneShot(AudioProfile.ambient_wind, GlobalManager.GlobalVolumeScale);
+            ambientAudioSource.PlayOneShot(SoundEffects.AMBIENT_1);
+            ambientWindAudioSource.PlayOneShot(SoundEffects.AMBIENT_2);
 
             // UpdateStats();
         }
@@ -287,7 +287,7 @@ public class ValueStore : MonoBehaviour
     {
         LevelStarted?.Invoke();
 
-        _audioSource.PlayOneShot(AudioProfile.level_start, GlobalManager.GlobalVolumeScale);
+        _audioSource.PlayOneShot(SoundEffects.LEVEL_START);
     }
 
     public void OnSilverChange()
@@ -302,7 +302,7 @@ public class ValueStore : MonoBehaviour
 
     private void OnWaveStarted(int wave)
     {
-        _audioSource.PlayOneShot(AudioProfile.wave_start, GlobalManager.GlobalVolumeScale);
+        _audioSource.PlayOneShot(SoundEffects.WAVE_START);
 
         WaveCountdownTimer.Restart(WaveCountdownDuration);
         WaveCountdownTimer.Pause();
@@ -315,7 +315,7 @@ public class ValueStore : MonoBehaviour
     {
         if (!WaveSpawner.LevelFinished)
         {
-            _audioSource.PlayOneShot(AudioProfile.wave_end, GlobalManager.GlobalVolumeScale);
+            _audioSource.PlayOneShot(SoundEffects.WAVE_END);
 
             WaveCountdownTimer.Restart(WaveCountdownDuration);
             WaveCountdownTimer.Resume();
@@ -447,7 +447,7 @@ public class ValueStore : MonoBehaviour
 
     private void OnLevelVictory()
     {
-        _audioSource.PlayOneShot(AudioProfile.level_victory, GlobalManager.GlobalVolumeScale);
+        _audioSource.PlayOneShot(SoundEffects.LEVEL_END_VICTORY);
 
         this.AttachTimer(2f, (t) => victoryMenu.SetActive(true));
 
@@ -456,7 +456,7 @@ public class ValueStore : MonoBehaviour
 
     private void OnLevelDefeat()
     {
-        _audioSource.PlayOneShot(AudioProfile.level_defeat, GlobalManager.GlobalVolumeScale);
+        _audioSource.PlayOneShot(SoundEffects.LEVEL_END_DEFEAT);
 
         this.AttachTimer(1f, (t) => defeatMenu.SetActive(true));
 

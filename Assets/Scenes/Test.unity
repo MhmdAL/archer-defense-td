@@ -3522,7 +3522,7 @@ PrefabInstance:
     - target: {fileID: 7804336382044370681, guid: 9176c036e5fd60640813fe21357f2d6f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7804336382044370681, guid: 9176c036e5fd60640813fe21357f2d6f,
         type: 3}
@@ -6042,7 +6042,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &376015126
 GameObject:
@@ -9055,37 +9055,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1 &828161994
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 828161995}
-  m_Layer: 0
-  m_Name: HorseArcherEntry
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &828161995
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 828161994}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 93.91, y: -20.27, z: -0.17549172}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &842427594
 GameObject:
   m_ObjectHideFlags: 0
@@ -9385,7 +9354,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &866085383
 GameObject:
@@ -10562,6 +10531,10 @@ PrefabInstance:
     - target: {fileID: 463678, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5053716, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 21201068, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
       propertyPath: m_SortingOrder
@@ -19787,7 +19760,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1402419022
 GameObject:
@@ -21092,7 +21065,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1558172973
 GameObject:
@@ -23340,22 +23313,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02de22ab328d074daf171409debb3e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  t: 2
-  baseCooldown: 5
+  AbilityData: {fileID: 11400000, guid: c0628c3446882d44e8dcbb66cdbc840e, type: 2}
+  abilityUsedEvent: {fileID: 11400000, guid: f64e0a6c33934fb49b4db343d1259e9f, type: 2}
+  abilityActivatedEvent: {fileID: 11400000, guid: d61bb6986c3fa064484ca72031e14d3d,
+    type: 2}
   cooldownImage: {fileID: 1402419024}
   activeIndicator: {fileID: 196296444}
   inactiveIndicator: {fileID: 1140354721}
-  HorseRaidScreenIndicator: {fileID: 1116114924}
-  HorseRaidStartIndicatorPrefab: {fileID: 1491696350}
-  HorseRaidEndIndicatorPrefab: {fileID: 1302521765}
-  HorseRaiderPrefab: {fileID: 7696575124670680585, guid: 63c9989827545d842b5aa8a12a32f951,
-    type: 3}
-  HorseRaiderCount: 2
-  HorseRaiderSpawnDelay: 1
-  HorseRaiderSpawnPosition: {fileID: 828161995}
-  raidEndIndicator: {fileID: 1302521765}
   audioSource: {fileID: 1800843736}
-  raidStartSFX: {fileID: 8300000, guid: fd5f4d7922a1bf3458f1d469e2d7dd79, type: 3}
+  HorseRaidScreenIndicator: {fileID: 1116114924}
+  raidEndIndicator: {fileID: 1302521765}
 --- !u!82 &1800843736
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23767,7 +23734,7 @@ Transform:
   m_Children:
   - {fileID: 934913217}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1821386246
 GameObject:
@@ -32204,7 +32171,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &8301556261260648759
 Transform:
@@ -32775,11 +32742,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e20c86038dfd3749a78cc51fdeb15c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  t: 0
-  baseCooldown: 45
+  AbilityData: {fileID: 0}
+  abilityUsedEvent: {fileID: 0}
+  abilityActivatedEvent: {fileID: 0}
   cooldownImage: {fileID: 8301556261270706391}
   activeIndicator: {fileID: 8301556261270696647}
   inactiveIndicator: {fileID: 8301556261270678513}
+  audioSource: {fileID: 0}
   ArrowPrefab: {fileID: 7046564412954026214, guid: 3cafeb37a68df2946ad85d2c394b6fd3,
     type: 3}
   StartPosition: {fileID: 439663791}
@@ -34418,7 +34387,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 7355959
 --- !u!114 &8301556261270677237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34980,11 +34949,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db454176217e2d48a1c5f43dc659924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  t: 1
-  baseCooldown: 0
+  AbilityData: {fileID: 0}
+  abilityUsedEvent: {fileID: 0}
+  abilityActivatedEvent: {fileID: 0}
   cooldownImage: {fileID: 8301556261270596825}
   activeIndicator: {fileID: 8301556261270668761}
   inactiveIndicator: {fileID: 8301556261270599877}
+  audioSource: {fileID: 0}
 --- !u!114 &8301556261270701945
 MonoBehaviour:
   m_ObjectHideFlags: 0

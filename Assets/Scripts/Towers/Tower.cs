@@ -510,7 +510,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
     public bool IsManualMode() => currentAttackStrategy == manualAttackStrategy;
 
-    public void PlayShotSFX() => PlayClip(ShootSFX);
+    public void PlayShotSFX() => _audioSource.PlayOneShot(SoundEffects.ARCHER_SHOT);
     public void PlayBowDrawSFX() => PlayClip(DrawSFX);
     public void PlayHitSound() => PlayClip(HitSFX);
 

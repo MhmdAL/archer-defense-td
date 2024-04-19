@@ -2,14 +2,14 @@
 using System.Collections;
 using UnityTimer;
 
-public class AbilityDamageBoost : Ability
+public class AbilityDamageBoost : Ability<HorseRaidAbilityData>
 {
 
     public override void Initialize()
     {
         vs.towerManagerInstance.TowersInSceneChanged += OnTowersInSceneChange;
         // baseCooldown = SaveData.baseUpgradeValues[UpgradeType.DamageBoostCooldown] + SaveData.GetUpgrade(UpgradeType.DamageBoostCooldown).CurrentValue;
-        baseCooldown = 10;
+        AbilityData.BaseCooldown = 10;
 
         CooldownTimer = this.AttachTimer(0, null, isDoneWhenElapsed: false);
     }

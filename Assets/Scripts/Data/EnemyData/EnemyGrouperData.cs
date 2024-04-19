@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "EnemyData/Grouper")]
 public class EnemyGrouperData : EnemyData
 {
     public float GroupBuffRadius;

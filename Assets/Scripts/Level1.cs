@@ -9,11 +9,15 @@ public class Level1 : MonoBehaviour
 {
     public GameUIController uIController;
     public ValueStore gameController;
+    public AbilityUsedEvent abilityUsedEvent;
 
     public List<TutorialStage> stages;
     private GameObject _pathMask;
 
     private int currentStage = 0;
+
+    [SerializeField]
+    private float initialStageDelay = 1.5f;
 
     public TutorialStage CurrentStage => stages[currentStage];
 
@@ -22,7 +26,34 @@ public class Level1 : MonoBehaviour
         _pathMask = GameObject.Find("PathMaskParent");
 
         uIController = FindObjectOfType<GameUIController>();
+        
+        InitStages();
 
+        // uIController.StartWaveEnabled = false;
+    }
+
+    private void Start()
+    {
+        uIController.horseRaidAbility.SetActive(false);
+        uIController.GO_spawnWavePanel.SetActive(false);
+
+        gameController = FindObjectOfType<ValueStore>();
+
+        gameController.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
+        gameController.WaveSpawner.WaveStarted += OnWaveStarted;
+
+        abilityUsedEvent.Subscribe(OnAbilityUsed);
+
+        uIController.horseRaidAbility.GetComponentInChildren<AbilityHorseRaidV2>().RaidStarted += OnRaidStarted;
+
+        this.AttachTimer(initialStageDelay, (t) =>
+        {
+            stages[0].Begin();
+        });
+    }
+
+    private void InitStages()
+    {
         stages = new List<TutorialStage>
         {
             new TutorialStage
@@ -81,6 +112,7 @@ public class Level1 : MonoBehaviour
                     uIController.tutorialManager.SetActiveStage(5);
 
                     uIController.GO_spawnWavePanel.SetActive(true);
+                    uIController.ShowWaveMenu();
 
                     uIController.GO_spawnWavePanelParent.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
                     uIController.GO_spawnWavePanelParent.transform.SetAsLastSibling();
@@ -118,28 +150,6 @@ public class Level1 : MonoBehaviour
                 }
             }
         };
-
-        // uIController.StartWaveEnabled = false;
-    }
-
-    private void Start()
-    {
-        uIController.horseRaidAbility.SetActive(false);
-        uIController.GO_spawnWavePanel.SetActive(false);
-
-        gameController = FindObjectOfType<ValueStore>();
-
-        gameController.userClickHandlerInstance.ObjectClicked += OnObjectClicked;
-        gameController.WaveSpawner.WaveStarted += OnWaveStarted;
-
-        Ability.AbilityUsed += OnAbilityUsed;
-
-        uIController.horseRaidAbility.GetComponentInChildren<AbilityHorseRaidV2>().RaidStarted += OnRaidStarted;
-
-        this.AttachTimer(1f, (t) =>
-        {
-            stages[0].Begin();
-        });
     }
 
     private void OnObjectClicked(object obj)

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
 
 public class MainMenu : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class MainMenu : MonoBehaviour
 	private void Start()
 	{
 		UpdateProgressText();
+
+		Addressables.LoadAssetAsync<AudioComposition>(SoundEffects.LEVEL_START);
 	}
 
 	private void Update()

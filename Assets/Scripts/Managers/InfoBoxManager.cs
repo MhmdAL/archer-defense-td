@@ -41,7 +41,7 @@ public class InfoBoxManager : MonoBehaviour {
 		vs.WaveSpawner.WaveStarted += OnWaveStart;
 		vs.towerManagerInstance.TowerDeployed += OnTowerDeployed;
 		vs.towerManagerInstance.TowerSpecialised += OnTowerSpecialised;
-		Ability.AbilityActivated += OnAbilityActivated;
+		// BaseAbility.AbilityActivated += OnAbilityActivated;
 
 		UpdateState ();
 
@@ -180,6 +180,6 @@ public class InfoBoxManager : MonoBehaviour {
 		vs.WaveSpawner.WaveStarted -= OnWaveStart;
 		vs.towerManagerInstance.TowerDeployed -= OnTowerDeployed;
 		vs.towerManagerInstance.TowerSpecialised -= OnTowerSpecialised;
-		Ability.AbilityActivated -= OnAbilityActivated;
+		// BaseAbility.AbilityActivated -= OnAbilityActivated;
 	}
 }

@@ -7,28 +7,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AbilityHorseRaidV2 : Ability
+public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
 {
     public Action RaidStarted;
 
+    [Header("Raid Specific")]
     public GameObject HorseRaidScreenIndicator;
-    public GameObject HorseRaidStartIndicatorPrefab;
-    public GameObject HorseRaidEndIndicatorPrefab;
-    public GameObject HorseRaiderPrefab;
-    public int HorseRaiderCount = 3;
-    public float HorseRaiderSpawnDelay = 1;
-    public Transform HorseRaiderSpawnPosition;
+
+    public GameObject raidEndIndicator;
 
     private HorseRaidState _state;
 
-    private Vector2? _raidStartPosition;
     private Vector2? _raidEndPosition;
-
-    private GameObject _raidStartIndicator = null;
-    public GameObject raidEndIndicator;
-
-    public AudioSource audioSource;
-    public AudioClip raidStartSFX;
 
     private CursorManager _cursorManager;
 
@@ -79,7 +69,7 @@ public class AbilityHorseRaidV2 : Ability
                 {
                     OnAbilityActivated();
 
-                    audioSource.PlayOneShot(raidStartSFX, GlobalManager.GlobalVolumeScale);
+                    audioSource.PlayOneShot(AbilityData.raidStartSFX);
 
                     StartCoroutine(StartRaid());
 
@@ -117,16 +107,16 @@ public class AbilityHorseRaidV2 : Ability
         var paths = GenerateRaiderPaths(raidEndWorldPos).Shuffle().ToList();
 
         var currentPathIdx = 0;
-        for (int i = 0; i < HorseRaiderCount; i++, currentPathIdx = (currentPathIdx + 1) % paths.Count)
+        for (int i = 0; i < AbilityData.HorseRaiderCount; i++, currentPathIdx = (currentPathIdx + 1) % paths.Count)
         {
-            var horseRaider = Instantiate(HorseRaiderPrefab, HorseRaiderSpawnPosition.position, Quaternion.identity).GetComponent<HorseRaiderV2>();
+            var horseRaider = Instantiate(AbilityData.HorseRaiderPrefab, AbilityData.HorseRaiderSpawnPosition.position, Quaternion.identity).GetComponent<HorseRaiderV2>();
 
             var randomPath = paths[currentPathIdx];
 
             horseRaider.StartRaid(randomPath);
             horseRaider.PatrolStarted += OnPatrolStarted;
 
-            yield return new WaitForSeconds(HorseRaiderSpawnDelay);
+            yield return new WaitForSeconds(AbilityData.HorseRaiderSpawnDelay);
         }
     }
 

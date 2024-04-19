@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "EnemyData/Boss1")]
 public class EnemyBoss1Data : EnemyData
 {
     [field: SerializeField]

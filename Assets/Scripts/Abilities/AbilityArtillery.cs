@@ -5,7 +5,7 @@ using static UnityEngine.ParticleSystem;
 using UnityTimer;
 using System;
 
-public class AbilityArtillery : Ability, IShooting
+public class AbilityArtillery : Ability<HorseRaidAbilityData>, IShooting
 {
     public GameObject ArrowPrefab;
     public Transform StartPosition;

@@ -11,16 +11,19 @@ public enum AbilityType
     Damage_boost,
     Cavalry_Raid,
 }
-public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
-{
-    public static event Action<AbilityType> AbilityUsed;
-    public static event Action<AbilityType> AbilityActivated;
 
-    public AbilityType t;
-    public float baseCooldown;
+public abstract class Ability<T> : BaseAbility, IAttacking, ICleanable where T : AbilityData
+{
+    [Header("Common Ability Data")]
+    public T AbilityData;
+
+    public GameEvent<AbilityType> abilityUsedEvent;
+    public GameEvent<AbilityType> abilityActivatedEvent;
 
     public Image cooldownImage;
     public Image activeIndicator, inactiveIndicator;
+
+    public AudioSource audioSource;
 
     protected ValueStore vs;
 
@@ -80,7 +83,7 @@ public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 
     protected virtual void Update()
     {
-        cooldownImage.fillAmount = CooldownTimer.GetTimeRemaining() / baseCooldown;
+        cooldownImage.fillAmount = CooldownTimer.GetTimeRemaining() / AbilityData.BaseCooldown;
 
         UpdateReadiness();
     }
@@ -103,16 +106,16 @@ public abstract class Ability : MonoBehaviour, IAttacking, ICleanable
 
     public virtual void OnClick()
     {
-        AbilityUsed?.Invoke(t);
+        abilityUsedEvent.Raise(AbilityData.Type);
 
         Execute();
     }
 
     protected void OnAbilityActivated()
     {
-        CooldownTimer.Restart(baseCooldown);
+        CooldownTimer.Restart(AbilityData.BaseCooldown);
 
-        AbilityActivated?.Invoke(t);
+        abilityActivatedEvent.Raise(AbilityData.Type);
     }
 
     public virtual void CleanUp()

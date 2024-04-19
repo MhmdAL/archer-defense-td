@@ -6,14 +6,14 @@ using System.Diagnostics;
 using UnityTimer;
 using System;
 using EPOOutline;
+using UnityEngine.AddressableAssets;
 
 public abstract class Monster : Unit, IMoving
 {
     [field: SerializeField]
     public EnemyData EnemyData { get; set; }
 
-    [SerializeField]
-    private AudioComposition deathSound;
+    // private AudioComposition deathSound;
 
     public Stat MoveSpeed { get; set; }
 
@@ -73,7 +73,7 @@ public abstract class Monster : Unit, IMoving
 
     private FollowPath _followPathComponent;
 
-    protected override void Awake()
+    protected override async void Awake()
     {
         base.Awake();
 
@@ -222,7 +222,7 @@ public abstract class Monster : Unit, IMoving
             anim.SetInteger("death_index", UnityEngine.Random.Range(0, 2));
         }
 
-        _audioSource.PlayOneShot(deathSound);
+        _audioSource.PlayOneShot(SoundEffects.ENEMY_DEATH);
         
         // Add death particle effects
         // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);

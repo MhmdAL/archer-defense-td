@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Threading.Tasks;
 
 public static class AudioExtensions
 {
@@ -20,11 +23,17 @@ public static class AudioExtensions
             else if (item.Type == AudioCompositionPartType.SelectRandom)
             {
                 var rand = UnityEngine.Random.Range(0, item.Clips.Count);
-                
+
                 source.Play(item.Clips[rand]);
             }
         }
     }
+
+    public static void PlayOneShot(this AudioSource source, string audio)
+    {
+        Addressables.LoadAssetAsync<AudioComposition>(audio).Completed += (t) => PlayOneShot(source, t.Result);
+    }
+
 
     public static void Play(this AudioSource source, ExtendedAudioClip clip)
     {

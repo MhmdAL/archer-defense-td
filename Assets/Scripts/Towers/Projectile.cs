@@ -47,7 +47,7 @@ public class Projectile : MonoBehaviour
         _reached = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (_reached || !CanHitTarget)
         {
@@ -73,7 +73,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private bool CanHitTarget => _curTime / Duration >= 0.65f;
+    private bool CanHitTarget => _curTime / Duration >= 0.75f;
 
     public void OnTargetHit(IProjectileTarget target, Vector3 hitPosition)
     {
