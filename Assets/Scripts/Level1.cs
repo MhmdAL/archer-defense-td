@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Shapes2D;
 using UnityEngine;
 using UnityTimer;
@@ -14,12 +15,14 @@ public class Level1 : MonoBehaviour
     public List<TutorialStage> stages;
     private GameObject _pathMask;
 
-    private int currentStage = 0;
+    private Level1Stage currentStage;
 
     [SerializeField]
     private float initialStageDelay = 1.5f;
+    [SerializeField]
+    private float cavalryRaidWaitTime = 3f;
 
-    public TutorialStage CurrentStage => stages[currentStage];
+    public TutorialStage CurrentStage => stages.First(x => x.StageId == currentStage);
 
     private void Awake()
     {
@@ -35,7 +38,8 @@ public class Level1 : MonoBehaviour
     private void Start()
     {
         uIController.horseRaidAbility.SetActive(false);
-        uIController.GO_spawnWavePanel.SetActive(false);
+        uIController.HideWaveMenu();
+        uIController.HideTimeControls();
 
         gameController = FindObjectOfType<ValueStore>();
 
@@ -48,6 +52,7 @@ public class Level1 : MonoBehaviour
 
         this.AttachTimer(initialStageDelay, (t) =>
         {
+            currentStage = (Level1Stage)1;
             stages[0].Begin();
         });
     }
@@ -58,10 +63,11 @@ public class Level1 : MonoBehaviour
         {
             new TutorialStage
             {
+                StageId = Level1Stage.Intro,
                 Begin = () => {
                     uIController.EnableBlur();
 
-                    uIController.tutorialManager.SetActiveStage(1);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.Intro);
                 },
                 End = () => {
                     uIController.DisableBlur();
@@ -69,16 +75,17 @@ public class Level1 : MonoBehaviour
             },
             new TutorialStage
             {
+                StageId = Level1Stage.WaveLivesInfo,
                 Begin = () => {
                     uIController.EnableBlur();
 
-                    uIController.tutorialManager.SetActiveStage(2);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.WaveLivesInfo);
                     uIController.GO_statsPanel.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
                     uIController.GO_statsPanel.transform.SetAsLastSibling();
 
                     // uIController.GO_timeControlsPanel.transform.parent = uIController.GO_timeControlsPanel.transform.parent.parent;
                     // uIController.GO_timeControlsPanel.transform.SetAsLastSibling();
-                    uIController.GO_timeControlsPanel.SetActive(false);
+                    // uIController.GO_timeControlsPanel.SetActive(false);
                 },
                 End = () => {
                     uIController.DisableBlur();
@@ -86,15 +93,16 @@ public class Level1 : MonoBehaviour
                     uIController.GO_statsPanel.transform.parent = uIController.GO_HUD.transform;
                     // uIController.GO_timeControlsPanel.transform.parent = uIController.GO_HUD.transform;
 
-                    uIController.GO_timeControlsPanel.SetActive(true);
+                    // uIController.GO_timeControlsPanel.SetActive(true);
                 }
             },
             new TutorialStage
             {
+                StageId = Level1Stage.SelectArcher,
                 Begin = () => {
                     uIController.tutorialManager.DisableBackdrop();
 
-                    uIController.tutorialManager.SetActiveStage(3);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.SelectArcher);
                 },
                 End = () => {
                     uIController.tutorialManager.EnableBackdrop();
@@ -102,16 +110,24 @@ public class Level1 : MonoBehaviour
             },
             new TutorialStage
             {
+                StageId = Level1Stage.MoveArcher,
                 Begin = () => {
-                    uIController.tutorialManager.SetActiveStage(4);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.MoveArcher);
                 }
             },
             new TutorialStage
             {
+                StageId = Level1Stage.FiringModes,
                 Begin = () => {
-                    uIController.tutorialManager.SetActiveStage(5);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.FiringModes);
+                }
+            },
+            new TutorialStage
+            {
+                StageId = Level1Stage.StartWave,
+                Begin = () => {
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.StartWave);
 
-                    uIController.GO_spawnWavePanel.SetActive(true);
                     uIController.ShowWaveMenu();
 
                     uIController.GO_spawnWavePanelParent.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
@@ -123,30 +139,30 @@ public class Level1 : MonoBehaviour
             },
             new TutorialStage
             {
+                StageId = Level1Stage.UseRaid,
                 Begin = () => {
                     uIController.horseRaidAbility.SetActive(true);
 
-                    uIController.tutorialManager.SetActiveStage(6);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.UseRaid);
 
                     uIController.horseRaidAbility.transform.parent = uIController.GO_statsPanel.transform.parent.parent;
                     uIController.horseRaidAbility.transform.SetAsLastSibling();
                 },
                 End = () => {
                     uIController.horseRaidAbility.transform.parent = uIController.GO_HUD.transform;
-
-                    print("ended stage 6");
                 }
             },
             new TutorialStage
             {
+                StageId = Level1Stage.ActivateRaid,
                 Begin = () => {
-                    print("started stage 7");
-
                     _pathMask.transform.GetChild(0).gameObject.SetActive(true);
-                    uIController.tutorialManager.SetActiveStage(7, 0);
+                    uIController.tutorialManager.SetActiveStage((int)Level1Stage.ActivateRaid, 0);
                 },
                 End = () => {
                     _pathMask.transform.GetChild(0).gameObject.SetActive(false);
+
+                    uIController.ShowTimeControls();
                 }
             }
         };
@@ -154,7 +170,7 @@ public class Level1 : MonoBehaviour
 
     private void OnObjectClicked(object obj)
     {
-        if (obj is Tower && currentStage == 2 && !CurrentStage.StageFinished)
+        if (obj is Tower && currentStage == Level1Stage.SelectArcher && !CurrentStage.StageFinished)
         {
             EndStage();
 
@@ -164,14 +180,14 @@ public class Level1 : MonoBehaviour
 
     private void OnWaveStarted(int wave)
     {
-        if (currentStage == 4 && !CurrentStage.StageFinished)
+        if(currentStage == Level1Stage.StartWave && wave == 1)
         {
             EndStage();
         }
 
-        if (currentStage == 4 && CurrentStage.StageFinished && wave == 2)
+        if (currentStage == Level1Stage.StartWave && wave == 2)
         {
-            this.AttachTimer(5f, (f) => NextStage());
+            this.AttachTimer(cavalryRaidWaitTime, (f) => NextStage());
         }
     }
 
@@ -179,7 +195,7 @@ public class Level1 : MonoBehaviour
     {
         print("ability activated");
 
-        if (currentStage == 5 && abilityType == AbilityType.Cavalry_Raid)
+        if (currentStage == Level1Stage.UseRaid && abilityType == AbilityType.Cavalry_Raid)
         {
             print("ending stg 5");
             EndStage();
@@ -190,7 +206,7 @@ public class Level1 : MonoBehaviour
 
     private void OnRaidStarted()
     {
-        if (currentStage == 6)
+        if (currentStage == Level1Stage.ActivateRaid)
         {
             EndStage();
         }
@@ -206,10 +222,10 @@ public class Level1 : MonoBehaviour
 
     private void NextStage()
     {
-        if (stages.Count > currentStage + 1)
+        if (stages.Count > (int)currentStage)
         {
             currentStage++;
-            stages[currentStage].Begin();
+            CurrentStage.Begin();
         }
     }
 
@@ -217,13 +233,13 @@ public class Level1 : MonoBehaviour
 
     private void Update()
     {
-        if (currentStage is 0 or 1 && Input.GetMouseButtonDown(0))
+        if (currentStage is Level1Stage.Intro or Level1Stage.WaveLivesInfo or Level1Stage.FiringModes && Input.GetMouseButtonDown(0) && !CurrentStage.StageFinished)
         {
             EndStage();
 
             NextStage();
         }
-        else if (currentStage == 3 && !CurrentStage.StageFinished && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
+        else if (currentStage == Level1Stage.MoveArcher && !CurrentStage.StageFinished && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
         {
             totalWalkTime += Time.deltaTime;
 
@@ -231,12 +247,8 @@ public class Level1 : MonoBehaviour
             {
                 EndStage();
 
-                uIController.ShowWaveMenu(false);
-
                 this.AttachTimer(1.5f, (t2) =>
                 {
-                    uIController.BTN_spawnWave.interactable = true;
-
                     NextStage();
                 });
             }
@@ -247,8 +259,21 @@ public class Level1 : MonoBehaviour
 
 public class TutorialStage
 {
+    public Level1Stage StageId;
     public bool StageFinished;
     public string Message;
     public Action Begin;
     public Action End;
+}
+
+public enum Level1Stage
+{
+    Intro = 1,
+    WaveLivesInfo,
+    SelectArcher,
+    MoveArcher,
+    FiringModes,
+    StartWave,
+    UseRaid,
+    ActivateRaid,
 }

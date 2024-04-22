@@ -598,13 +598,25 @@ public class GameUIController : MonoBehaviour
 
     public void ShowWaveMenu(bool isEnabled = true)
     {
+        GO_spawnWavePanel.SetActive(true);
         BTN_spawnWave.interactable = isEnabled;
         GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
     }
 
     public void HideWaveMenu()
     {
+        GO_spawnWavePanel.SetActive(false);
         GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("hide");
+    }
+
+    public void ShowTimeControls()
+    {
+        GO_timeControlsPanel.SetActive(true);
+    }
+
+    public void HideTimeControls()
+    {
+        GO_timeControlsPanel.SetActive(false);
     }
 
     private void OnPlatoonSpawned(Platoon platoon)

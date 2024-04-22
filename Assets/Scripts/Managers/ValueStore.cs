@@ -375,7 +375,7 @@ public class ValueStore : MonoBehaviour
 
         // Time.timeScale = 0f;
 
-        SaveData save = DataService.Instance.SaveData;
+        // SaveData save = DataService.Instance.SaveData;
 
         float winGoldGained = 0f;
         float allEnemiesSlainGoldGained = 0f;
@@ -396,7 +396,7 @@ public class ValueStore : MonoBehaviour
                     level.totalEnemiesSlain = TotalEnemiesSlain;
                 }
 
-                winGoldGained = (float)(CurrentGoldValue * 0.8f) + ((CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0)));
+                // winGoldGained = (float)(CurrentGoldValue * 0.8f) + ((CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0)));
                 level.won = true;
             }
             // If level is already won, set enemy slain count and gold gain accordingly
@@ -407,7 +407,7 @@ public class ValueStore : MonoBehaviour
                     level.totalEnemiesSlain = TotalEnemiesSlain;
                 }
 
-                winGoldGained = (CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0));
+                // winGoldGained = (CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0));
             }
 
             // If level is maxed for the first time, set gold gain accordingly
@@ -418,7 +418,7 @@ public class ValueStore : MonoBehaviour
                 level.maxed = true;
             }
 
-            LevelsManager.LevelWon(ref level);
+            // LevelsManager.LevelWon(ref level);
         }
         else if (gs == GameStatus.Loss)
         {
@@ -438,9 +438,9 @@ public class ValueStore : MonoBehaviour
         endGameMenuSlainGoldText.text = "+ " + Mathf.CeilToInt(allEnemiesSlainGoldGained);
         endGameMenuTotalGoldText.text = "+ " + Mathf.CeilToInt(totalGoldGained);
 
-        save.Gold += Mathf.CeilToInt(totalGoldGained);
+        // save.Gold += Mathf.CeilToInt(totalGoldGained);
 
-        DataService.Instance.WriteSaveData();
+        // DataService.Instance.WriteSaveData();
 
         // endGameMenu.SetActive(true);
     }
