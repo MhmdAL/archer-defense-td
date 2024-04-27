@@ -233,6 +233,8 @@ public class ValueStore : MonoBehaviour
 
         yield return null;
 
+        CleanUp();
+
         active = true;
 
         var levelPrefab = LevelPrefabs.First(x => x.LevelId == levelId);
@@ -360,16 +362,21 @@ public class ValueStore : MonoBehaviour
         //Silver += 1000;
     }
 
-    public void GameOver(GameStatus gs)
+    private void CleanUp()
     {
-        active = false;
-
         var cleanables = FindObjectsOfType<MonoBehaviour>().OfType<ICleanable>();
 
         foreach (var cleanable in cleanables)
         {
             cleanable.CleanUp();
         }
+    }
+
+    public void GameOver(GameStatus gs)
+    {
+        active = false;
+
+        CleanUp();
 
         LevelEnded?.Invoke(gs);
 
@@ -434,9 +441,9 @@ public class ValueStore : MonoBehaviour
 
         totalGoldGained = winGoldGained + allEnemiesSlainGoldGained;
 
-        endGameMenuGoldText.text = "+ " + Mathf.CeilToInt(winGoldGained);
-        endGameMenuSlainGoldText.text = "+ " + Mathf.CeilToInt(allEnemiesSlainGoldGained);
-        endGameMenuTotalGoldText.text = "+ " + Mathf.CeilToInt(totalGoldGained);
+        // endGameMenuGoldText.text = "+ " + Mathf.CeilToInt(winGoldGained);
+        // endGameMenuSlainGoldText.text = "+ " + Mathf.CeilToInt(allEnemiesSlainGoldGained);
+        // endGameMenuTotalGoldText.text = "+ " + Mathf.CeilToInt(totalGoldGained);
 
         // save.Gold += Mathf.CeilToInt(totalGoldGained);
 

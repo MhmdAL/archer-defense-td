@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityTimer;
 
-public class HorseRaiderV2 : MonoBehaviour, IMoving
+public class HorseRaiderV2 : MonoBehaviour, IMoving, ICleanable
 {
     public float Speed;
 
@@ -151,5 +151,10 @@ public class HorseRaiderV2 : MonoBehaviour, IMoving
     public void OnMovementEnded()
     {
         // throw new NotImplementedException();
+    }
+
+    public void CleanUp()
+    {
+        Destroy(gameObject);
     }
 }

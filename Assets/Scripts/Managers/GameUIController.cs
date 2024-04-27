@@ -255,6 +255,7 @@ public class GameUIController : MonoBehaviour
     public void InitHUD()
     {
         BTN_spawnWave.interactable = true;
+        GO_spawnWavePanelParent.SetActive(true);
         GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
         GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
     }

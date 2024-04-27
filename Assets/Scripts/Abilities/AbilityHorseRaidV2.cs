@@ -168,6 +168,8 @@ public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
         base.CleanUp();
 
         ExitRaidSetup();
+
+        raidEndIndicator.SetActive(false);
     }
 }
 
