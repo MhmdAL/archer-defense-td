@@ -11,7 +11,7 @@ public class LevelData : ScriptableObject
     public float StartingSilver;
     public int StartingLives;
 
-    public List<WaveData> Waves;
+    public List<WaveDa> Waves;
 
     public float DefaultSpawnDelay;
 

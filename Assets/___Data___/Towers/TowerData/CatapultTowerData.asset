@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 150d4899f6035b145a6f39df56ef7789, type: 3}
   m_Name: CatapultTowerData
   m_EditorClassIdentifier: 
-  BaseAttackDamage: 100
-  BaseAttackRange: 30
+  BaseAttackDamage: 60
+  BaseAttackRange: 25
+  ManualAttackRangeMultiplier: 1.2
   BaseAttackSpeed: 0.1
   BaseMoveSpeed: 1000

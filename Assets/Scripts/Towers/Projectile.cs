@@ -47,7 +47,7 @@ public class Projectile : MonoBehaviour
         _reached = false;
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (_reached || !CanHitTarget)
         {
@@ -60,16 +60,16 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (_reached || !CanHitTarget)
         {
             return;
         }
 
-        if (other.collider.TryGetComponent<IProjectileTarget>(out var target))
+        if (other.TryGetComponent<IProjectileTarget>(out var target))
         {
-            target.OnProjectileHit(this, other.collider.ClosestPoint(transform.parent.position));
+            target.OnProjectileHit(this, other.ClosestPoint(transform.parent.position));
         }
     }
 

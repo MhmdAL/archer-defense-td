@@ -183,14 +183,6 @@ public class GameUIController : MonoBehaviour
     private void InitializeUI()
     {
         SetScreenSaturation(0);
-
-        if (!performLevelwiseInit)
-            return;
-
-        if (_vs.level?.levelID == 1)
-        {
-            horseRaidAbility.SetActive(false);
-        }
     }
 
     private void Update()

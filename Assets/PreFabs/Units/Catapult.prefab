@@ -165,12 +165,12 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: d5fac1120f9469e4ba3316664273addb,
         type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: onHitEffects.Array.data[0]
+      propertyPath: 'onHitEffects.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: bf8153ced7a8db848b7a29904a13473f,
         type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: onHitEffects.Array.data[1]
+      propertyPath: 'onHitEffects.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 7f75b06b77b0ab645b7a345f9f0e3ef4,
         type: 2}
@@ -181,14 +181,14 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: <SecondaryTargetCount>k__BackingField
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
       propertyPath: <OnHitEffects>k__BackingField.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11482238, guid: 93080e4d4b2aa954cb26cbac0d4bda91, type: 3}
-      propertyPath: <OnHitEffects>k__BackingField.Array.data[1]
+      propertyPath: '<OnHitEffects>k__BackingField.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: bf8153ced7a8db848b7a29904a13473f,
         type: 2}

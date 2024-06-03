@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842c08a3999c9e2418d52f518e3896bc, type: 3}
+  m_Name: Wave2
+  m_EditorClassIdentifier: 
+  Platoons:
+  - DelayTillNextPlatoon: 17
+    Squads:
+    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+      Count: 4
+      SpawnDelay: 3
+      EntranceId: 1
+      ExitId: 0
+  - DelayTillNextPlatoon: 12
+    Squads:
+    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+      Count: 4
+      SpawnDelay: 3
+      EntranceId: 2
+      ExitId: 0
+  - DelayTillNextPlatoon: 1
+    Squads:
+    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+      Count: 4
+      SpawnDelay: 3
+      EntranceId: 2
+      ExitId: 0
+  - DelayTillNextPlatoon: 12
+    Squads:
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 4
+      SpawnDelay: 3
+      EntranceId: 1
+      ExitId: 0
+  - DelayTillNextPlatoon: 17
+    Squads:
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 4
+      SpawnDelay: 4
+      EntranceId: 1
+      ExitId: 0
+  - DelayTillNextPlatoon: 17
+    Squads:
+    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+      Count: 4
+      SpawnDelay: 4
+      EntranceId: 2
+      ExitId: 0
+  WaveRewards:
+  - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
+      type: 3}
+    FormationSpawnIndex: 0

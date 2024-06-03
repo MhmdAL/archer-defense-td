@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a903cf5efc11baa49a09c6e64b1c2398, type: 3}
+  m_Name: Level 3
+  m_EditorClassIdentifier: 
+  StartingSilver: 800
+  StartingLives: 10
+  Waves:
+  - {fileID: 11400000, guid: af1e267d8d3bb654ba1a2458aefe8332, type: 2}
+  - {fileID: 11400000, guid: 7bb3fc9cef14d8b4a89d192c7a000691, type: 2}
+  - {fileID: 11400000, guid: 470441bf44a30e34f9693a0e9c11d9d1, type: 2}
+  DefaultSpawnDelay: 1
+  StartingFormations:
+  - FormationPrefab: {fileID: 8641165623319483890, guid: ca8f33592f2930e4c882c47037132eab,
+      type: 3}
+    FormationSpawnIndex: 0
