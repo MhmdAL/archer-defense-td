@@ -106,7 +106,7 @@ public class WaveSpawner : MonoBehaviour
         StartCoroutine(routine);
     }
 
-    private IEnumerator SpawnWave(WaveDa wave)
+    private IEnumerator SpawnWave(WaveData wave)
     {
         IsSpawning = true;
 

@@ -11,7 +11,7 @@ public class LevelData : ScriptableObject
     public float StartingSilver;
     public int StartingLives;
 
-    public List<WaveDa> Waves;
+    public List<WaveData> Waves;
 
     public float DefaultSpawnDelay;
 
@@ -19,36 +19,8 @@ public class LevelData : ScriptableObject
 }
 
 [Serializable]
-public class WaveData
-{
-    [FormerlySerializedAs("WaveComponents")]
-    public List<Platoon> Platoons;
-    public List<FormationSpawn> WaveRewards;
-}
-
-[Serializable]
 public class FormationSpawn
 {
     public GameObject FormationPrefab;
     public int FormationSpawnIndex;
-}
-
-[Serializable]
-public class Platoon
-{
-    [FormerlySerializedAs("DelayTillNextComponent")]
-    public float DelayTillNextPlatoon;
-
-    public List<Squad> Squads;
-}
-
-[Serializable]
-public class Squad
-{
-    public GameObject Prefab;
-    public int Count;
-    public float SpawnDelay;
-
-    public int EntranceId;
-    public int ExitId;
 }

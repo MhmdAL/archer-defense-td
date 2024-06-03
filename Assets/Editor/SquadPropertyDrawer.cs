@@ -9,7 +9,7 @@ public class SquadDrawer : PropertyDrawer
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
         Debug.Log("create prop");
-        
+
         // Create property container element.
         var container = new VisualElement();
 
@@ -21,8 +21,15 @@ public class SquadDrawer : PropertyDrawer
         var prefabField = new ObjectField
         {
             objectType = typeof(GameObject),
+            allowSceneObjects = false,
             value = property.FindPropertyRelative("Prefab").objectReferenceValue
         };
+
+        prefabField.RegisterValueChangedCallback(evt =>
+        {
+            property.FindPropertyRelative("Prefab").objectReferenceValue = evt.newValue;
+            property.serializedObject.ApplyModifiedProperties();
+        });
 
         // var prefabField = CreateLargerThumbnailObjectField(property.FindPropertyRelative("Prefab"));
 
