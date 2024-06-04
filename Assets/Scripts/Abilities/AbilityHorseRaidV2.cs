@@ -57,7 +57,7 @@ public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
                 return;
             }
 
-            _cursorManager.UpdateBasedOnCollider(vs.pathCollider, CursorType.PossibleRaid, CursorType.PendingRaid);
+            _cursorManager.UpdateBasedOnCollider(vs.CurrentLevel.PathColliders.Cast<Collider2D>().ToList(), CursorType.PossibleRaid, CursorType.PendingRaid);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -65,7 +65,7 @@ public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
 
                 var worldPos = _raidEndPosition.Value.ToWorldPosition(Camera.main);
 
-                if (vs.pathCollider.OverlapPoint(worldPos))
+                if (vs.CurrentLevel.PathColliders.ContainsPoint(worldPos))
                 {
                     OnAbilityActivated();
 
@@ -109,9 +109,9 @@ public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
         var currentPathIdx = 0;
         for (int i = 0; i < AbilityData.HorseRaiderCount; i++, currentPathIdx = (currentPathIdx + 1) % paths.Count)
         {
-            var horseRaider = Instantiate(AbilityData.HorseRaiderPrefab, AbilityData.HorseRaiderSpawnPosition.position, Quaternion.identity).GetComponent<HorseRaiderV2>();
-
             var randomPath = paths[currentPathIdx];
+
+            var horseRaider = Instantiate(AbilityData.HorseRaiderPrefab, randomPath.Waypoints[0], Quaternion.identity).GetComponent<HorseRaiderV2>();
 
             horseRaider.StartRaid(randomPath);
             horseRaider.PatrolStarted += OnPatrolStarted;

@@ -227,12 +227,16 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     }
 
     [SerializeField]
-    private LineRenderer lineRenderer;
+    private LineRenderer rangeCircleRenderer;
+    [SerializeField]
+    private LineRenderer focusAreaRenderer;
 
     public bool HasFocus { get; set; }
 
     [SerializeField]
     private ParticleSystem dustPs;
+
+    public float? targetFocusAngle; // which angle the archer will focus more on for targeting purposes
 
     private void Awake()
     {
@@ -316,6 +320,21 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         // attack mode switching
         if (HasFocus)
         {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                var mousePos = Input.mousePosition.ToWorldPosition(Camera.main);
+                mousePos.z = 0;
+
+                var dir = mousePos - transform.position;
+
+                targetFocusAngle = Mathf.Atan2(dir.y, dir.x);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                targetFocusAngle = null;
+            }
+
             if (Input.GetMouseButtonDown(1))
             {
                 SetAttackMode(TowerAttackMode.Manual);
@@ -347,7 +366,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.V)) // DEB"UG PURPOSES
+        if (Input.GetKeyDown(KeyCode.V)) // DEB"UG PURPOSES
         {
             AD.Modify(10, BonusType.Percentage, "Hello");
         }
@@ -452,7 +471,7 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         var monsters = Physics2D.OverlapCircleAll(transform.position, AR.Value).Select(x => x.GetComponent<Monster>()).Where(x => x != null).ToList();
 
-        targets = TargetDetection.CalculateTargets(this, monsters, AD.Value, AP.Value);
+        targets = TargetDetection.CalculateTargets(this, monsters, targetFocusAngle, AD.Value, AP.Value);
 
         Attack();
     }
@@ -844,28 +863,28 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
 
         rangeCircleTransform.localScale = rangeCircleScale;
 
-        DrawCircle();
+        UpdateRangeCircle();
     }
 
-    private void DrawCircle()
+    private void UpdateRangeCircle()
     {
-        lineRenderer.positionCount = 501;
+        const float focusAngleRange = 180f;
 
-        for (int currentStep = 0; currentStep <= 500; currentStep++)
+        rangeCircleRenderer.DrawCircle(transform.position, AR.Value);
+
+        if (targetFocusAngle != null)
         {
-            float circProgress = (float)currentStep / 500;
+            var ang = Mathf.Rad2Deg * targetFocusAngle.Value;
+            if (ang < 0)
+            {
+                ang += 360;
+            }
 
-            float currentRadian = circProgress * 2 * Mathf.PI;
-
-            float xScaled = Mathf.Cos(currentRadian);
-            float yScaled = Mathf.Sin(currentRadian);
-
-            float x = xScaled * AR.Value;
-            float y = yScaled * AR.Value;
-
-            var curPos = new Vector3(x, y, 0);
-
-            lineRenderer.SetPosition(currentStep, curPos + transform.position);
+            focusAreaRenderer.DrawArc(ang - focusAngleRange / 2, ang + focusAngleRange / 2, transform.position, AR.Value);
+        }
+        else
+        {
+            focusAreaRenderer.positionCount = 0;
         }
     }
 

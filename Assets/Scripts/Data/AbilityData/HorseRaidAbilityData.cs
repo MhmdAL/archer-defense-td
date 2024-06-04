@@ -9,7 +9,6 @@ public class HorseRaidAbilityData : AbilityData
     public float HorseRaiderSpawnDelay = 1;
 
     public GameObject HorseRaiderPrefab;
-    public Transform HorseRaiderSpawnPosition;
 
     [Header("SFX")]
     public AudioComposition raidStartSFX;

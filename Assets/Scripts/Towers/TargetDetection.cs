@@ -5,15 +5,39 @@ using UnityEngine;
 
 public class TargetDetection
 {
+    private static float CalculatePriority(Monster m, Tower source, Vector2? focusDir)
+    {
+        var priority = m.DistanceTravelled;
+
+        if (focusDir != null)
+        {
+            var targetDir = (m.transform.position - source.transform.position).normalized;
+
+            var dot = Vector2.Dot(focusDir.Value, targetDir);
+
+            priority *= dot;
+        }
+
+        return priority;
+    }
+
     public static List<Monster> CalculateTargets(
         Tower source,
         List<Monster> targetsInRange,
+        float? targetFocusAngle,
         float damage,
         float armorPen)
     {
-        targetsInRange.Sort((x, y) => y.DistanceTravelled.CompareTo(x.DistanceTravelled)); // Sort enemies in range by how far they travelled
+        Vector2? focusDir = targetFocusAngle != null ? new Vector2(Mathf.Cos(targetFocusAngle.Value), Mathf.Sin(targetFocusAngle.Value)) : null;
+
+        targetsInRange.Sort((x, y) =>
+        {
+            return CalculatePriority(y, source, focusDir).CompareTo(CalculatePriority(x, source, focusDir));
+        }); // Sort enemies in range by how far they travelled
 
         var validTargets = targetsInRange.ToList();
+
+
 
         // Detect monsters in range
         // targetsInRange.Clear();

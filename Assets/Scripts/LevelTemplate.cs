@@ -19,18 +19,20 @@ public class LevelTemplate : MonoBehaviour
 
     public List<TowerBase> TowerBases { get; set; }
     public List<Path> Paths { get; set; }
+    public List<PolygonCollider2D> PathColliders { get; set; }
 
     private void Awake()
     {
         TowerBases = TowerBasesRoot.GetComponentsInChildren<TowerBase>().ToList();
         Paths = PathsRoot.GetComponentsInChildren<Path>().ToList();
+        PathColliders = GameObject.FindGameObjectsWithTag("Path").Select(x => x.GetComponent<PolygonCollider2D>()).ToList();
     }
 
     private void OnDrawGizmos()
     {
-        if(!gameObject.activeSelf)
+        if (!gameObject.activeSelf)
             return;
-            
+
         Paths = PathsRoot.GetComponentsInChildren<Path>().ToList();
 
         if (Paths == null || !Paths.Any())

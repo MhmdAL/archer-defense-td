@@ -118,8 +118,6 @@ public class ValueStore : MonoBehaviour
     [SerializeField]
     private AudioSource ambientWindAudioSource;
 
-    public PolygonCollider2D pathCollider;
-
     public float WaveStartTime => WaveCountdownTimer.GetTimeRemaining();
 
     void Awake()
@@ -239,8 +237,6 @@ public class ValueStore : MonoBehaviour
 
         var levelPrefab = LevelPrefabs.First(x => x.LevelId == levelId);
         CurrentLevel = Instantiate(levelPrefab);
-
-        pathCollider = GameObject.FindGameObjectWithTag("Path").GetComponent<PolygonCollider2D>();
 
         WaveSpawner.Reset(CurrentLevel.LevelData);
 
