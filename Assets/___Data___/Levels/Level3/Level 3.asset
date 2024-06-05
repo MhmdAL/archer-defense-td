@@ -16,8 +16,15 @@ MonoBehaviour:
   StartingLives: 10
   Waves:
   - {fileID: 11400000, guid: af1e267d8d3bb654ba1a2458aefe8332, type: 2}
+  - {fileID: 11400000, guid: 7bb3fc9cef14d8b4a89d192c7a000691, type: 2}
+  - {fileID: 11400000, guid: 470441bf44a30e34f9693a0e9c11d9d1, type: 2}
+  - {fileID: 11400000, guid: c1542ff0c6a012f4782a1bce408095c9, type: 2}
+  - {fileID: 11400000, guid: 58b08923c0aabdb47b7b9a549183ed58, type: 2}
   DefaultSpawnDelay: 1
   StartingFormations:
   - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
       type: 3}
     FormationSpawnIndex: 0
+  - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
+      type: 3}
+    FormationSpawnIndex: 1

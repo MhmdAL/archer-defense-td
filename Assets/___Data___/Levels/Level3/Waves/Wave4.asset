@@ -10,47 +10,48 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 842c08a3999c9e2418d52f518e3896bc, type: 3}
-  m_Name: Wave1
+  m_Name: Wave4
   m_EditorClassIdentifier: 
   Platoons:
-  - DelayTillNextPlatoon: 15
-    Squads:
-    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 3
-      SpawnDelay: 1
-      EntranceId: 1
-      ExitId: 1
-    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 3
-      SpawnDelay: 1
-      EntranceId: 2
-      ExitId: 1
-  - DelayTillNextPlatoon: 5
-    Squads:
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 3
-      SpawnDelay: 1
-      EntranceId: 2
-      ExitId: 1
   - DelayTillNextPlatoon: 20
     Squads:
     - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 2
-      SpawnDelay: 1
-      EntranceId: 1
-      ExitId: 1
-  - DelayTillNextPlatoon: 5
-    Squads:
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 3
-      SpawnDelay: 1
-      EntranceId: 2
-      ExitId: 1
-  - DelayTillNextPlatoon: 0
-    Squads:
-    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
-      Count: 2
+      Count: 7
       SpawnDelay: 1
       EntranceId: 3
       ExitId: 2
-  WaveRewards: []
+  - DelayTillNextPlatoon: 15
+    Squads:
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 5
+      SpawnDelay: 1
+      EntranceId: 1
+      ExitId: 1
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 5
+      SpawnDelay: 1
+      EntranceId: 2
+      ExitId: 1
+  - DelayTillNextPlatoon: 10
+    Squads:
+    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+      Count: 7
+      SpawnDelay: 1
+      EntranceId: 3
+      ExitId: 2
+  - DelayTillNextPlatoon: 0
+    Squads:
+    - Prefab: {fileID: 109258, guid: f23c1d48b73e03f4e91938a3084641de, type: 3}
+      Count: 7
+      SpawnDelay: 1
+      EntranceId: 2
+      ExitId: 1
+    - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
+      Count: 10
+      SpawnDelay: 1
+      EntranceId: 2
+      ExitId: 1
+  WaveRewards:
+  - FormationPrefab: {fileID: 8641165623319483890, guid: d5f5f4d6b26eb20449047b033ca43a09,
+      type: 3}
+    FormationSpawnIndex: 1
