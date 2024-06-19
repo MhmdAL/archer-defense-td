@@ -50,7 +50,7 @@ public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
 
         if (_state == HorseRaidState.Setup)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
             {
                 ExitRaidSetup();
 

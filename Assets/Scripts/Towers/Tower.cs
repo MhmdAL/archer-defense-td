@@ -12,7 +12,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using DG.Tweening;
 
-public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
+public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
 {
     public event Action<Tower> SkillPointsChanged;
     public event Action SkillUpgraded;
@@ -144,13 +144,9 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     [SerializeField]
     protected Animator animator;
 
-    private Outlinable _outlinable;
-
 
     public int consecutiveShots;
     public int shotNumber;
-
-    public GameObject FocusIndicatorArrow;
 
     private List<Monster> targets;
 
@@ -226,11 +222,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         }
     }
 
-    [SerializeField]
-    private LineRenderer rangeCircleRenderer;
-    [SerializeField]
-    private LineRenderer focusAreaRenderer;
-
     public bool HasFocus { get; set; }
 
     [SerializeField]
@@ -242,7 +233,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
     {
         anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
-        _outlinable = GetComponentInChildren<Outlinable>();
 
         Enhancements = new List<IEnhancement>();
 
@@ -318,41 +308,6 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         }
 
         // attack mode switching
-        if (HasFocus)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                var mousePos = Input.mousePosition.ToWorldPosition(Camera.main);
-                mousePos.z = 0;
-
-                var dir = mousePos - transform.position;
-
-                targetFocusAngle = Mathf.Atan2(dir.y, dir.x);
-            }
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                targetFocusAngle = null;
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                SetAttackMode(TowerAttackMode.Manual);
-
-                AttackCooldownTimer.Resume();
-            }
-            else if (Input.GetMouseButtonUp(1))
-            {
-                SetAttackMode(TowerAttackMode.Auto);
-
-                AttackCooldownTimer.Pause();
-            }
-
-            if (Input.GetMouseButton(1))
-            {
-                SetCombatMode(CombatMode.InCombat);
-            }
-        }
 
         // enemy detection
         var res = Physics2D.OverlapCircleAll(transform.position, AR.Value);
@@ -862,65 +817,8 @@ public class Tower : MonoBehaviour, IAttacking, IFocusable, IShooting, IMoving
         rangeCircleScale.x = AR.Value / 2;
 
         rangeCircleTransform.localScale = rangeCircleScale;
-
-        UpdateRangeCircle();
     }
 
-    private void UpdateRangeCircle()
-    {
-        const float focusAngleRange = 180f;
-
-        rangeCircleRenderer.DrawCircle(transform.position, AR.Value);
-
-        if (targetFocusAngle != null)
-        {
-            var ang = Mathf.Rad2Deg * targetFocusAngle.Value;
-            if (ang < 0)
-            {
-                ang += 360;
-            }
-
-            focusAreaRenderer.DrawArc(ang - focusAngleRange / 2, ang + focusAngleRange / 2, transform.position, AR.Value);
-        }
-        else
-        {
-            focusAreaRenderer.positionCount = 0;
-        }
-    }
-
-    public void Focus()
-    {
-        Highlight();
-
-        HasFocus = true;
-
-        circle.SetActive(true);
-        // cooldownBarParent.SetActive(true);
-
-        FocusIndicatorArrow.SetActive(true);
-    }
-
-    public void UnFocus()
-    {
-        UnHighlight();
-
-        HasFocus = false;
-
-        circle.SetActive(false);
-        // cooldownBarParent.SetActive(false);
-
-        FocusIndicatorArrow.SetActive(false);
-    }
-
-    public void Highlight()
-    {
-        _outlinable.OutlineParameters.Enabled = true;
-    }
-
-    public void UnHighlight()
-    {
-        _outlinable.OutlineParameters.Enabled = false;
-    }
 }
 
 public enum TowerAttackMode

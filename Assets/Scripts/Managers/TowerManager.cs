@@ -333,7 +333,7 @@ public class TowerManager : MonoBehaviour
 
     private void OnTowerSpecialized(Tower tower)
     {
-        tower.Focus();
+        // tower.Focus();
 
         TowerSpecialised?.Invoke(tower);
     }
