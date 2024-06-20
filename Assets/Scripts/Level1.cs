@@ -170,7 +170,7 @@ public class Level1 : MonoBehaviour
 
     private void OnObjectClicked(object obj)
     {
-        if (obj is Tower && currentStage == Level1Stage.SelectArcher && !CurrentStage.StageFinished)
+        if (obj is TowerFocusable && currentStage == Level1Stage.SelectArcher && !CurrentStage.StageFinished)
         {
             EndStage();
 

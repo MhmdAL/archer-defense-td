@@ -16,5 +16,8 @@ MonoBehaviour:
   - Type: 0
     Clips:
     - AudioClip: {fileID: 8300000, guid: 366f32bda5d56f74994fe015a2b2053d, type: 3}
-      VolumeScale: {x: 0.4105263, y: 0.5473684}
+      VolumeScale: {x: 0, y: 0}
+      Pitch: {x: 1, y: 1}
+    - AudioClip: {fileID: 8300000, guid: 9ec076929ac354242806c24ccd798054, type: 3}
+      VolumeScale: {x: 0.70886075, y: 0.721519}
       Pitch: {x: 1, y: 1}
