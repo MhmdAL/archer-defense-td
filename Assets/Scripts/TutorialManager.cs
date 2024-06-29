@@ -1,6 +1,10 @@
+using System.Collections;
+using System.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityTimer;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -16,35 +20,36 @@ public class TutorialManager : MonoBehaviour
         this.transform.SetSiblingIndex(100);
     }
 
-    public void SetActiveStage(int n, float opacity = 0.6f)
+    public IEnumerator SetActiveStage(int n, float opacity = 0.6f)
     {
+        currentStage = n - 1;
+
         dialogMenu.SetActive(true);
 
-        var image = dialogMenu.GetComponent<Image>();
-        var imageColor = image.color;
+        var imageColor = backdropImage.color;
         imageColor.a = opacity;
-        image.color = imageColor;
+        backdropImage.color = imageColor;
 
-        foreach (Transform child in transform)
-        {
-            child.gameObject.SetActive(false);
-        }
+        var stage = dialogMenu.transform.Find($"Stage{n}");
 
-        // print("Setting stage " + n + " to active");
+        var canvasGroup = stage.GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 0f;
+        stage.gameObject.SetActive(true);
 
-        dialogMenu.transform.Find($"Stage{n}").gameObject.SetActive(true);
+        canvasGroup.DOFade(1f, 0.5f);
+
+        yield return new WaitForSeconds(0.5f);
     }
 
     public void EnableBackdrop()
     {
-        backdropImage.enabled = true;
+        backdropImage.DOFade(0.58f, 0.5f);
     }
 
     public void DisableBackdrop()
     {
-        backdropImage.enabled = false;
+        backdropImage.DOFade(0f, 1f);
     }
-
 
     public void SetText(string text)
     {
@@ -53,10 +58,23 @@ public class TutorialManager : MonoBehaviour
         dialogText.text = text;
     }
 
-    public void Close()
+    public IEnumerator CloseActiveStage(float fadeOutDuration = 1f)
     {
         // print("Closing tutorial menu");
 
-        dialogMenu.SetActive(false);
+        var curStage = transform.GetChild(currentStage);
+
+        print("fading out stage: " + curStage.name);
+
+        var tween = curStage.GetComponent<CanvasGroup>().DOFade(0f, fadeOutDuration);
+        tween.onComplete = () =>
+        {
+            curStage.gameObject.SetActive(false);
+            dialogMenu.SetActive(false);
+
+            print("done fading out stage: " + curStage.name);
+        };
+
+        yield return new WaitForSeconds(fadeOutDuration);
     }
 }

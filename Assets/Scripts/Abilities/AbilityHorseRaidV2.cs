@@ -139,14 +139,29 @@ public class AbilityHorseRaidV2 : Ability<HorseRaidAbilityData>
             var leftHit = Physics2D.RaycastAll(path.Waypoints.Last(), leftRayDir).Where(x => x.collider.tag == "PathEdge").FirstOrDefault();
             var rightHit = Physics2D.RaycastAll(path.Waypoints.Last(), rightRayDir).Where(x => x.collider.tag == "PathEdge").FirstOrDefault();
 
+            RaycastHit2D nearestHit = default;
+            Vector2 nearestRay = default;
+
+            if (leftHit != default && rightHit != default)
+            {
+                nearestHit = leftHit.distance < rightHit.distance ? leftHit : rightHit;
+                nearestRay = leftHit.distance < rightHit.distance ? leftRayDir : rightRayDir;
+            }
+            else if (leftHit != default && rightHit == default)
+            {
+                nearestHit = leftHit;
+                nearestRay = leftRayDir;
+            }
+            else if (leftHit == default && rightHit != default)
+            {
+                nearestHit = rightHit;
+                nearestRay = rightRayDir;
+            }
             if (leftHit == default && rightHit == default)
             {
                 Debug.LogWarning("Somehow, no path edge was found!");
                 continue;
             }
-
-            var nearestHit = leftHit.distance < rightHit.distance ? leftHit : rightHit;
-            var nearestRay = leftHit.distance < rightHit.distance ? leftRayDir : rightRayDir;
 
             path.Waypoints.Add(nearestHit.point + nearestRay * UnityEngine.Random.Range(0.5f, 2f));
         }

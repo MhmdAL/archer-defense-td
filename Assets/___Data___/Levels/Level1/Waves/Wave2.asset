@@ -16,21 +16,21 @@ MonoBehaviour:
   - DelayTillNextPlatoon: 17
     Squads:
     - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 4
+      Count: 3
       SpawnDelay: 3
       EntranceId: 1
       ExitId: 0
   - DelayTillNextPlatoon: 12
     Squads:
     - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 4
+      Count: 3
       SpawnDelay: 3
       EntranceId: 2
       ExitId: 0
   - DelayTillNextPlatoon: 1
     Squads:
     - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 4
+      Count: 3
       SpawnDelay: 3
       EntranceId: 2
       ExitId: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
     Squads:
     - Prefab: {fileID: 886503809625349403, guid: 1dd9d5eab39e4904fbd53a2496e52da1,
         type: 3}
-      Count: 4
+      Count: 3
       SpawnDelay: 3
       EntranceId: 1
       ExitId: 0
@@ -46,14 +46,14 @@ MonoBehaviour:
     Squads:
     - Prefab: {fileID: 886503809625349403, guid: 1dd9d5eab39e4904fbd53a2496e52da1,
         type: 3}
-      Count: 4
+      Count: 3
       SpawnDelay: 4
       EntranceId: 1
       ExitId: 0
   - DelayTillNextPlatoon: 17
     Squads:
     - Prefab: {fileID: 178090, guid: 494085203b0488740a055a8545303aa1, type: 3}
-      Count: 4
+      Count: 3
       SpawnDelay: 4
       EntranceId: 2
       ExitId: 0

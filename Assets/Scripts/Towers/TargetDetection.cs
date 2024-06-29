@@ -24,59 +24,28 @@ public class TargetDetection
     public static List<Monster> CalculateTargets(
         Tower source,
         List<Monster> targetsInRange,
+        List<Monster> currentTargets,
         float? targetFocusAngle,
         float damage,
         float armorPen)
     {
         Vector2? focusDir = targetFocusAngle != null ? new Vector2(Mathf.Cos(targetFocusAngle.Value), Mathf.Sin(targetFocusAngle.Value)) : null;
 
+        var prioDict = new Dictionary<Monster, float>();
+
+        foreach (var target in targetsInRange)
+        {
+            var priorityMultiplier = currentTargets.Contains(target) ? 5 : 1;
+
+            prioDict[target] = priorityMultiplier * CalculatePriority(target, source, focusDir);
+        }
+
         targetsInRange.Sort((x, y) =>
         {
-            return CalculatePriority(y, source, focusDir).CompareTo(CalculatePriority(x, source, focusDir));
-        }); // Sort enemies in range by how far they travelled
+            return prioDict[y].CompareTo(prioDict[x]);
+        });
 
         var validTargets = targetsInRange.ToList();
-
-
-
-        // Detect monsters in range
-        // targetsInRange.Clear();
-        // foreach (Monster x in allEnemies)
-        // {
-        //     if (IsInRange(source.transform, x, range) && !targetsInRange.Contains(x))
-        //     {
-        //         targetsInRange.Add(x);
-        //     }
-        //     else if (!IsInRange(source.transform, x, range) && targetsInRange.Contains(x))
-        //     {
-        //         targetsInRange.Remove(x);
-        //     }
-        // }
-
-        // Remove monsters who leave range from list of targets
-        // foreach (Monster t in currentTargets.ToList())
-        // {
-        //     if (!IsInRange(source.transform, t, range) || t.IsDead)
-        //     {
-        //         if (currentTargets[0] != null && currentTargets[0].targetedBy.Count > 0)
-        //         {
-        //             if (currentTargets[0].targetedBy.FirstOrDefault(x => x == source))
-        //                 currentTargets[0].targetedBy.Remove(source);
-        //         }
-        //         currentTargets[currentTargets.IndexOf(t)] = null;
-        //     }
-        // }
-
-        // // Set currentTargets
-        // GetValidTargets(source, targetsInRange, currentTargets);
-
-        // if (validTargets.Any() && validTargets[0] != null)
-        // {
-        //     if (ValueStore.Instance.monsterManagerInstance.DoesKill(validTargets[0], damage, armorPen))
-        //     {
-        //         validTargets[0].isAboutToDie = true;
-        //     }
-        // }
 
         return validTargets;
     }

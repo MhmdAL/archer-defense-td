@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class SettingsPanel : MonoBehaviour
 {
-    private bool _isFastForwarded = false;
+    private TimeScaleState _timeScaleState;
     private bool _isPaused = false;
 
     [SerializeField]
@@ -30,7 +31,7 @@ public class SettingsPanel : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (!_isPaused)
                 OnPauseButtonClicked();
@@ -49,14 +50,19 @@ public class SettingsPanel : MonoBehaviour
 
     private void OnTimescaleChanged()
     {
-        _isFastForwarded = Time.timeScale > 1;
+        _timeScaleState = Time.timeScale > 1 ? TimeScaleState.Fast : TimeScaleState.Normal;
         _isPaused = Time.timeScale == 0;
         _gameManager.timeState = _isPaused ? TimeState.Paused : TimeState.Playing;
 
-        fastforwardButton.image.sprite = _isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
+        UpdateFastForwardButtonSprite();
     }
 
     public void OnPauseButtonClicked()
+    {
+        PauseGame();
+    }
+
+    public void PauseGame()
     {
         _isPaused = true;
         _gameManager.timeState = TimeState.Paused;
@@ -70,17 +76,27 @@ public class SettingsPanel : MonoBehaviour
 
     public void OnResumeButtonClicked()
     {
-        _isPaused = false;
-        _gameManager.timeState = TimeState.Playing;
+        ResumeGame();
+    }
 
-        AudioUtils.FadeInAllSounds();
+    public void ResumeGame()
+    {
+        _isPaused = true;
+        _gameManager.timeState = TimeState.Paused;
 
-        pauseMenu.SetActive(false);
+        AudioUtils.FadeOutAllSounds();
+
+        pauseMenu.SetActive(true);
 
         UpdateTimeScale();
     }
 
     public void OnRestartButtonClicked()
+    {
+        RestartGame();
+    }
+
+    public void RestartGame()
     {
         _isPaused = false;
         _gameManager.timeState = TimeState.Playing;
@@ -102,16 +118,46 @@ public class SettingsPanel : MonoBehaviour
 
     public void OnFastForwardButtonClicked()
     {
-        _isFastForwarded = !_isFastForwarded;
+        _timeScaleState = (TimeScaleState)((int)(_timeScaleState + 1) % Enum.GetNames(typeof(TimeScaleState)).Length); // iterate between different FF states
+
+        SetTimeScale(_timeScaleState);
+    }
+
+    public void SetTimeScale(TimeScaleState timeScaleState)
+    {
+        _timeScaleState = timeScaleState;
 
         UpdateTimeScale();
 
-        fastforwardButton.image.sprite = _isFastForwarded ? playButtonSprite : fastforwardButtonSprite;
+        UpdateFastForwardButtonSprite();
     }
 
     private void UpdateTimeScale()
     {
-        Time.timeScale = _isPaused ? 0f : _isFastForwarded ? fastForwardTimeScale : 1f;
+        if (_isPaused)
+        {
+            Time.timeScale = 0f;
+        }
+        else if (_timeScaleState == TimeScaleState.Normal)
+        {
+            Time.timeScale = 1f;
+        }
+        else if (_timeScaleState == TimeScaleState.Fast)
+        {
+            Time.timeScale = fastForwardTimeScale;
+        }
+
         _currentTimeScale = Time.timeScale;
     }
+
+    private void UpdateFastForwardButtonSprite()
+    {
+        fastforwardButton.image.sprite = _timeScaleState == TimeScaleState.Fast ? playButtonSprite : fastforwardButtonSprite;
+    }
+}
+
+public enum TimeScaleState
+{
+    Normal,
+    Fast
 }

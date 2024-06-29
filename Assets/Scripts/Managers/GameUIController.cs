@@ -246,21 +246,32 @@ public class GameUIController : MonoBehaviour
 
     public void InitHUD()
     {
+        GO_HUD.SetActive(true);
+        SetHudInteractable(true);
         BTN_spawnWave.interactable = true;
+        BTN_spawnWave.GetComponent<Image>().DOFade(1f, 0.5f);
         GO_spawnWavePanelParent.SetActive(true);
         GO_spawnWavePanel.GetComponent<Animator>().ResetTrigger("hide");
         GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
+    }
+
+    public void SetHudInteractable(bool active)
+    {
+        GO_HUD.GetComponent<CanvasGroup>().interactable = active;
     }
 
     public void UpdateHUD()
     {
         UpdateAbilityAvailability();
 
-        TXT_livesText.text = string.Concat(_vs.Lives);
+        if (_vs.active)
+        {
+            TXT_livesText.text = string.Concat(_vs.Lives);
 
-        TXT_waveText.text = _vs.WaveSpawner.CurrentWave + "/" + _vs.WaveSpawner.TotalWaves;
+            TXT_waveText.text = _vs.WaveSpawner.CurrentWave + "/" + _vs.WaveSpawner.TotalWaves;
 
-        TXT_silverText.text = string.Concat(_vs.Silver);
+            TXT_silverText.text = string.Concat(_vs.Silver);
+        }
     }
 
     public void EnableBlur()
@@ -278,11 +289,22 @@ public class GameUIController : MonoBehaviour
         // horseRaidAbility.SetActive(_vs.CurrentLevel.LevelId != 1 || !performLevelwiseInit || _vs.WaveSpawner.CurrentWave > 1);
     }
 
-    public void SetScreenSaturation(float saturation)
+    public void SetScreenSaturation(SaturationState saturationState)
     {
+        var saturation = saturationState switch
+        {
+            SaturationState.Normal => 0,
+            SaturationState.Unsaturated => -100,
+            _ => 0
+        };
+
         if (volume.profile.TryGet<ColorAdjustments>(out var ca))
         {
-            ca.saturation.value = saturation;
+            var cur = ca.saturation.value;
+            this.AttachTimer(1f, null, (f) =>
+            {
+                ca.saturation.value = Mathf.Lerp(cur, saturation, f / 1f);
+            });
         }
     }
 
@@ -550,6 +572,8 @@ public class GameUIController : MonoBehaviour
         Instantiate(waveStartParticles, BTN_spawnWave.transform.position.ToWorldPosition(Camera.main), waveStartParticles.transform.rotation);
 
         BTN_spawnWave.interactable = false;
+        BTN_spawnWave.GetComponent<Image>().DOFade(0f, 0.5f);
+        BTN_spawnWave.GetComponent<Animator>().SetTrigger("pressed");
 
         TXT_waveCountdown.transform.parent.gameObject.SetActive(false);
 
@@ -576,6 +600,7 @@ public class GameUIController : MonoBehaviour
         if (!_vs.WaveSpawner.LevelFinished)
         {
             BTN_spawnWave.interactable = true;
+            BTN_spawnWave.GetComponent<Image>().DOFade(1f, 0.5f);
             GO_spawnWavePanel.GetComponent<Animator>().SetTrigger("show");
         }
     }
@@ -623,6 +648,10 @@ public class GameUIController : MonoBehaviour
     {
         Debug.Log("Game Resetting");
 
+        DisableBlur();
+
+        SetScreenSaturation(SaturationState.Normal);
+
         InitHUD();
     }
 
@@ -645,4 +674,10 @@ public class GameUIController : MonoBehaviour
 
         _vs.LevelStarted -= OnLevelStarted;
     }
+}
+
+public enum SaturationState
+{
+    Normal,
+    Unsaturated
 }

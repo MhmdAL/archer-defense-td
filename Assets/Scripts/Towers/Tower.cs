@@ -148,7 +148,9 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
     public int consecutiveShots;
     public int shotNumber;
 
-    private List<Monster> targets;
+    private Monster primaryTarget;
+    private List<Monster> secondaryTargets;
+    // private List<Monster> targets;
 
     public List<Modifier> towerUpgrades = new List<Modifier>();
 
@@ -247,7 +249,7 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
         AddStartingModifiers();
 
         monstersInRange = new List<Monster>();
-        targets = new List<Monster> { null, null };
+        // targets = new List<Monster> { null, null };
 
         // Set values from file, used when upgrading tower
         SetUpgradeValues();
@@ -424,11 +426,20 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
     {
         Debug.Log("Attacking");
 
-        var monsters = Physics2D.OverlapCircleAll(transform.position, AR.Value).Select(x => x.GetComponent<Monster>()).Where(x => x != null).ToList();
+        var targetsInRange = GetMonstersInRange();
 
-        targets = TargetDetection.CalculateTargets(this, monsters, targetFocusAngle, AD.Value, AP.Value);
+        var currentTargets = primaryTarget != null ? new List<Monster> { primaryTarget } : new List<Monster>();
+        var targets = TargetDetection.CalculateTargets(this, targetsInRange, currentTargets, targetFocusAngle, AD.Value, AP.Value);
+
+        primaryTarget = targets.FirstOrDefault();
+        secondaryTargets = targets.Skip(1).Take(SecondaryTargetCount).ToList();
 
         Attack();
+    }
+
+    private List<Monster> GetMonstersInRange()
+    {
+        return Physics2D.OverlapCircleAll(transform.position, AR.Value).Select(x => x.GetComponent<Monster>()).Where(x => x != null).ToList();
     }
 
     private void AttackManual()
@@ -453,19 +464,17 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
     {
         if (!IsDisabled)
         {
-            if (!IsManualMode() && !targets.Any())
+            if (!IsManualMode() && primaryTarget == null)
                 return;
 
             // Debug.Log("not disabled");
             var mouseTarget = Input.mousePosition.ToWorldPosition(Camera.main);
             mouseTarget.z = 0;
 
-            var secondaryTargets = targets.Skip(1).Take(SecondaryTargetCount).ToList();
-
             currentAttackStrategy.Attack(new TowerAttackData
             {
                 Owner = this,
-                PrimaryTarget = targets.FirstOrDefault(),
+                PrimaryTarget = primaryTarget,
                 SecondaryTargets = secondaryTargets,
                 TargetPosition = mouseTarget,
                 MaxRange = AR.Value * towerData.ManualAttackRangeMultiplier,
@@ -542,110 +551,110 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
 
     #region Target Calculation
 
-    private void CalculateTargets()
-    {
-        // Detect monsters in range
-        // monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
-        monstersInRange.Clear();
-        // foreach (Monster x in monstersInScene)
-        // {
-        //     if (IsInRange(x) && !monstersInRange.Contains(x))
-        //     {
-        //         monstersInRange.Add(x);
-        //     }
-        //     else if (!IsInRange(x) && monstersInRange.Contains(x))
-        //     {
-        //         monstersInRange.Remove(x);
-        //     }
-        // }
-        // Remove monsters who leave range from list of targets
-        foreach (Monster t in targets.ToList())
-        {
-            if (!IsInRange(t) || t.IsDead)
-            {
-                if (targets[0] != null && targets[0].targetedBy.Count > 0)
-                {
-                    if (targets[0].targetedBy.FirstOrDefault(x => x == this))
-                        targets[0].targetedBy.Remove(this);
-                }
-                targets[targets.IndexOf(t)] = null;
-            }
-        }
-        // Set targets
-        SetTargets();
+    // private void CalculateTargets()
+    // {
+    //     // Detect monsters in range
+    //     // monstersInScene = ValueStore.Instance.monsterManagerInstance.MonstersInScene.ToList();
+    //     monstersInRange.Clear();
+    //     // foreach (Monster x in monstersInScene)
+    //     // {
+    //     //     if (IsInRange(x) && !monstersInRange.Contains(x))
+    //     //     {
+    //     //         monstersInRange.Add(x);
+    //     //     }
+    //     //     else if (!IsInRange(x) && monstersInRange.Contains(x))
+    //     //     {
+    //     //         monstersInRange.Remove(x);
+    //     //     }
+    //     // }
+    //     // Remove monsters who leave range from list of targets
+    //     foreach (Monster t in targets.ToList())
+    //     {
+    //         if (!IsInRange(t) || t.IsDead)
+    //         {
+    //             if (targets[0] != null && targets[0].targetedBy.Count > 0)
+    //             {
+    //                 if (targets[0].targetedBy.FirstOrDefault(x => x == this))
+    //                     targets[0].targetedBy.Remove(this);
+    //             }
+    //             targets[targets.IndexOf(t)] = null;
+    //         }
+    //     }
+    //     // Set targets
+    //     SetTargets();
 
-        if (targets[0] != null)
-        {
-            if (MonsterManager.DoesKill(targets[0], AD.Value, AP.Value))
-            {
-                targets[0].isAboutToDie = true;
-            }
-        }
-    }
+    //     if (targets[0] != null)
+    //     {
+    //         if (MonsterManager.DoesKill(targets[0], AD.Value, AP.Value))
+    //         {
+    //             targets[0].isAboutToDie = true;
+    //         }
+    //     }
+    // }
 
-    public void SetTargets()
-    {
-        if (monstersInRange.Count > 0)
-        { // If there is atleast 1 enemy in range
-            monstersInRange.Sort((x, y) => y.DistanceTravelled.CompareTo(x.DistanceTravelled)); // Sort enemies in range by how far they travelled
+    // public void SetTargets()
+    // {
+    //     if (monstersInRange.Count > 0)
+    //     { // If there is atleast 1 enemy in range
+    //         monstersInRange.Sort((x, y) => y.DistanceTravelled.CompareTo(x.DistanceTravelled)); // Sort enemies in range by how far they travelled
 
-            if (targets[0] == null && monstersInRange[0] != targets[1])
-            { // If primary and secondary targets are null
+    //         if (targets[0] == null && monstersInRange[0] != targets[1])
+    //         { // If primary and secondary targets are null
 
-                if (monstersInRange.Count > 1)
-                { // If there is more than 1 enemy in range
-                    Monster someTarget = monstersInRange.FirstOrDefault(x => x.isAboutToDie == false); // Try to target enemies that arent about to die
-                    if (someTarget != null)
-                    {
-                        targets[0] = someTarget;
-                    }
-                    else
-                    { // If non are found then default to the farthest enemy
-                        targets[0] = monstersInRange[0];
-                    }
-                }
-                else
-                {
-                    targets[0] = monstersInRange[0];
-                }
+    //             if (monstersInRange.Count > 1)
+    //             { // If there is more than 1 enemy in range
+    //                 Monster someTarget = monstersInRange.FirstOrDefault(x => x.isAboutToDie == false); // Try to target enemies that arent about to die
+    //                 if (someTarget != null)
+    //                 {
+    //                     targets[0] = someTarget;
+    //                 }
+    //                 else
+    //                 { // If non are found then default to the farthest enemy
+    //                     targets[0] = monstersInRange[0];
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 targets[0] = monstersInRange[0];
+    //             }
 
-            }
-            else if (targets[0] == null && monstersInRange[0] == targets[1])
-            { // If primary target is null and secondary target is not null
-                targets[0] = monstersInRange[0]; // Set as primary instead of secondary
-                targets[1] = null;
-            }
-            if (!targets[0].targetedBy.Contains(this))
-            {
-                targets[0].targetedBy.Add(this);
-            }
-            targets[0].RecheckTargeter(); // Make sure enemy isnt about to die
-        }
-    }
+    //         }
+    //         else if (targets[0] == null && monstersInRange[0] == targets[1])
+    //         { // If primary target is null and secondary target is not null
+    //             targets[0] = monstersInRange[0]; // Set as primary instead of secondary
+    //             targets[1] = null;
+    //         }
+    //         if (!targets[0].targetedBy.Contains(this))
+    //         {
+    //             targets[0].targetedBy.Add(this);
+    //         }
+    //         targets[0].RecheckTargeter(); // Make sure enemy isnt about to die
+    //     }
+    // }
 
     public void RecheckTarget()
     {
-        targets[0] = null;
-        targets = TargetDetection.GetValidTargets(this, monstersInRange);
+        // targets[0] = null;
+        // targets = TargetDetection.GetValidTargets(this, monstersInRange);
     }
 
-    public bool IsInRange(Monster m)
-    {
-        if (m)
-        {
-            Vector3 targetDistance = m.transform.root.position - transform.position;
-            if (targetDistance.magnitude < AR.Value)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-            return false;
-    }
+    // public bool IsInRange(Monster m)
+    // {
+    //     if (m)
+    //     {
+    //         Vector3 targetDistance = m.transform.root.position - transform.position;
+    //         if (targetDistance.magnitude < AR.Value)
+    //         {
+    //             return true;
+    //         }
+    //         else
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     else
+    //         return false;
+    // }
 
     #endregion
 
@@ -783,11 +792,9 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
 
     public void UpdateTowerVisuals()
     {
-        var target = targets?.FirstOrDefault();
-
-        if (target != null)
+        if (primaryTarget != null)
         {
-            var dir = target.transform.position - transform.position;
+            var dir = primaryTarget.transform.position - transform.position;
 
             if (dir.x > 0)
             {

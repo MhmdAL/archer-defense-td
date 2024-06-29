@@ -8,6 +8,7 @@ using TMPro;
 using System.Linq;
 using UnityTimer;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public enum ClickType
 {
@@ -41,6 +42,10 @@ public class ValueStore : MonoBehaviour
     public LevelTemplate CurrentLevel { get; set; }
 
     public GameObject buymenu, victoryMenu, defeatMenu, pauseMenu;
+    public TextMeshProUGUI victoryText;
+    public GameObject victoryPanel;
+    public TextMeshProUGUI defeatText;
+    public GameObject defeatPanel;
     public GameObject allEnemiesSlainEndMenuGoldDesc;
 
     public TowerManager towerManagerInstance;
@@ -55,6 +60,7 @@ public class ValueStore : MonoBehaviour
     public UserClickHandler userClickHandlerInstance;
     public WaveSpawner WaveSpawner;
     public PotionSpawner PotionSpawner;
+    public SettingsPanel SettingsPanel;
 
     public TextMeshProUGUI levelPopUpText;
 
@@ -120,9 +126,12 @@ public class ValueStore : MonoBehaviour
 
     public float WaveStartTime => WaveCountdownTimer.GetTimeRemaining();
 
-    void Awake()
+    public Timer WaveCountdownTimer;
+    public float WaveCountdownDuration;
+
+    private void Awake()
     {
-        active = true;
+        active = false;
         Instance = this;
         _audioSource = GetComponent<AudioSource>();
 
@@ -158,9 +167,6 @@ public class ValueStore : MonoBehaviour
 
             mainCamera = Camera.main;
 
-            ambientAudioSource.PlayOneShot(SoundEffects.AMBIENT_1);
-            ambientWindAudioSource.PlayOneShot(SoundEffects.AMBIENT_2);
-
             // UpdateStats();
         }
     }
@@ -179,9 +185,14 @@ public class ValueStore : MonoBehaviour
         AudioUtils.FadeInAllSounds(false, 5f);
     }
 
-    void Update()
+    private void Update()
     {
         CurrentTime = Time.time;
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            StartCoroutine(DefeatSequence());
+        }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -224,21 +235,12 @@ public class ValueStore : MonoBehaviour
         if (!LevelPrefabs.Select(x => x.LevelId).Contains(levelId))
             yield break;
 
-        if (CurrentLevel != null)
-        {
-            Destroy(CurrentLevel.gameObject);
-        }
+        yield return PreGameSetup();
 
-        yield return null;
-
-        CleanUp();
-
-        active = true;
+        uiControllerInstance.SetHudInteractable(false);
 
         var levelPrefab = LevelPrefabs.First(x => x.LevelId == levelId);
         CurrentLevel = Instantiate(levelPrefab);
-
-        WaveSpawner.Reset(CurrentLevel.LevelData);
 
         if (CurrentLevel.SpawnPotions)
         {
@@ -252,40 +254,28 @@ public class ValueStore : MonoBehaviour
         Silver = CurrentLevel.LevelData.StartingSilver;
         Lives = CurrentLevel.LevelData.StartingLives;
 
-        TotalEnemiesSlain = 0;
-
-        towerManagerInstance.Reset();
         towerManagerInstance.TowerBasesInScene.AddRange(CurrentLevel.TowerBases);
-
-        monsterManagerInstance.Reset();
         monsterManagerInstance.paths = CurrentLevel.Paths.ToArray();
 
-        pauseMenu.SetActive(false);
-        victoryMenu.SetActive(false);
-        defeatMenu.SetActive(false);
-
-        uiControllerInstance.Reset();
+        WaveSpawner.SetLevel(CurrentLevel.LevelData);
 
         levelPopUpText.text = $"Level {GetLevelDisplay(levelId)}";
 
+        ambientAudioSource.PlayOneShot(SoundEffects.AMBIENT_1);
+        // ambientWindAudioSource.PlayOneShot(SoundEffects.AMBIENT_2);
+
+        active = true;
+
         OnLevelStarted();
     }
-
-    private string GetLevelDisplay(int level) => level switch
-    {
-        1 => "One",
-        2 => "Two",
-        3 => "Three",
-        4 => "Four",
-        5 => "Five",
-        _ => "One"
-    };
 
     private void OnLevelStarted()
     {
         LevelStarted?.Invoke();
 
         _audioSource.PlayOneShot(SoundEffects.LEVEL_START);
+
+        this.AttachTimer(2f, (f) => uiControllerInstance.SetHudInteractable(true));
     }
 
     public void OnSilverChange()
@@ -305,9 +295,6 @@ public class ValueStore : MonoBehaviour
         WaveCountdownTimer.Restart(WaveCountdownDuration);
         WaveCountdownTimer.Pause();
     }
-
-    public Timer WaveCountdownTimer;
-    public float WaveCountdownDuration;
 
     private void OnWaveEnded(int wave)
     {
@@ -353,14 +340,58 @@ public class ValueStore : MonoBehaviour
         GlobalManager.instance.LoadScene(levelToLoad, 1f);
     }
 
-    public void addGold()
+    /// <summary>
+    /// Restores the game state to its initial state. As though the scene was restarted.
+    /// </summary>
+    private IEnumerator PreGameSetup()
     {
-        //Silver += 1000;
+        if (CurrentLevel != null)
+        {
+            Destroy(CurrentLevel.gameObject);
+        }
+
+        yield return null;
+
+        _audioSource.Stop();
+        ambientAudioSource.Stop();
+        ambientWindAudioSource.Stop();
+        ambientAudioSource.volume = 1;
+        ambientWindAudioSource.volume = 1;
+
+        SettingsPanel.SetTimeScale(TimeScaleState.Normal);
+
+        CleanUpCleanables();
+
+        TotalEnemiesSlain = 0;
+
+        towerManagerInstance.Reset();
+
+        monsterManagerInstance.Reset();
+
+        WaveSpawner.Reset();
+
+        pauseMenu.SetActive(false);
+        victoryMenu.SetActive(false);
+        defeatMenu.SetActive(false);
+
+        uiControllerInstance.Reset();
     }
 
-    private void CleanUp()
+    private void PostGameCleanUp()
     {
-        var cleanables = FindObjectsOfType<MonoBehaviour>().OfType<ICleanable>();
+        ambientAudioSource.DOFade(0f, 1f).onComplete += () => ambientAudioSource.Stop();
+        ambientWindAudioSource.DOFade(0f, 1f).onComplete += () => ambientWindAudioSource.Stop();
+
+        SettingsPanel.SetTimeScale(TimeScaleState.Normal);
+
+        uiControllerInstance.SetHudInteractable(false);
+
+        CleanUpCleanables();
+    }
+
+    public void CleanUpCleanables()
+    {
+        var cleanables = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<ICleanable>();
 
         foreach (var cleanable in cleanables)
         {
@@ -372,98 +403,95 @@ public class ValueStore : MonoBehaviour
     {
         active = false;
 
-        CleanUp();
-
         LevelEnded?.Invoke(gs);
 
-        // Time.timeScale = 0f;
-
-        // SaveData save = DataService.Instance.SaveData;
-
-        float winGoldGained = 0f;
-        float allEnemiesSlainGoldGained = 0f;
-        float totalGoldGained = 0f;
+        PostGameCleanUp();
 
         if (gs == GameStatus.Win)
         {
             OnLevelVictory();
-
-            // endGameMenuTitleText.text = "Victory!";
-            // endGameMenuWonText.text = "Victory:-";
-            // If level is won for the first time, set enemy slain count and gold gain accordingly
-            if (!level.won)
-            {
-                level.totalEnemies = WaveSpawner.TotalEnemies;
-                if (level.totalEnemiesSlain < TotalEnemiesSlain)
-                {
-                    level.totalEnemiesSlain = TotalEnemiesSlain;
-                }
-
-                // winGoldGained = (float)(CurrentGoldValue * 0.8f) + ((CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0)));
-                level.won = true;
-            }
-            // If level is already won, set enemy slain count and gold gain accordingly
-            else
-            {
-                if (level.totalEnemiesSlain < TotalEnemiesSlain)
-                {
-                    level.totalEnemiesSlain = TotalEnemiesSlain;
-                }
-
-                // winGoldGained = (CurrentGoldValue * 0.2f) * ((float)Lives / (10 + SaveData.GetUpgrade(UpgradeType.Lives)?.level ?? 0));
-            }
-
-            // If level is maxed for the first time, set gold gain accordingly
-            if (!level.maxed && level.totalEnemiesSlain == level.totalEnemies)
-            {
-                allEnemiesSlainGoldGained = 0.4f * CurrentGoldValue;
-                // allEnemiesSlainEndMenuGoldDesc.SetActive(true);
-                level.maxed = true;
-            }
-
-            // LevelsManager.LevelWon(ref level);
         }
         else if (gs == GameStatus.Loss)
         {
             OnLevelDefeat();
-
-            // endGameMenuTitleText.text = "Defeat";
-            // endGameMenuWonText.text = "Defeat:-";
-
-            // endGameMenuTitleText.color = Color.red;
-
-            winGoldGained = (0.15f * CurrentGoldValue * ((float)WaveSpawner.CurrentWave / (float)WaveSpawner.TotalWaves));
         }
-
-        totalGoldGained = winGoldGained + allEnemiesSlainGoldGained;
-
-        // endGameMenuGoldText.text = "+ " + Mathf.CeilToInt(winGoldGained);
-        // endGameMenuSlainGoldText.text = "+ " + Mathf.CeilToInt(allEnemiesSlainGoldGained);
-        // endGameMenuTotalGoldText.text = "+ " + Mathf.CeilToInt(totalGoldGained);
-
-        // save.Gold += Mathf.CeilToInt(totalGoldGained);
-
-        // DataService.Instance.WriteSaveData();
-
-        // endGameMenu.SetActive(true);
     }
 
     private void OnLevelVictory()
     {
-        _audioSource.PlayOneShot(SoundEffects.LEVEL_END_VICTORY);
-
-        this.AttachTimer(2f, (t) => victoryMenu.SetActive(true));
+        StartCoroutine(VictorySequence());
 
         PlayerPrefs.SetInt("LastCompletedLevel", CurrentLevel.LevelId);
     }
 
     private void OnLevelDefeat()
     {
+        StartCoroutine(DefeatSequence());
+    }
+
+    private IEnumerator VictorySequence()
+    {
+        yield return new WaitForSeconds(2.5f);
+
+        _audioSource.PlayOneShot(SoundEffects.LEVEL_END_VICTORY);
+
+        uiControllerInstance.GO_HUD.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
+
+        victoryMenu.GetComponent<CanvasGroup>().alpha = 0f;
+        victoryText.GetComponent<TextMeshProUGUI>().alpha = 0f;
+        victoryPanel.GetComponent<CanvasGroup>().alpha = 0f;
+
+        victoryMenu.SetActive(true);
+        victoryText.gameObject.SetActive(true);
+        var tween = victoryMenu.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+
+        tween.onComplete = () =>
+        {
+            var textTween = victoryText.DOFade(1f, 2.5f);
+            textTween.onComplete = () =>
+            {
+                this.AttachTimer(0.5f, (f) =>
+                {
+                    // uiControllerInstance.EnableBlur();
+                    victoryPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.75f);
+                });
+            };
+        };
+    }
+
+    private IEnumerator DefeatSequence()
+    {
+        yield return new WaitForSeconds(2.5f);
+
         _audioSource.PlayOneShot(SoundEffects.LEVEL_END_DEFEAT);
 
-        this.AttachTimer(1f, (t) => defeatMenu.SetActive(true));
+        uiControllerInstance.GO_HUD.SetActive(false);
 
-        uiControllerInstance.SetScreenSaturation(-100);
+        yield return new WaitForSeconds(0.5f);
+
+        defeatMenu.GetComponent<CanvasGroup>().alpha = 0f;
+        defeatText.GetComponent<TextMeshProUGUI>().alpha = 0f;
+        defeatPanel.GetComponent<CanvasGroup>().alpha = 0f;
+
+        defeatMenu.SetActive(true);
+        defeatText.gameObject.SetActive(true);
+        var tween = defeatMenu.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+
+        tween.onComplete = () =>
+        {
+            uiControllerInstance.SetScreenSaturation(SaturationState.Unsaturated);
+
+            var textTween = defeatText.DOFade(1f, 2.5f);
+            textTween.onComplete = () =>
+            {
+                this.AttachTimer(0.5f, (f) =>
+                {
+                    defeatPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.75f);
+                });
+            };
+        };
     }
 
     public void OnGameOverProceedButtonClicked()
@@ -481,6 +509,16 @@ public class ValueStore : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private string GetLevelDisplay(int level) => level switch
+    {
+        1 => "One",
+        2 => "Two",
+        3 => "Three",
+        4 => "Four",
+        5 => "Five",
+        _ => "One"
+    };
 
     public void AnchorsToCorners(RectTransform t)
     {

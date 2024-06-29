@@ -50,12 +50,6 @@ public class WaveSpawner : MonoBehaviour
 
     private List<IEnumerator> _activeRoutines = new List<IEnumerator>();
 
-    [SerializeField]
-    private AudioSource upcomingWaveAudioSource;
-
-    [SerializeField]
-    private AudioClip upcomingWaveSFX;
-
     private List<Monster> _spawnedMonsters = new List<Monster>();
 
 
@@ -210,7 +204,7 @@ public class WaveSpawner : MonoBehaviour
         IsSpawning = false;
     }
 
-    public void Reset(LevelData levelData)
+    public void Reset()
     {
         if (_activeRoutines.Any())
         {
@@ -220,9 +214,12 @@ public class WaveSpawner : MonoBehaviour
 
         StopAllCoroutines();
 
-        this.LevelData = levelData;
-
         CurrentWave = 1;
         EnemiesRemainingInCurrentWave = 0;
+    }
+
+    public void SetLevel(LevelData levelData)
+    {
+        this.LevelData = levelData;
     }
 }
