@@ -428,13 +428,27 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
 
         var targetsInRange = GetMonstersInRange();
 
-        var currentTargets = primaryTarget != null ? new List<Monster> { primaryTarget } : new List<Monster>();
+        var currentTargets = new List<Monster>();
+
+        if (primaryTarget != null)
+        {
+            currentTargets.Add(primaryTarget);
+        }
+
         var targets = TargetDetection.CalculateTargets(this, targetsInRange, currentTargets, targetFocusAngle, AD.Value, AP.Value);
 
         primaryTarget = targets.FirstOrDefault();
         secondaryTargets = targets.Skip(1).Take(SecondaryTargetCount).ToList();
 
         Attack();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (primaryTarget != null)
+        {
+            Gizmos.DrawSphere(primaryTarget.transform.position, 1f);
+        }
     }
 
     private List<Monster> GetMonstersInRange()

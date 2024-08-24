@@ -6,6 +6,9 @@ using System;
 public class Projectile : MonoBehaviour
 {
     public IShooting Owner { get; set; }
+    public IProjectileTarget PrimaryTarget { get; set; }
+
+    public HitDetectionMode HitDetectionMode { get; set; }
 
     public float Damage { get; set; }
     public float Radius { get; set; }
@@ -22,6 +25,12 @@ public class Projectile : MonoBehaviour
     private float _curTime;
 
     private bool _reached;
+
+    private bool CanHitOtherTargets => _curTime / Duration >= 0.95f;
+    private bool CanHitTarget(IProjectileTarget target) => !_reached &&
+        (HitDetectionMode == HitDetectionMode.Any
+        || (HitDetectionMode == HitDetectionMode.PrimaryTargetOnly && target == PrimaryTarget)
+        || (HitDetectionMode == HitDetectionMode.PreferPrimaryTarget && CanHitOtherTargets));
 
     private void FixedUpdate()
     {
@@ -49,12 +58,14 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (_reached || !CanHitTarget)
+        other.TryGetComponent<IProjectileTarget>(out var target);
+
+        if (!CanHitTarget(target))
         {
             return;
         }
 
-        if (other.TryGetComponent<IProjectileTarget>(out var target))
+        if (target != null)
         {
             target.OnProjectileHit(this, other.ClosestPoint(transform.parent.position));
         }
@@ -62,18 +73,18 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (_reached || !CanHitTarget)
+        other.TryGetComponent<IProjectileTarget>(out var target);
+
+        if (!CanHitTarget(target))
         {
             return;
         }
 
-        if (other.TryGetComponent<IProjectileTarget>(out var target))
+        if (target != null)
         {
             target.OnProjectileHit(this, other.ClosestPoint(transform.parent.position));
         }
     }
-
-    private bool CanHitTarget => _curTime / Duration >= 0.75f;
 
     public void OnTargetHit(IProjectileTarget target, Vector3 hitPosition)
     {
@@ -130,6 +141,8 @@ public class Projectile : MonoBehaviour
         projectileObj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
 
         projectile.Owner = data.Owner;
+        projectile.PrimaryTarget = data.PrimaryTarget;
+        projectile.HitDetectionMode = data.HitDetectionMode;
         projectile.StartPosition = data.SpawnPosition;
         projectile.TargetPosition = data.TargetPosition;
 
@@ -200,6 +213,8 @@ public class ProjectileSpawnData
     }
 
     public IShooting Owner { get; set; }
+    public IProjectileTarget PrimaryTarget { get; set; }
+    public HitDetectionMode HitDetectionMode { get; set; }
     public GameObject Prefab { get; set; }
     public Vector3 SpawnPosition { get; set; }
     public Vector3 TargetPosition { get; set; }
@@ -210,4 +225,11 @@ public class ProjectileSpawnData
     public float ArmorPen { get; set; }
     public float Radius { get; set; }
     public float Duration { get; set; }
+}
+
+public enum HitDetectionMode
+{
+    Any, // hit any target which collides
+    PreferPrimaryTarget, // consider only primary target at least until a certain duration of projectile motion is accomplished
+    PrimaryTargetOnly // only collide with primary target
 }

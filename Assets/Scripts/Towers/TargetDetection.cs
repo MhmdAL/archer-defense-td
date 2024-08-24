@@ -35,7 +35,7 @@ public class TargetDetection
 
         foreach (var target in targetsInRange)
         {
-            var priorityMultiplier = currentTargets.Contains(target) ? 5 : 1;
+            var priorityMultiplier = currentTargets.Contains(target) ? 10 : 1;
 
             prioDict[target] = priorityMultiplier * CalculatePriority(target, source, focusDir);
         }

@@ -81,12 +81,12 @@ public class SettingsPanel : MonoBehaviour
 
     public void ResumeGame()
     {
-        _isPaused = true;
-        _gameManager.timeState = TimeState.Paused;
+        _isPaused = false;
+        _gameManager.timeState = TimeState.Playing;
 
-        AudioUtils.FadeOutAllSounds();
+        AudioUtils.FadeInAllSounds();
 
-        pauseMenu.SetActive(true);
+        pauseMenu.SetActive(false);
 
         UpdateTimeScale();
     }

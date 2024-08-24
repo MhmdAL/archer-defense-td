@@ -36,6 +36,7 @@ public class ShootAtPositionTowerAttackStrategy : TowerAttackStrategy
         bullet.StartPosition = startPosition;
         bullet.TargetPosition = targetPosition;
         bullet.LingerTime = data.Owner.bulletLinger;
+        bullet.HitDetectionMode = HitDetectionMode.Any; // TODO: see how we can make a good UX for target detection for manual shooting mode
 
         data.Owner.isInCombat = true;
         data.Owner.CombatTimer.Restart(data.Owner.CombatCooldown);

@@ -50,6 +50,8 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
             ArmorPen = armorpen,
             Radius = radius,
             SpawnPosition = data.Owner.arrowSpawnPoint.position,
+            PrimaryTarget = target,
+            HitDetectionMode = HitDetectionMode.PreferPrimaryTarget,
             LingerTime = data.Owner.bulletLinger
         });
 
