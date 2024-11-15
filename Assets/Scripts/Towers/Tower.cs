@@ -300,6 +300,9 @@ public class Tower : MonoBehaviour, IAttacking, IShooting, IMoving
 
     public virtual void AddStartingModifiers() { }
 
+    public ParticleSystem rightFootFootprint;
+    public ParticleSystem leftFootFootprint;
+
     private void Update()
     {
         UpdateTowerVisuals();

@@ -69,6 +69,8 @@ public class GameUIController : MonoBehaviour
     public GameObject GO_HUD;
     public GameObject GO_statsPanel;
     public GameObject GO_timeControlsPanel;
+    public GameObject GO_unlocksParent;
+    public LevelUnlockPanel GO_unlockPrefab;
 
     public SkillDisplayUI ADSkillDisplay;
     public SkillDisplayUI ASSkillDisplay;
@@ -143,6 +145,8 @@ public class GameUIController : MonoBehaviour
     public bool performLevelwiseInit = true;
 
     public GameObject blueVolume;
+
+    public ScreenFlashImage screenFlashImage;
 
     private void Awake()
     {
@@ -596,6 +600,8 @@ public class GameUIController : MonoBehaviour
     private void OnWaveEnded(int wave)
     {
         Debug.Log("Wave Ended");
+
+        screenFlashImage.Flash();
 
         if (!_vs.WaveSpawner.LevelFinished)
         {

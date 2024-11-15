@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour
     private bool CanHitTarget(IProjectileTarget target) => !_reached &&
         (HitDetectionMode == HitDetectionMode.Any
         || (HitDetectionMode == HitDetectionMode.PrimaryTargetOnly && target == PrimaryTarget)
-        || (HitDetectionMode == HitDetectionMode.PreferPrimaryTarget && CanHitOtherTargets));
+        || (HitDetectionMode == HitDetectionMode.PreferPrimaryTarget && (target == PrimaryTarget || CanHitOtherTargets)));
 
     private void FixedUpdate()
     {

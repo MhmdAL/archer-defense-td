@@ -7,6 +7,7 @@ using UnityTimer;
 using System;
 using EPOOutline;
 using UnityEngine.AddressableAssets;
+using DG.Tweening;
 
 public abstract class Monster : Unit, IMoving
 {
@@ -130,8 +131,26 @@ public abstract class Monster : Unit, IMoving
         // }
     }
 
+    public GameObject footprintPrefab;
+
+    public float footprintDistanceCounter = 0;
+
     private void OnMovement(Vector3 delta, Vector3 currentVelocity)
     {
+        footprintDistanceCounter += delta.magnitude;
+
+        if (footprintDistanceCounter >= UnityEngine.Random.Range(2, 4))
+        {
+            footprintDistanceCounter = 0;
+
+            float angle = Mathf.Atan2(currentVelocity.y, currentVelocity.x);
+
+            Quaternion rotation = Quaternion.Euler(0f, 0f, 90 + angle * Mathf.Rad2Deg); // Convert from radians to degrees
+
+            var footprint = Instantiate(footprintPrefab, transform.position, rotation);
+            footprint.GetComponent<SpriteRenderer>().DOFade(0, 15f);
+        }
+
         anim.SetFloat("walk_speed", currentVelocity.magnitude);
 
         UpdateDirection(delta);
@@ -223,7 +242,7 @@ public abstract class Monster : Unit, IMoving
         }
 
         _audioSource.PlayOneShot(SoundEffects.ENEMY_DEATH);
-        
+
         // Add death particle effects
         // GameObject deathParticle = (GameObject)Instantiate(m.deathParticlePrefab, myTransform.position, myTransform.rotation);
         // Destroy(deathParticle, 2f);

@@ -20,7 +20,7 @@ public class MovementTracker : MonoBehaviour
         CurrentVelocity = (transform.position - prevPos) / Time.deltaTime;
         prevPos = transform.position;
 
-        if (lastVelocity != CurrentVelocity)
+        if (transform.position != LastPosition)
         {
             MovementChanged?.Invoke(transform.position - LastPosition, CurrentVelocity);
         }

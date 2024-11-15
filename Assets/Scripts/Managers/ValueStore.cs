@@ -189,9 +189,14 @@ public class ValueStore : MonoBehaviour
     {
         CurrentTime = Time.time;
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.N))
         {
             StartCoroutine(DefeatSequence());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            StartCoroutine(VictorySequence());
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -261,7 +266,7 @@ public class ValueStore : MonoBehaviour
 
         levelPopUpText.text = $"Level {GetLevelDisplay(levelId)}";
 
-        ambientAudioSource.PlayOneShot(SoundEffects.AMBIENT_1);
+        // ambientAudioSource.PlayOneShot(SoundEffects.AMBIENT_1);
         // ambientWindAudioSource.PlayOneShot(SoundEffects.AMBIENT_2);
 
         active = true;
@@ -447,18 +452,72 @@ public class ValueStore : MonoBehaviour
         victoryText.gameObject.SetActive(true);
         var tween = victoryMenu.GetComponent<CanvasGroup>().DOFade(1f, 1f);
 
-        tween.onComplete = () =>
+        yield return new WaitForSeconds(1f);
+
+        var textTween = victoryText.DOFade(1f, 2.5f);
+
+        yield return new WaitForSeconds(3f);
+
+        // uiControllerInstance.EnableBlur();
+
+        var unlocks = GetLevelUnlocks();
+
+        if (unlocks.Count > 0)
         {
-            var textTween = victoryText.DOFade(1f, 2.5f);
-            textTween.onComplete = () =>
+            victoryText.GetComponent<Animator>().SetBool("unlock", true);
+
+            yield return new WaitForSeconds(0.6f);
+
+            victoryMenu.GetComponent<Image>().DOFade(0.9f, 0.6f);
+
+            yield return new WaitForSeconds(0.6f);
+
+            var unlocksParent = uiControllerInstance.GO_unlocksParent;
+
+            foreach (var item in unlocks)
             {
-                this.AttachTimer(0.5f, (f) =>
+                var unlock = Instantiate(uiControllerInstance.GO_unlockPrefab, unlocksParent.transform);
+
+                unlock.SetUnlockType(item.UnlockType);
+                unlock.SetUnlockName(item.UnlockName);
+
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        victoryPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.75f);
+    }
+
+    public List<LevelUnlock> GetLevelUnlocks()
+    {
+        return CurrentLevel.LevelId switch
+        {
+            1 => new List<LevelUnlock>
+            {
+                new LevelUnlock
                 {
-                    // uiControllerInstance.EnableBlur();
-                    victoryPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.75f);
-                });
-            };
+                    UnlockType = "New Ability",
+                    UnlockName = "Cavalry Raid"
+                }
+            },
+            2 => new List<LevelUnlock>
+            {
+                new LevelUnlock
+                {
+                    UnlockType = "New Skill",
+                    UnlockName = "Improved Targeting"
+                }
+            },
+            _ => new List<LevelUnlock>()
         };
+    }
+
+    public class LevelUnlock
+    {
+        public string UnlockType { get; set; }
+        public string UnlockName { get; set; }
     }
 
     private IEnumerator DefeatSequence()

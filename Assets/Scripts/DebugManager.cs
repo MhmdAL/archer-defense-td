@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DebugManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class DebugManager : MonoBehaviour
     private ValueStore _gameManager;
 
     public GameObject TXT_selected;
+
+    private GameObject selectedEntity;
 
     private void Awake()
     {
@@ -40,20 +43,34 @@ public class DebugManager : MonoBehaviour
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hits = Physics2D.RaycastAll(ray.origin, ray.direction);
 
-            if (hits.Any())
+            if (Input.GetMouseButtonDown(1))
             {
-                var hit = hits[0];
+                if (hits.Any())
+                {
+                    selectedEntity = hits[0].collider.gameObject;
+                }
+                else
+                {
+                    selectedEntity = null;
+                }
+            }
 
+            var targetToDisplay = selectedEntity != null ? selectedEntity : hits.Any() ? hits[0].collider.gameObject : null;
+
+            if (targetToDisplay != null)
+            {
                 var text = new StringBuilder();
-                text.AppendLine("Entity: " + hit.collider.name);
+                text.AppendLine("Entity: " + targetToDisplay.name);
 
-                var monster = hit.collider.gameObject.GetComponentInChildren<Monster>();
+                var monster = targetToDisplay.GetComponentInChildren<Monster>();
                 if (monster != null)
                 {
                     text.AppendLine("Speed: " + monster.movementTracker.CurrentVelocity);
+                    text.AppendLine("LastPos: " + monster.movementTracker.LastPosition);
+                    text.AppendLine("footprintDistanceCounter: " + monster.footprintDistanceCounter);
                 }
 
-                var horseArcher = hit.collider.gameObject.GetComponentInChildren<HorseRaiderV2>();
+                var horseArcher = targetToDisplay.GetComponentInChildren<HorseRaiderV2>();
                 if (horseArcher != null)
                 {
                     text.AppendLine("Speed: " + horseArcher.movementTracker.CurrentVelocity);

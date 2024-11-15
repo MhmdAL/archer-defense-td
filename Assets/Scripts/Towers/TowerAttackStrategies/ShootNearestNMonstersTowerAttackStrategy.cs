@@ -59,7 +59,7 @@ public class ShootNearestNMonstersTowerAttackStrategy : TowerAttackStrategy
 
         bullet.Duration = ArcherUtils.CalculateProjectileDuration(dir, data.Owner.bulletSpeed);
 
-        targetPosition += ArcherUtils.CalculateProjectilePrediction(dir, target.movementTracker.CurrentVelocity, bullet.Duration);
+        targetPosition += ArcherUtils.CalculateProjectilePredictionOffset(dir, target.movementTracker.CurrentVelocity, bullet.Duration);
 
         bullet.TargetPosition = targetPosition;
         bullet.shotNumber = data.Owner.shotNumber;
